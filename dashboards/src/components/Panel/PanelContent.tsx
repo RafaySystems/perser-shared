@@ -43,38 +43,46 @@ export function PanelContent(props: PanelContentProps): ReactElement {
     );
   }
 
-  // Render the panel if any query has data, or the panel doesn't have a query attached (for example MarkdownPanel).
-  // Loading indicator or errors of other queries are shown in the panel header.
   const queryResultsWithData = queryResults.flatMap((q) =>
     q.data ? [{ data: q.data, definition: q.definition }] : []
   );
-  if (queryResultsWithData.length > 0 || queryResults.length === 0) {
+
+  const allQueriesSettled =
+    queryResults.length > 0 && queryResults.every((q) => !q.isFetching && !q.isLoading);
+
+  const panelQueryResults =
+    queryResultsWithData.length > 0
+      ? queryResultsWithData
+      : allQueriesSettled
+        ? queryResults.map((q) => ({
+            definition: q.definition,
+            data: q.data ?? { series: [] },
+          }))
+        : [];
+
+  // Render when we have data, no queries (Markdown), or all queries finished (incl. empty/zero series).
+  if (panelQueryResults.length > 0 || queryResults.length === 0) {
     return (
       <PanelPluginLoader
         kind={panelPluginKind}
         spec={spec}
         contentDimensions={contentDimensions}
         definition={definition}
-        queryResults={queryResultsWithData}
+        queryResults={panelQueryResults}
       />
     );
   }
 
-  // No query has data, show loading overlay if any query is fetching data.
-  if (queryResults.some((q) => q.isFetching)) {
+  if (queryResults.some((q) => q.isFetching || q.isLoading)) {
     return <PanelLoading plugin={plugin} spec={spec} definition={definition} contentDimensions={contentDimensions} />;
   }
 
-  // No query has data or is loading, show the error if any query has an error.
-  // The error will be catched in <ErrorBoundary> of <Panel>.
   const queryError = queryResults.find((q) => q.error);
   if (queryError) {
     throw queryError.error;
   }
 
-  // At this point, one or more queries are defined, but no query has data, is loading, or has an error.
-  // This can happen if all queries are disabled (e.g. dependent dashboard variables are loading, or they are not in the viewport of the browser).
-  // Most likely, some query will be enabled later. Render the panel loading skeleton.
+  // Queries disabled (e.g. not in viewport yet) — keep loading until they run.
   return <PanelLoading plugin={plugin} spec={spec} definition={definition} contentDimensions={contentDimensions} />;
 }
 

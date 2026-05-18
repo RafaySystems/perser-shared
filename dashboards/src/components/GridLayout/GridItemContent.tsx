@@ -67,7 +67,7 @@ export function GridItemContent(props: GridItemContentProps): ReactElement {
 
   const { ref: queryRef, inView: shouldQuery } = useInView({
     threshold: 0,
-    initialInView: false,
+    initialInView: true,
     triggerOnce: true,
   });
 
