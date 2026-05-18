@@ -12,11 +12,14 @@
 // limitations under the License.
 
 import type { PanelPlugin } from '../model';
+import { BarChartPanel } from './BarChartPanel';
 import { GaugeChartPanel } from './GaugeChartPanel';
+import { PieChartPanel, RingChartPanel } from './PieChartPanel';
 import { StatChartPanel } from './StatChartPanel';
 import { TimeSeriesChartPanel } from './TimeSeriesChartPanel';
 
-export { GaugeChartPanel, StatChartPanel, TimeSeriesChartPanel };
+export { BarChartPanel, GaugeChartPanel, PieChartPanel, RingChartPanel, StatChartPanel, TimeSeriesChartPanel };
+export * from './chartSpec';
 
 export const RechartsTimeSeriesChart: PanelPlugin = {
   PanelComponent: TimeSeriesChartPanel as PanelPlugin['PanelComponent'],
@@ -36,11 +39,32 @@ export const RechartsGaugeChart: PanelPlugin = {
   createInitialOptions: () => ({ calculation: 'last-number' }),
 };
 
+export const RechartsBarChart: PanelPlugin = {
+  PanelComponent: BarChartPanel as PanelPlugin['PanelComponent'],
+  supportedQueryTypes: ['TimeSeriesQuery'],
+  createInitialOptions: () => ({ calculation: 'last-number' }),
+};
+
+export const RechartsPieChart: PanelPlugin = {
+  PanelComponent: PieChartPanel as PanelPlugin['PanelComponent'],
+  supportedQueryTypes: ['TimeSeriesQuery'],
+  createInitialOptions: () => ({ calculation: 'last-number' }),
+};
+
+export const RechartsRingChart: PanelPlugin = {
+  PanelComponent: RingChartPanel as PanelPlugin['PanelComponent'],
+  supportedQueryTypes: ['TimeSeriesQuery'],
+  createInitialOptions: () => ({ calculation: 'last-number', donut: true, innerRadius: '55%' }),
+};
+
 /** Panel plugin name → implementation (matches Perses dashboard `kind` values). */
 export const RECHARTS_PANEL_PLUGINS: Record<string, PanelPlugin> = {
   TimeSeriesChart: RechartsTimeSeriesChart,
   StatChart: RechartsStatChart,
   GaugeChart: RechartsGaugeChart,
+  BarChart: RechartsBarChart,
+  PieChart: RechartsPieChart,
+  RingChart: RechartsRingChart,
 };
 
 export const RECHARTS_PANEL_KINDS = new Set(Object.keys(RECHARTS_PANEL_PLUGINS));

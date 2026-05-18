@@ -13,27 +13,15 @@
 
 import {
   buildChartConfig,
-  ChartContainer,
+  CartesianTimeSeriesChart,
   ChartEmptyState,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
   collectTimeSeries,
-  formatValue,
   timeSeriesToRechartsRows,
-  type FormatOptions,
 } from '@perses-dev/components';
 import type { TimeSeriesData } from '@perses-dev/core';
 import type { PanelProps } from '../model';
-import { format } from 'date-fns';
 import { useMemo, type ReactElement } from 'react';
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
-
-type TimeSeriesChartSpec = {
-  legend?: { position?: 'bottom' | 'top' };
-  yAxis?: { format?: FormatOptions; label?: string };
-};
+import { resolveTimeSeriesVariant, type TimeSeriesChartSpec } from './chartSpec';
 
 export function TimeSeriesChartPanel({
   spec,
@@ -41,7 +29,7 @@ export function TimeSeriesChartPanel({
   contentDimensions,
 }: PanelProps<TimeSeriesChartSpec, TimeSeriesData>): ReactElement {
   const chartSpec = spec as TimeSeriesChartSpec;
-  const yFormat = chartSpec.yAxis?.format;
+  const variant = resolveTimeSeriesVariant(chartSpec);
 
   const { rows, chartConfig, seriesKeys } = useMemo(() => {
     const seriesList = collectTimeSeries(queryResults);
@@ -59,55 +47,18 @@ export function TimeSeriesChartPanel({
   }
 
   return (
-    <ChartContainer
-      config={chartConfig}
-      className="aspect-auto w-full [&>div]:!aspect-auto"
-      style={{ height }}
-    >
-      <LineChart data={rows} margin={{ top: 8, right: 12, bottom: showLegend ? 4 : 0, left: 4 }}>
-        <CartesianGrid vertical={false} strokeDasharray="3 3" />
-        <XAxis
-          dataKey="timestamp"
-          tickLine={false}
-          axisLine={false}
-          tickMargin={8}
-          minTickGap={32}
-          tickFormatter={(ts) => format(new Date(ts), 'HH:mm')}
-        />
-        <YAxis
-          tickLine={false}
-          axisLine={false}
-          width={48}
-          tickMargin={4}
-          tickFormatter={(value) => formatValue(Number(value), yFormat)}
-        />
-        <ChartTooltip
-          content={
-            <ChartTooltipContent
-              labelFormatter={(_, payload) => {
-                const ts = payload?.[0]?.payload?.timestamp;
-                return ts != null ? format(new Date(ts as number), 'MMM d, HH:mm:ss') : '';
-              }}
-              formatter={(value) => formatValue(Number(value), yFormat)}
-            />
-          }
-        />
-        {showLegend && (
-          <ChartLegend verticalAlign={legendVerticalAlign} content={<ChartLegendContent />} />
-        )}
-        {seriesKeys.map((key) => (
-          <Line
-            key={key}
-            type="monotone"
-            dataKey={key}
-            stroke={`var(--color-${key})`}
-            strokeWidth={1.5}
-            dot={false}
-            connectNulls
-            isAnimationActive={false}
-          />
-        ))}
-      </LineChart>
-    </ChartContainer>
+    <CartesianTimeSeriesChart
+      rows={rows}
+      chartConfig={chartConfig}
+      seriesKeys={seriesKeys}
+      height={height}
+      yFormat={chartSpec.yAxis?.format}
+      variant={variant}
+      areaOpacity={chartSpec.visual?.areaOpacity ?? 0.3}
+      lineWidth={chartSpec.visual?.lineWidth ?? 1.5}
+      stacked={chartSpec.visual?.stack ?? false}
+      showLegend={showLegend}
+      legendVerticalAlign={legendVerticalAlign}
+    />
   );
 }

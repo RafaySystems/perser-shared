@@ -13,5 +13,9 @@
 
 export * from './chartColors';
 export * from './ChartEmptyState';
+export * from './categoricalData';
+export * from './CartesianTimeSeriesChart';
+export * from './PersesBarChart';
+export * from './PersesPieChart';
 export * from './timeSeriesData';
 export * from './types';
