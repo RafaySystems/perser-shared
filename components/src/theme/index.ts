@@ -12,5 +12,6 @@
 // limitations under the License.
 
 export * from './theme';
-export * from './ThemeProvider';
+export { PersesThemeProvider, usePaletteMode, usePersesThemeContext } from './ThemeProvider';
+export type { PersesThemeProviderProps } from './ThemeProvider';
 export * from './palette';

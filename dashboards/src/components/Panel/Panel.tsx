@@ -230,7 +230,6 @@ export const Panel = memo(function Panel(props: PanelProps) {
               />
             </ErrorBoundary>
           </figure>
-        </Card>
         </section>
       </ItemActionsProvider>
     </SelectionProvider>

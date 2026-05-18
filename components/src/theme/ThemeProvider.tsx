@@ -62,8 +62,8 @@ export function PersesThemeProvider({ mode = 'light', onModeChange, children }: 
   );
 }
 
-/** Drop-in replacement for MUI's useTheme() */
-export function useChartsTheme(): ThemeContextValue {
+/** App shell theme context (light/dark). Prefer usePaletteMode() for mode only. */
+export function usePersesThemeContext(): ThemeContextValue {
   return React.useContext(ThemeContext);
 }
 
