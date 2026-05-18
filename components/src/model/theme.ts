@@ -11,50 +11,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type {
-  EChartsOption,
-  BarSeriesOption,
-  LineSeriesOption,
-  GaugeSeriesOption,
-  TitleComponentOption,
-  ComposeOption,
-  XAXisComponentOption,
-  YAXisComponentOption,
-} from 'echarts';
 import { ThresholdColorPalette } from './thresholds';
 
+/**
+ * Chart theming aligned with shadcn/ui CSS variables (`--chart-1` … `--chart-5` in globals.css).
+ */
 export interface PersesChartsTheme {
-  echartsTheme: EChartsTheme;
-  noDataOption: NoDataOption;
+  /** Series stroke/fill colors (typically `hsl(var(--chart-N))`). */
+  seriesColors: string[];
+  noDataMessage: string;
   sparkline: {
     width: number;
     color: string;
     areaOpacity: number;
   };
-  /**
-   * Theming for the container that wraps a chart.
-   */
   container: {
-    /**
-     * Padding in pixels.
-     */
     padding: {
       default: number;
     };
   };
   thresholds: ThresholdColorPalette;
-  /**
-   * The id of the container that will have the chart tooltip appended to it.
-   * By default, chart tooltip uses the body of the top-level document object.
-   */
   tooltipPortalContainerId?: string;
 }
-
-// https://github.com/apache/echarts/issues/12489#issuecomment-643185207
-export interface EChartsTheme extends EChartsOption {
-  bar?: BarSeriesOption;
-  line?: LineSeriesOption;
-  gauge?: GaugeSeriesOption;
-}
-
-export type NoDataOption = ComposeOption<TitleComponentOption | XAXisComponentOption | YAXisComponentOption>;

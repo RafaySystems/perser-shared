@@ -1,18 +1,4 @@
 // Copyright The Perses Authors
-// Licensed under the Apache License, Version 2.0 (the \"License\");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an \"AS IS\" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-/* eslint-disable @typescript-eslint/no-require-imports */
-// Copyright The Perses Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -26,12 +12,25 @@
 // limitations under the License.
 
 import { createInstance, ModuleFederation } from '@module-federation/enhanced/runtime';
-
+import * as emotionReact from '@emotion/react';
+import * as emotionStyled from '@emotion/styled';
+import * as hookformResolversZod from '@hookform/resolvers/zod';
+import * as PersesComponents from '@perses-dev/components';
+import * as PersesCore from '@perses-dev/core';
+import * as PersesDashboards from '@perses-dev/dashboards';
+import * as PersesExplore from '@perses-dev/explore';
+import * as PersesPluginSystem from '@perses-dev/plugin-system';
 import * as ReactQuery from '@tanstack/react-query';
+import * as dateFns from 'date-fns';
+import * as dateFnsTz from 'date-fns-tz';
+import * as immerModule from 'immer';
+import lodash from 'lodash';
+import * as lucideReact from 'lucide-react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as ReactHookForm from 'react-hook-form';
 import * as ReactRouterDOM from 'react-router-dom';
+import useResizeObserver from 'use-resize-observer';
 import { PersesPlugin, RemotePluginModule } from './PersesPlugin.types';
 
 let instance: ModuleFederation | null = null;
@@ -82,18 +81,9 @@ const getPluginRuntime = (): ModuleFederation => {
             requiredVersion: '^7.52.2',
           },
         },
-        echarts: {
-          version: '5.5.0',
-          lib: () => require('echarts'),
-          shareConfig: {
-            singleton: true,
-            requiredVersion: '^5.5.0',
-          },
-        },
-        // TODO should we add @perses-dev/spec here ?
         '@perses-dev/core': {
           version: '0.53.1',
-          lib: () => require('@perses-dev/core'),
+          lib: () => PersesCore,
           shareConfig: {
             singleton: true,
             requiredVersion: '^0.53.1',
@@ -101,7 +91,7 @@ const getPluginRuntime = (): ModuleFederation => {
         },
         '@perses-dev/components': {
           version: '0.53.1',
-          lib: () => require('@perses-dev/components'),
+          lib: () => PersesComponents,
           shareConfig: {
             singleton: true,
             requiredVersion: '^0.53.1',
@@ -109,7 +99,7 @@ const getPluginRuntime = (): ModuleFederation => {
         },
         '@perses-dev/plugin-system': {
           version: '0.53.1',
-          lib: () => require('@perses-dev/plugin-system'),
+          lib: () => PersesPluginSystem,
           shareConfig: {
             singleton: true,
             requiredVersion: '^0.53.1',
@@ -117,7 +107,7 @@ const getPluginRuntime = (): ModuleFederation => {
         },
         '@perses-dev/explore': {
           version: '0.53.1',
-          lib: () => require('@perses-dev/explore'),
+          lib: () => PersesExplore,
           shareConfig: {
             singleton: true,
             requiredVersion: '^0.53.1',
@@ -125,16 +115,15 @@ const getPluginRuntime = (): ModuleFederation => {
         },
         '@perses-dev/dashboards': {
           version: '0.53.1',
-          lib: () => require('@perses-dev/dashboards'),
+          lib: () => PersesDashboards,
           shareConfig: {
             singleton: true,
             requiredVersion: '^0.53.1',
           },
         },
-        // Below are the shared modules that are used by the plugins, this can be part of the SDK
         'date-fns': {
           version: '4.1.0',
-          lib: () => require('date-fns'),
+          lib: () => dateFns,
           shareConfig: {
             singleton: true,
             requiredVersion: '^4.1.0',
@@ -142,7 +131,7 @@ const getPluginRuntime = (): ModuleFederation => {
         },
         'date-fns-tz': {
           version: '3.2.0',
-          lib: () => require('date-fns-tz'),
+          lib: () => dateFnsTz,
           shareConfig: {
             singleton: true,
             requiredVersion: '^3.2.0',
@@ -150,7 +139,7 @@ const getPluginRuntime = (): ModuleFederation => {
         },
         lodash: {
           version: '4.17.21',
-          lib: () => require('lodash'),
+          lib: () => lodash,
           shareConfig: {
             singleton: true,
             requiredVersion: '^4.17.21',
@@ -158,7 +147,7 @@ const getPluginRuntime = (): ModuleFederation => {
         },
         '@emotion/react': {
           version: '11.11.3',
-          lib: () => require('@emotion/react'),
+          lib: () => emotionReact,
           shareConfig: {
             singleton: true,
             requiredVersion: '^11.11.3',
@@ -166,7 +155,7 @@ const getPluginRuntime = (): ModuleFederation => {
         },
         '@emotion/styled': {
           version: '11.11.0',
-          lib: () => require('@emotion/styled'),
+          lib: () => emotionStyled,
           shareConfig: {
             singleton: true,
             requiredVersion: '^11.11.0',
@@ -174,7 +163,7 @@ const getPluginRuntime = (): ModuleFederation => {
         },
         '@hookform/resolvers/zod': {
           version: '3.3.4',
-          lib: () => require('@hookform/resolvers/zod'),
+          lib: () => hookformResolversZod,
           shareConfig: {
             singleton: true,
             requiredVersion: '^3.3.4',
@@ -182,7 +171,7 @@ const getPluginRuntime = (): ModuleFederation => {
         },
         'use-resize-observer': {
           version: '9.1.0',
-          lib: () => require('use-resize-observer'),
+          lib: () => useResizeObserver,
           shareConfig: {
             singleton: true,
             requiredVersion: '^9.1.0',
@@ -190,7 +179,7 @@ const getPluginRuntime = (): ModuleFederation => {
         },
         'lucide-react': {
           version: '0.469.0',
-          lib: () => require('lucide-react'),
+          lib: () => lucideReact,
           shareConfig: {
             singleton: true,
             requiredVersion: '^0.469.0',
@@ -198,7 +187,7 @@ const getPluginRuntime = (): ModuleFederation => {
         },
         immer: {
           version: '10.1.1',
-          lib: () => require('immer'),
+          lib: () => immerModule,
           shareConfig: {
             singleton: true,
             requiredVersion: '^10.1.1',

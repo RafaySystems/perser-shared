@@ -11,7 +11,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { PersesChartsTheme } from '../model';
-import { generateChartsTheme } from '../utils';
+import { ReactElement } from 'react';
+import { cn } from '../lib/utils';
 
-export const testChartsTheme: PersesChartsTheme = generateChartsTheme('light');
+export interface ChartEmptyStateProps {
+  message?: string;
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+export function ChartEmptyState({
+  message = 'No data',
+  className,
+  style,
+}: ChartEmptyStateProps): ReactElement {
+  return (
+    <div
+      className={cn(
+        'flex h-full min-h-[80px] items-center justify-center text-sm text-muted-foreground',
+        className
+      )}
+      style={style}
+    >
+      {message}
+    </div>
+  );
+}

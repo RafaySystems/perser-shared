@@ -13,3 +13,5 @@
 
 export * from './PluginLoaderComponent';
 export * from './remotePluginLoader';
+export * from './rechartsPluginLoader';
+export * from '../panels-recharts';

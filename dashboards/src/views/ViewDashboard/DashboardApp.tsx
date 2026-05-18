@@ -11,8 +11,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ReactElement, ReactNode, useState } from 'react';
-import { ChartsProvider, ErrorAlert, ErrorBoundary, useChartsTheme } from '@perses-dev/components';
+import { ReactElement, ReactNode, useMemo, useState } from 'react';
+import {
+  ChartsProvider,
+  ErrorAlert,
+  ErrorBoundary,
+  generateChartsTheme,
+  usePaletteMode,
+} from '@perses-dev/components';
 import { useDatasourceStore } from '@perses-dev/plugin-system';
 import { DashboardSpec } from '@perses-dev/spec';
 import {
@@ -73,7 +79,8 @@ const DashboardAppContent = (props: DashboardAppProps): ReactElement => {
     onDiscard,
   } = props;
 
-  const chartsTheme = useChartsTheme();
+  const mode = usePaletteMode();
+  const chartsTheme = useMemo(() => generateChartsTheme(mode), [mode]);
 
   const { isEditMode, setEditMode } = useEditMode();
 
@@ -128,6 +135,7 @@ const DashboardAppContent = (props: DashboardAppProps): ReactElement => {
   });
 
   return (
+    <ChartsProvider chartsTheme={chartsTheme} enablePinning={false} enableSyncGrouping={false}>
     <div className="grow overflow-x-hidden overflow-y-auto flex flex-col">
       <DashboardToolbar
         dashboardName={dashboardResource.metadata.name}
@@ -149,9 +157,7 @@ const DashboardAppContent = (props: DashboardAppProps): ReactElement => {
             }}
           />
         </ErrorBoundary>
-        <ChartsProvider chartsTheme={chartsTheme} enablePinning={false} enableSyncGrouping={false}>
-          <PanelDrawer />
-        </ChartsProvider>
+        <PanelDrawer />
         <PanelGroupDialog />
         <DeletePanelGroupDialog />
         <DeletePanelDialog />
@@ -163,5 +169,6 @@ const DashboardAppContent = (props: DashboardAppProps): ReactElement => {
         )}
       </div>
     </div>
+    </ChartsProvider>
   );
 };

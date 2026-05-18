@@ -11,4 +11,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export * from './EChart';
+/** shadcn chart palette — mirrors `--chart-1` … `--chart-5` in globals.css */
+export const CHART_SERIES_COLORS = [
+  'hsl(var(--chart-1))',
+  'hsl(var(--chart-2))',
+  'hsl(var(--chart-3))',
+  'hsl(var(--chart-4))',
+  'hsl(var(--chart-5))',
+] as const;
+
+export function getChartSeriesColor(index: number): string {
+  return CHART_SERIES_COLORS[index % CHART_SERIES_COLORS.length];
+}

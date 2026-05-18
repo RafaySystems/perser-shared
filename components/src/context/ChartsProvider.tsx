@@ -13,7 +13,7 @@
 
 import React, { createContext, ReactElement, useContext, useMemo, useState } from 'react';
 import { PersesChartsTheme } from '../model';
-import { CursorCoordinates } from '../TimeSeriesTooltip';
+import { CursorCoordinates } from '../charts/types';
 
 export interface ChartsProviderProps {
   chartsTheme: PersesChartsTheme;

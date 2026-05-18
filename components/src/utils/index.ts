@@ -13,7 +13,8 @@
 
 export * from './axis';
 export * from './browser-storage';
-export * from './chart-actions';
+/** @deprecated ECharts chart actions — not used with Recharts panels. */
+// export * from './chart-actions';
 export * from './combine-sx';
 export * from './component-ids';
 export * from './data-field-interpolation';

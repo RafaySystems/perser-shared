@@ -11,7 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { PersesChartsTheme } from '../model';
-import { generateChartsTheme } from '../utils';
-
-export const testChartsTheme: PersesChartsTheme = generateChartsTheme('light');
+/** Cursor position for chart tooltip pinning (Recharts / legacy ECharts). */
+export interface CursorCoordinates {
+  x: number;
+  y: number;
+}

@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ChartsProvider, useChartsTheme } from '@perses-dev/components';
-import { ReactElement, ReactNode } from 'react';
+import { ChartsProvider, generateChartsTheme, usePaletteMode } from '@perses-dev/components';
+import { ReactElement, ReactNode, useMemo } from 'react';
 import { ExploreManager, ExplorerManagerProviderWithQueryParams } from '../../components';
 
 export interface ViewAppProps {
@@ -21,16 +21,16 @@ export interface ViewAppProps {
 
 export function ViewExploreApp(props: ViewAppProps): ReactElement {
   const { exploreTitleComponent } = props;
-
-  const chartsTheme = useChartsTheme();
+  const mode = usePaletteMode();
+  const chartsTheme = useMemo(() => generateChartsTheme(mode), [mode]);
 
   return (
-    <div className="grow overflow-x-hidden overflow-y-auto flex flex-col">
-      <ChartsProvider chartsTheme={chartsTheme} enablePinning={false}>
+    <ChartsProvider chartsTheme={chartsTheme} enablePinning={false}>
+      <div className="grow overflow-x-hidden overflow-y-auto flex flex-col">
         <ExplorerManagerProviderWithQueryParams>
           <ExploreManager exploreTitleComponent={exploreTitleComponent} />
         </ExplorerManagerProviderWithQueryParams>
-      </ChartsProvider>
-    </div>
+      </div>
+    </ChartsProvider>
   );
 }
