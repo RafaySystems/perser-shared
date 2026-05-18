@@ -80,7 +80,7 @@ export const Panel = memo(function Panel(props: PanelProps) {
     editHandlers,
     onMouseEnter,
     onMouseLeave,
-    sx,
+    className,
     panelOptions,
     panelGroupItemId,
     viewQueriesHandler,
