@@ -1,9 +1,9 @@
 // Copyright The Perses Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 
+import { parseVariables, replaceVariables } from '@perses-dev/components';
 import type { TimeSeries, TimeSeriesData } from '@perses-dev/spec';
 import type { TimeSeriesQueryPlugin } from '../model';
-import { parseVariables, replaceVariables } from '../runtime';
 import type { PrometheusHttpClient, PromQueryResponse } from './prometheusClient';
 
 export const PROM_DATASOURCE_KIND = 'PrometheusDatasource';
