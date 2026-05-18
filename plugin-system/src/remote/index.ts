@@ -14,4 +14,5 @@
 export * from './PluginLoaderComponent';
 export * from './remotePluginLoader';
 export * from './rechartsPluginLoader';
+export * from '../prometheus-local/localPrometheusPlugins';
 export * from '../panels-recharts';

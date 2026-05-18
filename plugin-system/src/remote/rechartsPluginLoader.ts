@@ -12,6 +12,10 @@
 // limitations under the License.
 
 import { RECHARTS_PANEL_KINDS, RECHARTS_PANEL_PLUGINS } from '../panels-recharts';
+import {
+  LOCAL_PROMETHEUS_MODULE_NAME,
+  LOCAL_PROMETHEUS_PLUGINS,
+} from '../prometheus-local/localPrometheusPlugins';
 import type { PluginLoader, PluginModuleResource } from '../model';
 import { remotePluginLoader } from './remotePluginLoader';
 
@@ -48,6 +52,7 @@ function localPanelsModule(resource: PluginModuleResource): Record<string, unkno
 
 /**
  * Loads query/variable plugins from Perses but renders TimeSeries/Stat/Gauge panels with Recharts (shadcn).
+ * Prometheus query/datasource/variable plugins are bundled in-process (remote MF breaks on React 18.3).
  */
 export function rechartsPluginLoader(options?: RemoteLoaderOptions): PluginLoader {
   const remote = remotePluginLoader(options);
@@ -55,6 +60,10 @@ export function rechartsPluginLoader(options?: RemoteLoaderOptions): PluginLoade
   return {
     getInstalledPlugins: () => remote.getInstalledPlugins(),
     importPluginModule: async (resource) => {
+      if (resource.metadata.name === LOCAL_PROMETHEUS_MODULE_NAME) {
+        return { ...LOCAL_PROMETHEUS_PLUGINS };
+      }
+
       const panelPlugins = resource.spec.plugins.filter((p) => p.kind === 'Panel');
       const hasNonPanelPlugins = resource.spec.plugins.some((p) => p.kind !== 'Panel');
 
