@@ -12,7 +12,6 @@
 // limitations under the License.
 
 import { ReactElement, useContext, useEffect, useRef } from 'react';
-import { Box } from '@mui/material';
 import { PanelEditorValues } from '@perses-dev/spec';
 import { Panel } from '../Panel';
 import { PanelEditorContext } from '../../context';
@@ -34,8 +33,8 @@ export function PanelPreview({ panelDefinition }: Pick<PanelEditorValues, 'panel
   }
 
   return (
-    <Box ref={boxRef} height={PANEL_PREVIEW_HEIGHT}>
+    <div ref={boxRef} style={{ height: PANEL_PREVIEW_HEIGHT }}>
       <Panel definition={panelDefinition} />
-    </Box>
+    </div>
   );
 }

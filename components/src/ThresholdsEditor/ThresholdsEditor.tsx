@@ -13,15 +13,15 @@
 
 import React, { ReactElement, useEffect, useRef } from 'react';
 import { produce } from 'immer';
-import { IconButton, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
-import PlusIcon from 'mdi-material-ui/Plus';
-import { Stack } from '@mui/system';
+import { Plus as PlusIcon } from 'lucide-react';
 import { useChartsTheme } from '../context/ChartsProvider';
 import { OptionsEditorControl, OptionsEditorGroup } from '../OptionsEditorLayout';
 import { InfoTooltip } from '../InfoTooltip';
 import { OptionsColorPicker } from '../ColorPicker/OptionsColorPicker';
 import { ThresholdOptions } from '../model';
 import { ThresholdInput } from './ThresholdInput';
+import { Button } from '../ui/button';
+import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 
 export interface ThresholdsEditorProps {
   onChange: (thresholds: ThresholdOptions) => void;
@@ -150,7 +150,7 @@ export function ThresholdsEditor({
     }
   };
 
-  const handleModeChange = (event: React.MouseEvent, value: string): void => {
+  const handleModeChange = (value: string): void => {
     const mode = value === 'percent' ? 'percent' : undefined;
     if (thresholds !== undefined) {
       onChange(
@@ -168,9 +168,9 @@ export function ThresholdsEditor({
       title="Thresholds"
       icon={
         <InfoTooltip description="Add threshold">
-          <IconButton size="small" aria-label="add threshold" onClick={addThresholdInput}>
+          <Button variant="ghost" size="icon" aria-label="add threshold" className="h-8 w-8" onClick={addThresholdInput}>
             <PlusIcon />
-          </IconButton>
+          </Button>
         </InfoTooltip>
       }
     >
@@ -178,20 +178,21 @@ export function ThresholdsEditor({
         label="Mode"
         description="Percentage means thresholds relative to min & max"
         control={
-          <ToggleButtonGroup
-            exclusive
+          <ToggleGroup
+            type="single"
             disabled={disablePercentMode}
             value={thresholds?.mode ?? 'absolute'}
-            onChange={handleModeChange}
-            sx={{ height: '36px', marginLeft: 'auto' }}
+            onValueChange={handleModeChange}
+            className="h-9 ml-auto"
+            variant="outline"
           >
-            <ToggleButton aria-label="absolute" value="absolute" sx={{ fontWeight: 500 }}>
+            <ToggleGroupItem aria-label="absolute" value="absolute" className="font-medium">
               Absolute
-            </ToggleButton>
-            <ToggleButton aria-label="percent" value="percent" sx={{ fontWeight: 500 }}>
+            </ToggleGroupItem>
+            <ToggleGroupItem aria-label="percent" value="percent" className="font-medium">
               Percent
-            </ToggleButton>
-          </ToggleButtonGroup>
+            </ToggleGroupItem>
+          </ToggleGroup>
         }
       />
       {steps &&
@@ -216,10 +217,10 @@ export function ThresholdsEditor({
           ))
           .reverse()}
       {!hideDefault && (
-        <Stack flex={1} direction="row" alignItems="center" spacing={1}>
+        <div className="flex flex-1 flex-row items-center gap-2">
           <OptionsColorPicker label="default" color={defaultThresholdColor} onColorChange={handleDefaultColorChange} />
-          <Typography>Default</Typography>
-        </Stack>
+          <p className="text-sm">Default</p>
+        </div>
       )}
     </OptionsEditorGroup>
   );

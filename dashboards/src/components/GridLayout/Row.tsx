@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Collapse, useTheme } from '@mui/material';
 import { PanelGroupId } from '@perses-dev/spec';
 import { PanelOptions, useViewPanelGroup } from '@perses-dev/dashboards';
+import { Collapsible, CollapsibleContent } from '@perses-dev/components';
 import { ReactElement, useEffect, useMemo, useState } from 'react';
 import { Layout, Layouts, Responsive, WidthProvider } from 'react-grid-layout';
 import { ErrorAlert, ErrorBoundary } from '@perses-dev/components';
@@ -25,6 +25,9 @@ import { GridTitle } from './GridTitle';
 
 const DEFAULT_MARGIN = 10;
 const ROW_HEIGHT = 30;
+
+// Small breakpoint width in px (matches sm: 600 from typical theme)
+const SM_BREAKPOINT = 600;
 
 export interface RowProps {
   panelGroupId: PanelGroupId;
@@ -55,7 +58,6 @@ export function Row({
   repeatVariable,
 }: RowProps): ReactElement {
   const ResponsiveGridLayout = useMemo(() => WidthProvider(Responsive), []);
-  const theme = useTheme();
   const viewPanelItemId = useViewPanelGroup();
 
   const [isOpen, setIsOpen] = useState(!groupDefinition.isCollapsed);
@@ -99,11 +101,8 @@ export function Row({
 
   return (
     <GridContainer
-      sx={{
-        display: isGridDisplayed ? 'block' : 'none',
-        height: itemLayoutViewed ? `${panelFullHeight}px` : 'unset',
-        overflow: itemLayoutViewed ? 'hidden' : 'unset',
-      }}
+      className={isGridDisplayed ? undefined : 'hidden'}
+      style={itemLayoutViewed ? { height: `${panelFullHeight}px`, overflow: 'hidden' } : undefined}
     >
       {groupDefinition.title && (
         <GridTitle
@@ -116,41 +115,43 @@ export function Row({
           }
         />
       )}
-      <Collapse in={isOpen} unmountOnExit appear={false} data-testid="panel-group-content">
-        <ResponsiveGridLayout
-          className="layout"
-          breakpoints={{ [GRID_LAYOUT_SMALL_BREAKPOINT]: theme.breakpoints.values.sm, xxs: 0 }}
-          cols={GRID_LAYOUT_COLS}
-          rowHeight={ROW_HEIGHT}
-          draggableHandle=".drag-handle"
-          resizeHandles={['se']}
-          isDraggable={isEditMode && !hasViewPanel}
-          isResizable={isEditMode && !hasViewPanel}
-          margin={[DEFAULT_MARGIN, DEFAULT_MARGIN]}
-          containerPadding={[0, 10]}
-          layouts={{ sm: itemLayouts }}
-          onLayoutChange={onLayoutChange}
-          onWidthChange={onWidthChange}
-          allowOverlap={hasViewPanel} // Enabling overlap when viewing a specific panel because panel in front of the viewed panel will add empty spaces (empty row height)
-        >
-          {itemLayouts.map(({ i, w }) => (
-            <div
-              key={i}
-              style={{
-                display: itemLayoutViewed ? (itemLayoutViewed === i ? 'unset' : 'none') : 'unset',
-              }}
-            >
-              <ErrorBoundary FallbackComponent={ErrorAlert}>
-                <GridItemContent
-                  panelOptions={panelOptions}
-                  panelGroupItemId={{ panelGroupId, panelGroupItemLayoutId: i, repeatVariable }}
-                  width={calculateGridItemWidth(w, gridColWidth)}
-                />
-              </ErrorBoundary>
-            </div>
-          ))}
-        </ResponsiveGridLayout>
-      </Collapse>
+      <Collapsible open={isOpen}>
+        <CollapsibleContent data-testid="panel-group-content">
+          <ResponsiveGridLayout
+            className="layout"
+            breakpoints={{ [GRID_LAYOUT_SMALL_BREAKPOINT]: SM_BREAKPOINT, xxs: 0 }}
+            cols={GRID_LAYOUT_COLS}
+            rowHeight={ROW_HEIGHT}
+            draggableHandle=".drag-handle"
+            resizeHandles={['se']}
+            isDraggable={isEditMode && !hasViewPanel}
+            isResizable={isEditMode && !hasViewPanel}
+            margin={[DEFAULT_MARGIN, DEFAULT_MARGIN]}
+            containerPadding={[0, 10]}
+            layouts={{ sm: itemLayouts }}
+            onLayoutChange={onLayoutChange}
+            onWidthChange={onWidthChange}
+            allowOverlap={hasViewPanel} // Enabling overlap when viewing a specific panel because panel in front of the viewed panel will add empty spaces (empty row height)
+          >
+            {itemLayouts.map(({ i, w }) => (
+              <div
+                key={i}
+                style={{
+                  display: itemLayoutViewed ? (itemLayoutViewed === i ? 'unset' : 'none') : 'unset',
+                }}
+              >
+                <ErrorBoundary FallbackComponent={ErrorAlert}>
+                  <GridItemContent
+                    panelOptions={panelOptions}
+                    panelGroupItemId={{ panelGroupId, panelGroupItemLayoutId: i, repeatVariable }}
+                    width={calculateGridItemWidth(w, gridColWidth)}
+                  />
+                </ErrorBoundary>
+              </div>
+            ))}
+          </ResponsiveGridLayout>
+        </CollapsibleContent>
+      </Collapsible>
     </GridContainer>
   );
 }

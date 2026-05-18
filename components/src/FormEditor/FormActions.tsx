@@ -11,11 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button, Divider, Stack, StackProps } from '@mui/material';
 import { ReactElement } from 'react';
-import { Action } from '@perses-dev/components'; // TODO the internal permission system of Perses should not be in a shared library
+import { Button } from '../ui/button';
+import { Separator } from '../ui/separator';
+import { cn } from '../lib/utils';
+import { Action } from '@perses-dev/components';
 
-export interface FormActionsProps extends StackProps {
+export interface FormActionsProps {
   action: Action;
   submitText?: string;
   cancelText?: string;
@@ -25,6 +27,7 @@ export interface FormActionsProps extends StackProps {
   onSubmit?: () => void;
   onDelete?: () => void;
   onCancel?: () => void;
+  className?: string;
 }
 
 export function FormActions({
@@ -37,37 +40,27 @@ export function FormActions({
   onSubmit,
   onDelete,
   onCancel,
-  ...props
+  className,
 }: FormActionsProps): ReactElement {
   return (
-    <Stack direction="row" gap={1} sx={{ marginLeft: 'auto' }} {...props}>
+    <div className={cn('flex flex-row gap-2 ml-auto items-center', className)}>
       {action === 'read' ? (
         <>
           {onActionChange && (
-            <Button disabled={isReadonly} variant="contained" onClick={() => onActionChange('update')}>
+            <Button disabled={isReadonly} onClick={() => onActionChange('update')}>
               Edit
             </Button>
           )}
           {onDelete && (
-            <Button color="error" disabled={isReadonly} variant="outlined" onClick={onDelete}>
+            <Button variant="destructive" disabled={isReadonly} onClick={onDelete}>
               Delete
             </Button>
           )}
           {onCancel && (onSubmit || onDelete) && (
-            <Divider
-              orientation="vertical"
-              flexItem
-              sx={{
-                borderColor: (theme) => theme.palette.grey['500'],
-                '&.MuiDivider-root': {
-                  marginLeft: 2,
-                  marginRight: 1,
-                },
-              }}
-            />
+            <Separator orientation="vertical" className="mx-2 h-6" />
           )}
           {onCancel && (
-            <Button color="secondary" variant="outlined" onClick={onCancel}>
+            <Button variant="outline" onClick={onCancel}>
               {cancelText}
             </Button>
           )}
@@ -75,17 +68,17 @@ export function FormActions({
       ) : (
         <>
           {onSubmit && (
-            <Button variant="contained" disabled={!isValid} onClick={onSubmit}>
+            <Button disabled={!isValid} onClick={onSubmit}>
               {submitText}
             </Button>
           )}
           {onCancel && (
-            <Button color="secondary" variant="outlined" onClick={onCancel}>
+            <Button variant="outline" onClick={onCancel}>
               {cancelText}
             </Button>
           )}
         </>
       )}
-    </Stack>
+    </div>
   );
 }

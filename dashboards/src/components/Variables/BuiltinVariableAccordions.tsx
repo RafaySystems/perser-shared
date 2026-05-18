@@ -14,17 +14,16 @@
 import { BuiltinVariableDefinition } from '@perses-dev/spec';
 import {
   Accordion,
-  AccordionDetails,
-  AccordionSummary,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
+  TableHeader,
   TableRow,
-  Typography,
-} from '@mui/material';
-import ExpandMoreIcon from 'mdi-material-ui/ChevronUp';
+} from '@perses-dev/components';
 import { InfoTooltip } from '@perses-dev/components';
 import { ReactElement, useMemo } from 'react';
 
@@ -59,53 +58,39 @@ export function BuiltinVariableAccordions({
   }, [builtinVariablesBySource]);
 
   return (
-    <>
+    <Accordion type="multiple" className="w-full">
       {sources.map((source) => (
-        <Accordion
-          key={source}
-          sx={(theme) => ({
-            '.MuiAccordionSummary-root': {
-              backgroundColor: theme.palette.background.lighter,
-            },
-            '.MuiAccordionDetails-root': {
-              backgroundColor: theme.palette.background.lighter,
-            },
-          })}
-        >
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="builtin" id="builtin">
-            <Typography variant="h2">
+        <AccordionItem key={source} value={source}>
+          <AccordionTrigger className="bg-muted/50 px-4">
+            <h2 className="text-base font-semibold">
               <InfoTooltip
                 title={`${source} Built-in Variables`}
                 description="Variables computed during dashboard rendering."
               >
                 <span>{source} Built-in Variables</span>
               </InfoTooltip>
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <TableContainer>
-              <Table sx={{ minWidth: 650 }} aria-label="table of external variables">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Description</TableCell>
+            </h2>
+          </AccordionTrigger>
+          <AccordionContent className="bg-muted/50 px-4">
+            <Table aria-label="table of external variables" className="min-w-[650px]">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Description</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {(builtinVariablesBySource[source] ?? []).map((v) => (
+                  <TableRow key={source + '-' + v.spec.name}>
+                    <TableCell className="font-bold">{v.spec.name}</TableCell>
+                    <TableCell>{v.spec.display?.description ?? ''}</TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {(builtinVariablesBySource[source] ?? []).map((v) => (
-                    <TableRow key={source + '-' + v.spec.name}>
-                      <TableCell component="th" scope="row" sx={{ fontWeight: 'bold' }}>
-                        {v.spec.name}
-                      </TableCell>
-                      <TableCell>{v.spec.display?.description ?? ''}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </AccordionDetails>
-        </Accordion>
+                ))}
+              </TableBody>
+            </Table>
+          </AccordionContent>
+        </AccordionItem>
       ))}
-    </>
+    </Accordion>
   );
 }

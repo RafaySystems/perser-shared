@@ -14,7 +14,7 @@
 import { usePlugin, PanelProps } from '@perses-dev/plugin-system';
 import { UnknownSpec, QueryDataType } from '@perses-dev/spec';
 import { ReactElement } from 'react';
-import { Skeleton } from '@mui/material';
+import { Skeleton } from '@perses-dev/components';
 
 interface PanelPluginProps extends PanelProps<UnknownSpec, QueryDataType> {
   kind: string;

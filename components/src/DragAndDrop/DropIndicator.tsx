@@ -11,32 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, Stack } from '@mui/material';
 import { ReactElement } from 'react';
 
 export function DropIndicator(): ReactElement {
   return (
-    <Stack direction="row" alignItems="center">
-      <Box
-        sx={{
-          content: '""',
-          width: 8,
-          height: 8,
-          boxSizing: 'border-box',
-          position: 'absolute',
-          backgroundColor: (theme) => theme.palette.background.default,
-          border: (theme) => `2px solid ${theme.palette.info.main}`,
-          borderRadius: '50%',
-        }}
-      ></Box>
-      <Box
-        sx={{
-          content: '""',
-          height: 2,
-          background: (theme) => theme.palette.info.main,
-          width: '100%',
-        }}
-      ></Box>
-    </Stack>
+    <div className="flex flex-row items-center">
+      <div className="absolute w-2 h-2 box-border bg-background border-2 border-info rounded-full" />
+      <div className="h-0.5 bg-info w-full" />
+    </div>
   );
 }

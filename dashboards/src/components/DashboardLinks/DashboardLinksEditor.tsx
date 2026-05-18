@@ -12,29 +12,22 @@
 // limitations under the License.
 
 import { useState, ReactElement } from 'react';
+import { Plus as AddIcon, Trash2 as TrashIcon, ArrowUp, ArrowDown, Pencil as PencilIcon, ChevronUp } from 'lucide-react';
+import { Link } from '@perses-dev/spec';
+import { useImmer } from 'use-immer';
 import {
   Button,
-  Stack,
-  Box,
-  Typography,
-  IconButton,
+  Collapsible,
+  CollapsibleContent,
+  InfoTooltip,
+  LinkEditorForm,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
+  TableHeader,
   TableRow,
-  Collapse,
-} from '@mui/material';
-import AddIcon from 'mdi-material-ui/Plus';
-import TrashIcon from 'mdi-material-ui/TrashCan';
-import ArrowUp from 'mdi-material-ui/ArrowUp';
-import ArrowDown from 'mdi-material-ui/ArrowDown';
-import PencilIcon from 'mdi-material-ui/Pencil';
-import ChevronUp from 'mdi-material-ui/ChevronUp';
-import { Link } from '@perses-dev/spec';
-import { useImmer } from 'use-immer';
-import { InfoTooltip, LinkEditorForm } from '@perses-dev/components';
+} from '@perses-dev/components';
 import { useDiscardChangesConfirmationDialog } from '../../context';
 
 export interface DashboardLinksEditorProps {
@@ -136,67 +129,57 @@ export function DashboardLinksEditor({
 
   return (
     <>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: (theme) => theme.spacing(1, 2),
-          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
-        }}
-      >
-        <Typography variant="h2">Edit Dashboard Links</Typography>
-        <Stack direction="row" spacing={1} marginLeft="auto">
-          <Button disabled={!isValid} variant="contained" onClick={() => onChange(links)}>
+      <div className="flex items-center px-4 py-2 border-b">
+        <h2 className="text-base font-semibold">Edit Dashboard Links</h2>
+        <div className="flex flex-row gap-2 ml-auto">
+          <Button disabled={!isValid} variant="default" onClick={() => onChange(links)}>
             Apply
           </Button>
-          <Button color="secondary" variant="outlined" onClick={handleCancel}>
+          <Button variant="outline" onClick={handleCancel}>
             Cancel
           </Button>
-        </Stack>
-      </Box>
-      <Box padding={2} sx={{ overflowY: 'scroll' }}>
-        <Stack spacing={2}>
-          <TableContainer>
-            <Table size="small" sx={{ tableLayout: 'fixed', width: '100%' }} aria-label="table of dashboard links">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>URL</TableCell>
-                  <TableCell width={80}>New Tab</TableCell>
-                  <TableCell align="right" width={180}>
-                    Actions
-                  </TableCell>
-                </TableRow>
+        </div>
+      </div>
+      <div className="p-4 overflow-y-auto flex flex-col gap-4">
+        <Table style={{ tableLayout: 'fixed', width: '100%' }} aria-label="table of dashboard links">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>URL</TableHead>
+              <TableHead style={{ width: 80 }}>New Tab</TableHead>
+              <TableHead className="text-right" style={{ width: 180 }}>
+                Actions
               </TableHead>
-              <TableBody>
-                {links.map((link, index) => (
-                  <LinkTableRow
-                    key={index}
-                    link={link}
-                    index={index}
-                    isFirst={index === 0}
-                    isLast={index === links.length - 1}
-                    isExpanded={expandedIndex === index}
-                    onToggleExpand={() => setExpandedIndex(expandedIndex === index ? null : index)}
-                    onUpdate={(updatedLink) => handleUpdateLink(index, updatedLink)}
-                    onRemove={() => handleRemove(index)}
-                    onMoveUp={() => handleMoveUp(index)}
-                    onMoveDown={() => handleMoveDown(index)}
-                  />
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          {links.length === 0 && (
-            <Typography variant="body1" color="text.secondary" fontStyle="italic" textAlign="center" py={4}>
-              No links defined. Click &apos;Add Link&apos; to create one.
-            </Typography>
-          )}
-          <Button variant="contained" startIcon={<AddIcon />} onClick={handleAdd} sx={{ alignSelf: 'flex-start' }}>
-            Add Link
-          </Button>
-        </Stack>
-      </Box>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {links.map((link, index) => (
+              <LinkTableRow
+                key={index}
+                link={link}
+                index={index}
+                isFirst={index === 0}
+                isLast={index === links.length - 1}
+                isExpanded={expandedIndex === index}
+                onToggleExpand={() => setExpandedIndex(expandedIndex === index ? null : index)}
+                onUpdate={(updatedLink) => handleUpdateLink(index, updatedLink)}
+                onRemove={() => handleRemove(index)}
+                onMoveUp={() => handleMoveUp(index)}
+                onMoveDown={() => handleMoveDown(index)}
+              />
+            ))}
+          </TableBody>
+        </Table>
+        {links.length === 0 && (
+          <p className="text-sm text-muted-foreground italic text-center py-8">
+            No links defined. Click &apos;Add Link&apos; to create one.
+          </p>
+        )}
+        <Button variant="default" onClick={handleAdd} className="self-start">
+          <AddIcon className="mr-1 h-4 w-4" />
+          Add Link
+        </Button>
+      </div>
     </>
   );
 }
@@ -232,73 +215,98 @@ function LinkTableRow({
   return (
     <>
       <TableRow>
-        <TableCell component="th" scope="row" sx={{ fontWeight: 'bold', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-          {displayName}
-        </TableCell>
+        <TableCell className="font-bold overflow-hidden text-ellipsis">{displayName}</TableCell>
         <TableCell
-          sx={{
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            color: hasError ? 'error.main' : undefined,
-          }}
+          className={`overflow-hidden text-ellipsis whitespace-nowrap${hasError ? ' text-destructive' : ''}`}
         >
           <InfoTooltip description={link.url} enterDelay={100}>
             {link.url || '(no URL)'}
           </InfoTooltip>
         </TableCell>
         <TableCell>{link.targetBlank ? 'Yes' : 'No'}</TableCell>
-        <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
-          <IconButton onClick={onMoveUp} disabled={isFirst} aria-label="Move link up">
+        <TableCell className="text-right whitespace-nowrap">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onMoveUp}
+            disabled={isFirst}
+            aria-label="Move link up"
+            className="h-8 w-8"
+          >
             <ArrowUp />
-          </IconButton>
-          <IconButton onClick={onMoveDown} disabled={isLast} aria-label="Move link down">
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onMoveDown}
+            disabled={isLast}
+            aria-label="Move link down"
+            className="h-8 w-8"
+          >
             <ArrowDown />
-          </IconButton>
-          <IconButton onClick={onToggleExpand} aria-label={isExpanded ? 'Collapse link editor' : 'Edit link'}>
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onToggleExpand}
+            aria-label={isExpanded ? 'Collapse link editor' : 'Edit link'}
+            className="h-8 w-8"
+          >
             {isExpanded ? <ChevronUp /> : <PencilIcon />}
-          </IconButton>
-          <IconButton onClick={onRemove} aria-label="Remove link">
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onRemove}
+            aria-label="Remove link"
+            className="h-8 w-8"
+          >
             <TrashIcon />
-          </IconButton>
+          </Button>
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell colSpan={4} sx={{ paddingBottom: 0, paddingTop: 0, border: isExpanded ? undefined : 'none' }}>
-          <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 2 }}>
-              <LinkEditorForm
-                mode="modalEmbedded"
-                url={{
-                  value: link.url,
-                  label: 'URL',
-                  error: { hasError: hasError, helperText: hasError ? 'URL is required' : undefined },
-                  placeholder: 'https://example.com/dashboard?var=$variable',
-                  onChange: (url) => onUpdate({ ...link, url }),
-                }}
-                name={{
-                  value: link.name ?? '',
-                  label: 'Display Name',
-                  onChange: (name) => onUpdate({ ...link, name }),
-                }}
-                tooltip={{
-                  value: link.tooltip ?? '',
-                  label: 'Tooltip',
-                  onChange: (tooltip) => onUpdate({ ...link, tooltip }),
-                }}
-                renderVariables={{
-                  value: link.renderVariables ?? true,
-                  label: 'Replace variables in URL',
-                  onChange: (renderVariables) => onUpdate({ ...link, renderVariables }),
-                }}
-                newTabOpen={{
-                  value: link.targetBlank ?? true,
-                  label: 'Open in new tab',
-                  onChange: (targetBlank) => onUpdate({ ...link, targetBlank }),
-                }}
-              />
-            </Box>
-          </Collapse>
+        <TableCell
+          colSpan={4}
+          className={`pb-0 pt-0${isExpanded ? '' : ' border-0'}`}
+          style={{ paddingBottom: 0, paddingTop: 0 }}
+        >
+          <Collapsible open={isExpanded}>
+            <CollapsibleContent>
+              <div className="m-4">
+                <LinkEditorForm
+                  mode="modalEmbedded"
+                  url={{
+                    value: link.url,
+                    label: 'URL',
+                    error: { hasError: hasError, helperText: hasError ? 'URL is required' : undefined },
+                    placeholder: 'https://example.com/dashboard?var=$variable',
+                    onChange: (url) => onUpdate({ ...link, url }),
+                  }}
+                  name={{
+                    value: link.name ?? '',
+                    label: 'Display Name',
+                    onChange: (name) => onUpdate({ ...link, name }),
+                  }}
+                  tooltip={{
+                    value: link.tooltip ?? '',
+                    label: 'Tooltip',
+                    onChange: (tooltip) => onUpdate({ ...link, tooltip }),
+                  }}
+                  renderVariables={{
+                    value: link.renderVariables ?? true,
+                    label: 'Replace variables in URL',
+                    onChange: (renderVariables) => onUpdate({ ...link, renderVariables }),
+                  }}
+                  newTabOpen={{
+                    value: link.targetBlank ?? true,
+                    label: 'Open in new tab',
+                    onChange: (targetBlank) => onUpdate({ ...link, targetBlank }),
+                  }}
+                />
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
         </TableCell>
       </TableRow>
     </>

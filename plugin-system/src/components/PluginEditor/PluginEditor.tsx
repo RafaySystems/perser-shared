@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, Button } from '@mui/material';
-import Reload from 'mdi-material-ui/Reload';
+import { Button } from '@perses-dev/components';
+import { RefreshCw as Reload } from 'lucide-react';
 import { ErrorAlert, ErrorBoundary } from '@perses-dev/components';
 import { ReactElement, useCallback } from 'react';
 import { UnknownSpec } from '@perses-dev/spec';
@@ -39,6 +39,8 @@ export function PluginEditor(props: PluginEditorProps): ReactElement {
     isReadonly,
     onRunQuery,
     filteredQueryPlugins,
+    width,
+    style,
     ...others
   } = props;
 
@@ -52,17 +54,8 @@ export function PluginEditor(props: PluginEditorProps): ReactElement {
   );
 
   return (
-    <Box {...others}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 1,
-          mb: 1,
-        }}
-      >
+    <div style={{ width, ...style }} {...others}>
+      <div className="flex flex-row items-center justify-between gap-1 mb-1">
         <PluginKindSelect
           fullWidth={false}
           sx={{ minWidth: 120 }}
@@ -81,15 +74,16 @@ export function PluginEditor(props: PluginEditorProps): ReactElement {
         {withRunQueryButton && (
           <Button
             data-testid="run_query_button"
-            variant="contained"
-            startIcon={<Reload />}
+            variant="default"
             onClick={onRunQuery}
             disabled={isLoading}
+            className="flex items-center gap-1"
           >
+            <Reload className="h-4 w-4" />
             Run Query
           </Button>
         )}
-      </Box>
+      </div>
 
       <ErrorBoundary FallbackComponent={ErrorAlert}>
         <PluginSpecEditor
@@ -99,6 +93,6 @@ export function PluginEditor(props: PluginEditorProps): ReactElement {
           isReadonly={isReadonly}
         />
       </ErrorBoundary>
-    </Box>
+    </div>
   );
 }

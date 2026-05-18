@@ -1,0 +1,31 @@
+{
+  "name": "@perses-dev/storybook",
+  "version": "0.54.0-beta.1",
+  "description": "Storybook for Perses UI components",
+  "private": true,
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "@perses-dev/components": "0.54.0-beta.1",
+    "@perses-dev/dashboards": "0.54.0-beta.1",
+    "@perses-dev/explore": "0.54.0-beta.1",
+    "@perses-dev/plugin-system": "0.54.0-beta.1"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^8.6.0",
+    "@storybook/addon-interactions": "^8.6.0",
+    "@storybook/addon-links": "^8.6.0",
+    "@storybook/addon-themes": "^8.6.0",
+    "@storybook/blocks": "^8.6.0",
+    "@storybook/react": "^8.6.0",
+    "@storybook/react-vite": "^8.6.0",
+    "@vitejs/plugin-react": "^4.4.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.3",
+    "storybook": "^8.6.0",
+    "tailwindcss": "^3.4.17",
+    "vite": "^6.3.5"
+  }
+}

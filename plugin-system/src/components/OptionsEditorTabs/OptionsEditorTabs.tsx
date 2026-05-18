@@ -11,9 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Tab, Tabs, TabsProps, Box } from '@mui/material';
-import { ReactElement, ReactNode, useState } from 'react';
-import { OptionsEditorTabPanel } from '../OptionsEditorTabPanel';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@perses-dev/components';
+import { ReactElement, ReactNode } from 'react';
 
 export type OptionsEditorTab = {
   label: string;
@@ -28,35 +27,34 @@ export type OptionsEditorTabsProps = {
 };
 
 export const OptionsEditorTabs = ({ tabs }: OptionsEditorTabsProps): ReactElement => {
-  const [activeTab, setActiveTab] = useState(0);
-
-  const handleChange: TabsProps['onChange'] = (_, newValue) => {
-    setActiveTab(newValue);
-  };
-
   return (
-    <>
-      <Box sx={{ borderBottom: 1, borderColor: (theme) => theme.palette.divider }}>
-        <Tabs value={activeTab} onChange={handleChange} aria-label="Panel configuration tabs">
-          {tabs.map(({ label }, i) => {
-            return (
-              <Tab
-                key={label}
-                label={label}
-                id={`options-editor-tab-${i}`}
-                aria-controls={`options-editor-tabpanel-${i}`}
-              />
-            );
-          })}
-        </Tabs>
-      </Box>
-      {tabs.map(({ label, content }, i) => {
-        return (
-          <OptionsEditorTabPanel key={label} value={activeTab} index={i}>
-            {content}
-          </OptionsEditorTabPanel>
-        );
-      })}
-    </>
+    <Tabs defaultValue={tabs[0]?.label ?? ''}>
+      <div className="border-b border-border">
+        <TabsList className="h-auto bg-transparent p-0 rounded-none">
+          {tabs.map(({ label }, i) => (
+            <TabsTrigger
+              key={label}
+              value={label}
+              id={`options-editor-tab-${i}`}
+              aria-controls={`options-editor-tabpanel-${i}`}
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
+            >
+              {label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </div>
+      {tabs.map(({ label, content }, i) => (
+        <TabsContent
+          key={label}
+          value={label}
+          id={`options-editor-tabpanel-${i}`}
+          aria-labelledby={`options-editor-tab-${i}`}
+          className="mt-2"
+        >
+          {content}
+        </TabsContent>
+      ))}
+    </Tabs>
   );
 };

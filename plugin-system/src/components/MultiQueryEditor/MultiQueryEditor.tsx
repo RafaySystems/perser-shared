@@ -13,8 +13,8 @@
 
 import { forwardRef, ReactElement, useState } from 'react';
 import { produce } from 'immer';
-import { Button, Stack } from '@mui/material';
-import AddIcon from 'mdi-material-ui/Plus';
+import { Button } from '@perses-dev/components';
+import { Plus as AddIcon } from 'lucide-react';
 import { QueryDefinition, QueryPluginType } from '@perses-dev/spec';
 import { QueryData, useListPluginMetadata, usePlugin, usePluginRegistry } from '../../runtime';
 import { PluginEditorRef } from '../PluginEditor';
@@ -147,7 +147,7 @@ export const MultiQueryEditor = forwardRef<PluginEditorRef, MultiQueryEditorProp
 
   return (
     <>
-      <Stack spacing={1}>
+      <div className="flex flex-col gap-1">
         {queryDefinitions.map((query: QueryDefinition, i: number) => (
           <QueryEditorContainer
             ref={ref}
@@ -164,8 +164,9 @@ export const MultiQueryEditor = forwardRef<PluginEditorRef, MultiQueryEditorProp
             onCollapseExpand={handleQueryCollapseExpand}
           />
         ))}
-      </Stack>
-      <Button variant="contained" startIcon={<AddIcon />} sx={{ marginTop: 1 }} onClick={handleQueryAdd}>
+      </div>
+      <Button variant="default" className="mt-1 flex items-center gap-1" onClick={handleQueryAdd}>
+        <AddIcon className="h-4 w-4" />
         Add Query
       </Button>
     </>

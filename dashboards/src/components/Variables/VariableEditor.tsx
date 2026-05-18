@@ -14,38 +14,27 @@
 import { ReactElement, useMemo, useState } from 'react';
 import {
   Accordion,
-  AccordionDetails,
-  AccordionSummary,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
   Alert,
-  Box,
+  AlertDescription,
   Button,
-  capitalize,
-  CircularProgress,
-  IconButton,
-  Stack,
-  styled,
+  Spinner,
   Switch,
   Table,
   TableBody,
-  TableCell as MuiTableCell,
-  TableContainer,
+  TableCell,
   TableHead,
+  TableHeader,
   TableRow,
   Tooltip,
-  Typography,
-} from '@mui/material';
-import AddIcon from 'mdi-material-ui/Plus';
+  TooltipContent,
+  TooltipTrigger,
+} from '@perses-dev/components';
+import { Plus as AddIcon, Pencil as PencilIcon, Copy as CloneIcon, Trash2 as TrashIcon, ArrowUp, ArrowDown, CopyPlus as ContentDuplicate, ExternalLink as OpenInNewIcon, ChevronUp as ExpandMoreIcon } from 'lucide-react';
 import { BuiltinVariableDefinition, VariableDefinition } from '@perses-dev/spec';
 import { useImmer } from 'use-immer';
-import PencilIcon from 'mdi-material-ui/Pencil';
-import CloneIcon from 'mdi-material-ui/ContentCopy';
-import TrashIcon from 'mdi-material-ui/TrashCan';
-import ArrowUp from 'mdi-material-ui/ArrowUp';
-import ArrowDown from 'mdi-material-ui/ArrowDown';
-import ContentDuplicate from 'mdi-material-ui/ContentDuplicate';
-import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
-import ExpandMoreIcon from 'mdi-material-ui/ChevronUp';
-
 import {
   ValidationProvider,
   VARIABLE_TYPES,
@@ -58,6 +47,10 @@ import { ExternalVariableDefinition } from '../../model/VariableDefinition';
 import { useDiscardChangesConfirmationDialog, VariableProvider } from '../../context';
 import { hydrateVariableDefinitionStates } from '../../context/VariableProvider/hydrationUtils';
 import { BuiltinVariableAccordions } from './BuiltinVariableAccordions';
+
+function capitalize(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
 
 function getVariableLabelByKind(kind: string): 'List' | 'Text' | undefined {
   return VARIABLE_TYPES.find((variableType) => variableType.kind === kind)?.label;
@@ -212,80 +205,77 @@ export function VariableEditor(props: {
       )}
       {!currentEditingVariableDefinition && (
         <>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              padding: (theme) => theme.spacing(1, 2),
-              borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
-            }}
-          >
-            <Typography variant="h2">Edit Dashboard Variables</Typography>
-            <Stack direction="row" spacing={1} marginLeft="auto">
+          <div className="flex items-center px-4 py-2 border-b border-border">
+            <h2 className="text-base font-semibold">Edit Dashboard Variables</h2>
+            <div className="flex flex-row gap-1 ml-auto">
               <Button
                 disabled={props.variableDefinitions === variableDefinitions || !validation.isValid}
-                variant="contained"
+                variant="default"
                 onClick={() => {
                   props.onChange(variableDefinitions);
                 }}
               >
                 Apply
               </Button>
-              <Button color="secondary" variant="outlined" onClick={handleCancel}>
+              <Button variant="outline" onClick={handleCancel}>
                 Cancel
               </Button>
-            </Stack>
-          </Box>
-          <Box padding={2} sx={{ overflowY: 'scroll' }}>
-            <Stack spacing={2}>
-              <Stack spacing={2}>
+            </div>
+          </div>
+          <div className="p-4 overflow-y-scroll">
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4">
                 {!validation.isValid &&
                   validation.errors.map((error) => (
-                    <Alert severity="error" key={error}>
-                      {error}
+                    <Alert variant="destructive" key={error}>
+                      <AlertDescription>{error}</AlertDescription>
                     </Alert>
                   ))}
-                <TableContainer>
-                  <Table sx={{ minWidth: 650 }} aria-label="table of variables">
-                    <TableHead>
+                <div className="overflow-x-auto">
+                  <Table className="min-w-[650px]" aria-label="table of variables">
+                    <TableHeader>
                       <TableRow>
-                        <TableCell>Visibility</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Type</TableCell>
-                        <TableCell>Description</TableCell>
-                        <TableCell align="right">Actions</TableCell>
+                        <TableHead>Visibility</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Description</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
                       </TableRow>
-                    </TableHead>
+                    </TableHeader>
                     <TableBody>
                       {variableDefinitions.map((v, idx) => (
                         <TableRow key={v.spec.name}>
-                          <TableCell component="th" scope="row">
+                          <TableCell>
                             <Switch
                               checked={v.spec.display?.hidden !== true}
-                              onChange={(e) => {
-                                toggleVariableVisibility(idx, e.target.checked);
+                              onCheckedChange={(checked) => {
+                                toggleVariableVisibility(idx, checked);
                               }}
                             />
                           </TableCell>
-                          <TableCell component="th" scope="row" sx={{ fontWeight: 'bold' }}>
+                          <TableCell className="font-bold">
                             <VariableName name={v.spec.name} state={variableState.get({ name: v.spec.name })} />
                           </TableCell>
                           <TableCell>{getVariableLabelByKind(v.kind) ?? v.kind}</TableCell>
                           <TableCell>{v.spec.display?.description ?? ''}</TableCell>
-                          <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
-                            <IconButton onClick={() => changeVariableOrder(idx, 'up')} disabled={idx === 0}>
+                          <TableCell className="text-right whitespace-nowrap">
+                            <Button variant="ghost" size="icon" onClick={() => changeVariableOrder(idx, 'up')} disabled={idx === 0}>
                               <ArrowUp />
-                            </IconButton>
-                            <IconButton
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
                               onClick={() => changeVariableOrder(idx, 'down')}
                               disabled={idx === variableDefinitions.length - 1}
                             >
                               <ArrowDown />
-                            </IconButton>
-                            <IconButton onClick={() => editVariable(idx)}>
+                            </Button>
+                            <Button variant="ghost" size="icon" onClick={() => editVariable(idx)}>
                               <PencilIcon />
-                            </IconButton>
-                            <IconButton
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
                               onClick={() => {
                                 setVariableDefinitions((draft) => {
                                   if (v.kind === 'TextVariable') {
@@ -300,137 +290,126 @@ export function VariableEditor(props: {
                               }}
                             >
                               <CloneIcon />
-                            </IconButton>
-                            <IconButton onClick={() => removeVariable(idx)}>
+                            </Button>
+                            <Button variant="ghost" size="icon" onClick={() => removeVariable(idx)}>
                               <TrashIcon />
-                            </IconButton>
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
-                </TableContainer>
-                <Box display="flex">
-                  <Button variant="contained" startIcon={<AddIcon />} sx={{ marginLeft: 'auto' }} onClick={addVariable}>
+                </div>
+                <div className="flex">
+                  <Button variant="default" className="ml-auto" onClick={addVariable}>
+                    <AddIcon className="mr-1" />
                     Add Variable
                   </Button>
-                </Box>
-              </Stack>
+                </div>
+              </div>
               {externalVariableDefinitions &&
                 !externalVariableDefinitions.every((v) => v.definitions.length === 0) &&
                 externalVariableDefinitions.map(
                   (extVar, key) =>
                     extVar.definitions.length > 0 && (
-                      <Accordion
-                        key={key}
-                        sx={(theme) => ({
-                          '.MuiAccordionSummary-root': {
-                            backgroundColor: theme.palette.background.lighter,
-                          },
-                          '.MuiAccordionDetails-root': {
-                            backgroundColor: theme.palette.background.lighter,
-                          },
-                        })}
-                      >
-                        <AccordionSummary
-                          expandIcon={<ExpandMoreIcon />}
-                          aria-controls={extVar.source}
-                          id={extVar.source}
-                        >
-                          <Stack flexDirection="row" alignItems="center" justifyContent="start">
-                            <>
-                              {extVar.tooltip ? (
-                                <Typography variant="h2">
-                                  <InfoTooltip
-                                    title={extVar.tooltip.title || ''}
-                                    description={extVar.tooltip.description || ''}
-                                  >
-                                    <span>{capitalize(extVar.source)} Variables</span>
-                                  </InfoTooltip>
-                                </Typography>
-                              ) : (
-                                <Typography variant="h2">{capitalize(extVar.source)} Variables</Typography>
-                              )}
-                              {extVar.editLink && (
-                                <IconButton href={extVar.editLink} target="_blank">
-                                  <OpenInNewIcon fontSize="small" />
-                                </IconButton>
-                              )}
-                            </>
-                          </Stack>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          <TableContainer>
-                            <Table sx={{ minWidth: 650 }} aria-label="table of external variables">
-                              <TableHead>
-                                <TableRow>
-                                  <TableCell>Visibility</TableCell>
-                                  <TableCell>Name</TableCell>
-                                  <TableCell>Type</TableCell>
-                                  <TableCell>Description</TableCell>
-                                  <TableCell align="right">Actions</TableCell>
-                                </TableRow>
-                              </TableHead>
-                              <TableBody>
-                                {extVar.definitions.map((v) => (
-                                  <TableRow key={v.spec.name}>
-                                    <TableCell component="th" scope="row">
-                                      <Switch checked={v.spec.display?.hidden !== true} disabled />
-                                    </TableCell>
-
-                                    <TableCell component="th" scope="row" sx={{ fontWeight: 'bold' }}>
-                                      <VariableName
-                                        name={v.spec.name}
-                                        state={variableState.get({ name: v.spec.name, source: extVar.source })}
-                                      />
-                                    </TableCell>
-                                    <TableCell>{getVariableLabelByKind(v.kind) ?? v.kind}</TableCell>
-                                    <TableCell>{v.spec.display?.description ?? ''}</TableCell>
-                                    <TableCell align="right">
-                                      <Tooltip title="Override">
-                                        <IconButton
-                                          onClick={() => overrideVariable(v)}
-                                          disabled={!!variableState.get({ name: v.spec.name })}
-                                        >
-                                          <ContentDuplicate />
-                                        </IconButton>
-                                      </Tooltip>
-                                      <IconButton disabled>
-                                        <ArrowUp />
-                                      </IconButton>
-                                      <IconButton disabled>
-                                        <ArrowDown />
-                                      </IconButton>
-                                      <IconButton disabled>
-                                        <PencilIcon />
-                                      </IconButton>
-                                      <IconButton disabled>
-                                        <TrashIcon />
-                                      </IconButton>
-                                    </TableCell>
+                      <Accordion key={key} type="single" collapsible>
+                        <AccordionItem value={extVar.source} className="bg-background/50">
+                          <AccordionTrigger>
+                            <div className="flex flex-row items-center justify-start">
+                              <>
+                                {extVar.tooltip ? (
+                                  <h2 className="text-base font-semibold">
+                                    <InfoTooltip
+                                      title={extVar.tooltip.title || ''}
+                                      description={extVar.tooltip.description || ''}
+                                    >
+                                      <span>{capitalize(extVar.source)} Variables</span>
+                                    </InfoTooltip>
+                                  </h2>
+                                ) : (
+                                  <h2 className="text-base font-semibold">{capitalize(extVar.source)} Variables</h2>
+                                )}
+                                {extVar.editLink && (
+                                  <a href={extVar.editLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center ml-1 p-1 hover:bg-accent rounded">
+                                    <OpenInNewIcon fontSize="small" />
+                                  </a>
+                                )}
+                              </>
+                            </div>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <div className="overflow-x-auto">
+                              <Table className="min-w-[650px]" aria-label="table of external variables">
+                                <TableHeader>
+                                  <TableRow>
+                                    <TableHead>Visibility</TableHead>
+                                    <TableHead>Name</TableHead>
+                                    <TableHead>Type</TableHead>
+                                    <TableHead>Description</TableHead>
+                                    <TableHead className="text-right">Actions</TableHead>
                                   </TableRow>
-                                ))}
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                        </AccordionDetails>
+                                </TableHeader>
+                                <TableBody>
+                                  {extVar.definitions.map((v) => (
+                                    <TableRow key={v.spec.name}>
+                                      <TableCell>
+                                        <Switch checked={v.spec.display?.hidden !== true} disabled />
+                                      </TableCell>
+                                      <TableCell className="font-bold">
+                                        <VariableName
+                                          name={v.spec.name}
+                                          state={variableState.get({ name: v.spec.name, source: extVar.source })}
+                                        />
+                                      </TableCell>
+                                      <TableCell>{getVariableLabelByKind(v.kind) ?? v.kind}</TableCell>
+                                      <TableCell>{v.spec.display?.description ?? ''}</TableCell>
+                                      <TableCell className="text-right">
+                                        <Tooltip>
+                                          <TooltipTrigger asChild>
+                                            <Button
+                                              variant="ghost"
+                                              size="icon"
+                                              onClick={() => overrideVariable(v)}
+                                              disabled={!!variableState.get({ name: v.spec.name })}
+                                            >
+                                              <ContentDuplicate />
+                                            </Button>
+                                          </TooltipTrigger>
+                                          <TooltipContent>Override</TooltipContent>
+                                        </Tooltip>
+                                        <Button variant="ghost" size="icon" disabled>
+                                          <ArrowUp />
+                                        </Button>
+                                        <Button variant="ghost" size="icon" disabled>
+                                          <ArrowDown />
+                                        </Button>
+                                        <Button variant="ghost" size="icon" disabled>
+                                          <PencilIcon />
+                                        </Button>
+                                        <Button variant="ghost" size="icon" disabled>
+                                          <TrashIcon />
+                                        </Button>
+                                      </TableCell>
+                                    </TableRow>
+                                  ))}
+                                </TableBody>
+                              </Table>
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
                       </Accordion>
                     )
                 )}
               {builtinVariableDefinitions && (
                 <BuiltinVariableAccordions builtinVariableDefinitions={builtinVariableDefinitions} />
               )}
-            </Stack>
-          </Box>
+            </div>
+          </div>
         </>
       )}
     </>
   );
 }
-
-const TableCell = styled(MuiTableCell)(({ theme }) => ({
-  borderBottom: `solid 1px ${theme.palette.divider}`,
-}));
 
 interface VariableEditorFormWithContextProps {
   variableDefinitions: VariableDefinition[];
@@ -457,18 +436,9 @@ function VariableEditorFormWithContext({
 
   if (isLoading) {
     return (
-      <Stack
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100%',
-          width: '100%',
-          overflow: 'hidden',
-        }}
-      >
-        <CircularProgress aria-label="loading" />
-      </Stack>
+      <div className="flex items-center justify-center h-full w-full overflow-hidden">
+        <Spinner aria-label="loading" />
+      </div>
     );
   }
 
@@ -499,16 +469,16 @@ export function VariableName(props: { name: string; state: VariableState | undef
     <>
       {!state?.overridden && `${name} `}
       {!state?.overridden && state?.overriding && (
-        <Box fontWeight="normal" color={(theme) => theme.palette.primary.main}>
+        <span className="font-normal text-primary">
           (overriding)
-        </Box>
+        </span>
       )}
       {state?.overridden && (
         <>
-          <Box color={(theme) => theme.palette.grey[500]}>{name}</Box>
-          <Box fontWeight="normal" color={(theme) => theme.palette.grey[500]}>
+          <span className="text-muted-foreground">{name}</span>
+          <span className="font-normal text-muted-foreground">
             (overridden)
-          </Box>
+          </span>
         </>
       )}
     </>

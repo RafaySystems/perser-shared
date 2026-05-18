@@ -11,20 +11,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
+import { ExternalLink as OpenInNewIcon } from 'lucide-react';
+import { ChevronsUpDown } from 'lucide-react';
 import {
-  Stack,
-  ListItemText,
-  Chip,
-  IconButton,
-  Box,
-  OutlinedSelectProps,
-  BaseSelectProps,
-  Autocomplete,
-  TextField,
-} from '@mui/material';
+  Button,
+  Badge,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  Label,
+} from '@perses-dev/components';
 import { DatasourceSelector, VariableName } from '@perses-dev/spec';
-import { ReactElement, useMemo } from 'react';
+import { ReactElement, useMemo, useState } from 'react';
 import {
   DatasourceSelectItem,
   DatasourceSelectItemGroup,
@@ -37,9 +41,6 @@ import { parseVariables } from '../../utils';
 
 const DATASOURCE_VARIABLE_VALUE_PREFIX = '__DATASOURCE_VARIABLE_VALUE__';
 const VARIABLE_IDENTIFIER = '$';
-// Props on MUI Select that we don't want people to pass because we're either redefining them or providing them in
-// this component
-type OmittedMuiProps = 'children' | 'value' | 'onChange';
 
 type DataSourceOption = {
   groupEditLink?: string;
@@ -52,21 +53,24 @@ const emptyDatasourceOption: DataSourceOption = { name: '', value: '' };
 
 export type DatasourceSelectValue<T = DatasourceSelector> = T | VariableName;
 
-export interface DatasourceSelectProps extends Omit<OutlinedSelectProps & BaseSelectProps<string>, OmittedMuiProps> {
+export interface DatasourceSelectProps {
   value: DatasourceSelectValue;
   onChange: (next: DatasourceSelectValue) => void;
   datasourcePluginKind: string;
   project?: string;
+  readOnly?: boolean;
+  label?: string;
 }
 
 /**
- * Displays a MUI input for selecting a Datasource of a particular kind. Note: The 'value' and `onChange` handler for
+ * Displays an input for selecting a Datasource of a particular kind. Note: The 'value' and `onChange` handler for
  * the input deal with a `DatasourceSelector`.
  */
 export function DatasourceSelect(props: DatasourceSelectProps): ReactElement {
-  const { datasourcePluginKind, value, project, readOnly, onChange, ...others } = props;
+  const { datasourcePluginKind, value, project, readOnly, onChange, label } = props;
   const { data, isLoading } = useListDatasourceSelectItems(datasourcePluginKind, project);
   const variables = useVariableValues();
+  const [open, setOpen] = useState(false);
 
   const defaultValue = useMemo<VariableName | DatasourceSelectItemSelector>(() => {
     if (isVariableDatasource(value)) {
@@ -114,68 +118,99 @@ export function DatasourceSelect(props: DatasourceSelectProps): ReactElement {
     return [...datasourceOptions, ...variableOptions];
   }, [data, variables]);
 
-  // While loading available values, just use an empty datasource option so MUI select doesn't warn about values out of range
+  // While loading available values, just use an empty datasource option so we don't show stale selections
   const optionValue = isLoading
     ? emptyDatasourceOption
     : options.find((option) => option.value === selectorToOptionValue(defaultValue));
 
   // When the user makes a selection, convert the string option value back to a DatasourceSelector
-  const handleChange = (selectedOption: DataSourceOption | null): void => {
+  const handleSelect = (selectedValue: string): void => {
+    const selectedOption = options.find((o) => o.value === selectedValue);
     if (selectedOption) {
-      const next = optionValueToSelector(selectedOption?.value || '');
+      const next = optionValueToSelector(selectedOption.value);
       onChange(next);
     } else {
       onChange({ kind: datasourcePluginKind });
     }
+    setOpen(false);
   };
 
-  // We use a fake action event when we click on the action of the chip (hijack the "delete" feature).
-  // This is because the href link action is on the `deleteIcon` property already, but the `onDelete` property
-  // controls its visibility.
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const fakeActionEvent = (): void => {};
+  // Group options by groupLabel
+  const groupedOptions = useMemo(() => {
+    const groups: Record<string, DataSourceOption[]> = {};
+    options.forEach((opt) => {
+      const key = opt.groupLabel || 'No group';
+      if (!groups[key]) groups[key] = [];
+      groups[key]!.push(opt);
+    });
+    return groups;
+  }, [options]);
 
   return (
-    <Autocomplete<DataSourceOption>
-      readOnly={readOnly}
-      options={options}
-      renderInput={(params) => <TextField {...params} label={others.label} placeholder="" />}
-      groupBy={(option) => option.groupLabel || 'No group'}
-      getOptionLabel={(option) => {
-        return option.name;
-      }}
-      onChange={(_, v) => handleChange(v)}
-      value={optionValue}
-      renderOption={(props, option) => {
-        return (
-          <li {...props} key={option.value}>
-            <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%">
-              <ListItemText>
-                <DatasourceName name={option.name} overridden={option.overridden} overriding={option.overriding} />
-              </ListItemText>
-              {!option.saved && <ListItemText>Save the dashboard to enable this datasource</ListItemText>}
-              <ListItemText style={{ textAlign: 'right' }}>
-                {option.groupLabel && option.groupLabel.length > 0 && (
-                  <Chip
-                    disabled={false}
-                    label={option.groupLabel}
-                    size="small"
-                    onDelete={option.groupEditLink ? fakeActionEvent : undefined}
-                    deleteIcon={
-                      option.groupEditLink ? (
-                        <IconButton href={option.groupEditLink} target="_blank">
-                          <OpenInNewIcon fontSize="small" />
-                        </IconButton>
-                      ) : undefined
-                    }
-                  />
-                )}
-              </ListItemText>
-            </Stack>
-          </li>
-        );
-      }}
-    />
+    <div className="flex flex-col gap-1.5 w-full">
+      {label && <Label>{label}</Label>}
+      <Popover open={open && !readOnly} onOpenChange={(o) => !readOnly && setOpen(o)}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="w-full justify-between font-normal"
+            disabled={isLoading || readOnly}
+          >
+            <span className="truncate">{optionValue?.name || (isLoading ? 'Loading...' : 'Select datasource...')}</span>
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[400px] p-0" align="start">
+          <Command>
+            <CommandInput placeholder="Search datasource..." />
+            <CommandList>
+              <CommandEmpty>No datasource found.</CommandEmpty>
+              {Object.entries(groupedOptions).map(([groupName, groupOptions]) => (
+                <CommandGroup key={groupName} heading={groupName}>
+                  {groupOptions.map((option) => (
+                    <CommandItem
+                      key={option.value}
+                      value={option.value}
+                      onSelect={handleSelect}
+                      className="flex items-center justify-between"
+                    >
+                      <DatasourceName
+                        name={option.name}
+                        overridden={option.overridden}
+                        overriding={option.overriding}
+                      />
+                      <div className="flex items-center gap-1 ml-auto">
+                        {!option.saved && (
+                          <span className="text-xs text-muted-foreground">Save the dashboard to enable</span>
+                        )}
+                        {option.groupLabel && option.groupLabel.length > 0 && (
+                          <Badge variant="secondary" className="text-xs">
+                            {option.groupLabel}
+                            {option.groupEditLink && (
+                              <a
+                                href={option.groupEditLink}
+                                target="_blank"
+                                rel="noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="ml-1 inline-flex items-center"
+                              >
+                                <OpenInNewIcon style={{ fontSize: 12 }} />
+                              </a>
+                            )}
+                          </Badge>
+                        )}
+                      </div>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              ))}
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 }
 
@@ -185,9 +220,7 @@ export function DatasourceName(props: { name: string; overridden?: boolean; over
     <>
       {`${name} `}
       {!overridden && overriding && (
-        <Box display="inline" fontWeight="normal" color={(theme) => theme.palette.primary.main}>
-          (overriding)
-        </Box>
+        <span className="inline font-normal text-primary">(overriding)</span>
       )}
       {overridden && '(overridden)'}
     </>

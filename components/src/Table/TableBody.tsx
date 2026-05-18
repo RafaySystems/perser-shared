@@ -11,11 +11,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { TableBody as MuiTableBody, TableBodyProps as MuiTableBodyProps } from '@mui/material';
 import { forwardRef } from 'react';
+import { cn } from '../lib/utils';
 
-type TableBodyProps = MuiTableBodyProps;
+type TableBodyProps = React.HTMLAttributes<HTMLTableSectionElement>;
 
-export const TableBody = forwardRef<HTMLTableSectionElement, TableBodyProps>(function TableBody(props, ref) {
-  return <MuiTableBody {...props} ref={ref} />;
+export const TableBody = forwardRef<HTMLTableSectionElement, TableBodyProps>(function TableBody(
+  { className, ...props },
+  ref
+) {
+  return <tbody ref={ref} className={cn('[&_tr:last-child]:border-0', className)} {...props} />;
 });

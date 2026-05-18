@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Typography, Box } from '@mui/material';
 import { ReactElement, ReactNode } from 'react';
 import { useEditMode } from '../../context';
 import { AddPanelButton } from '../AddPanelButton';
@@ -66,11 +65,6 @@ const DEFAULT_DESCRIPTION = {
 const CONTAINER_WIDTH = '500px';
 const PRIMARY_CONTENT_WIDTH = '289px';
 
-const COMMON_BUTTON_PROPS = {
-  variant: 'outlined',
-  color: 'secondary',
-} as const;
-
 type EmptyDashboardActionsProps = Pick<EmptyDashboardProps, 'actions' | 'onEditButtonClick'> & {
   isEditMode: boolean;
 };
@@ -94,7 +88,7 @@ const EmptyDashboardActions = ({
     // Default edit mode actions
     return (
       <>
-        <AddPanelButton variant="outlined" color="secondary" label="Add Panel" fullWidth />
+        <AddPanelButton variant="outline" label="Add Panel" fullWidth />
         <EditVariablesButton variant="outlined" color="secondary" label="Add Variables" fullWidth />
       </>
     );
@@ -102,7 +96,7 @@ const EmptyDashboardActions = ({
 
   if (onEditButtonClick) {
     // Default view mode actions
-    return <EditButton {...COMMON_BUTTON_PROPS} label="Edit Dashboard" onClick={onEditButtonClick} />;
+    return <EditButton variant="outline" label="Edit Dashboard" onClick={onEditButtonClick} />;
   }
 
   return null;
@@ -127,22 +121,18 @@ export const EmptyDashboard = ({
   );
 
   return (
-    <Box sx={{ width: CONTAINER_WIDTH, textAlign: 'center', margin: '0 auto' }}>
-      <Box sx={{ width: PRIMARY_CONTENT_WIDTH, margin: '0 auto' }}>
+    <div className="text-center mx-auto" style={{ width: CONTAINER_WIDTH }}>
+      <div className="mx-auto" style={{ width: PRIMARY_CONTENT_WIDTH }}>
         {!!image && image}
-        <Typography variant="h2" gutterBottom>
-          {title}
-        </Typography>
-        <Typography variant="body1">{description ?? defaultDescription}</Typography>
+        <h2 className="text-base font-semibold mb-2">{title}</h2>
+        <p className="text-sm">{description ?? defaultDescription}</p>
         {actionsContent && (
-          <Box sx={{ display: 'flex', gap: 2, marginTop: 1, justifyContent: 'center' }}>{actionsContent}</Box>
+          <div className="flex gap-2 mt-1 justify-center">{actionsContent}</div>
         )}
-      </Box>
+      </div>
       {additionalText && (
-        <Typography variant="subtitle1" sx={{ marginTop: 12 }}>
-          {additionalText}
-        </Typography>
+        <span className="text-sm block mt-12">{additionalText}</span>
       )}
-    </Box>
+    </div>
   );
 };

@@ -12,105 +12,84 @@
 // limitations under the License.
 
 import React, { useCallback } from 'react';
-import { styled } from '@mui/material/styles';
-import {
-  SnackbarProvider as NotistackProvider,
-  ProviderContext as NotistackContext,
-  useSnackbar as useNotistack,
-  SnackbarMessage,
-  OptionsObject,
-  SnackbarKey,
-  MaterialDesignContent,
-} from 'notistack';
+import { toast, Toaster } from 'sonner';
 
-export interface SnackbarContext extends NotistackContext {
+export type SnackbarKey = string | number;
+export type SnackbarMessage = React.ReactNode;
+export interface SnackbarOptions {
+  duration?: number;
+  description?: React.ReactNode;
+  action?: { label: string; onClick: () => void };
+}
+
+export interface SnackbarContext {
   errorSnackbar: EnqueueFunction;
   infoSnackbar: EnqueueFunction;
   warningSnackbar: EnqueueFunction;
   successSnackbar: EnqueueFunction;
-
-  /**
-   * Useful for catch blocks where the error will be of type `unknown`, tries
-   * to show the `message` property if passed an instance of `Error`.
-   */
-  exceptionSnackbar: (error: unknown, options?: SnackbarOptions) => SnackbarKey;
+  exceptionSnackbar: (error: unknown, options?: SnackbarOptions) => void;
+  closeSnackbar: (id?: SnackbarKey) => void;
+  enqueueSnackbar: (message: SnackbarMessage, options?: SnackbarOptions & { variant?: string }) => void;
 }
 
-type EnqueueFunction = (message: SnackbarMessage, options?: SnackbarOptions) => SnackbarKey;
-
-type SnackbarOptions = Omit<OptionsObject, 'variant'>;
+type EnqueueFunction = (message: SnackbarMessage, options?: SnackbarOptions) => void;
 
 /**
- * Application-wide provider for showing snackbars/toasts.
- * Customized to preserve formatting in error messages.
+ * Application-wide provider for showing toasts. Drop-in replacement for the
+ * previous notistack-based SnackbarProvider.
  */
-export function SnackbarProvider({
-  children,
-  ...props
-}: React.ComponentProps<typeof NotistackProvider>): React.ReactElement {
+export function SnackbarProvider({ children }: { children?: React.ReactNode }): React.ReactElement {
   return (
-    <NotistackProvider
-      {...props}
-      Components={{
-        error: styled(MaterialDesignContent)(() => ({
-          '&.notistack-MuiContent-error': {
-            whiteSpace: 'pre-wrap',
-          },
-        })),
-      }}
-    >
+    <>
       {children}
-    </NotistackProvider>
+      <Toaster richColors position="bottom-right" />
+    </>
   );
 }
 
 /**
- * Gets the SnackbarContext with methods for displaying snackbars/toasts.
+ * Returns toast helpers with the same API surface as the previous notistack useSnackbar().
  */
 export function useSnackbar(): SnackbarContext {
-  const { enqueueSnackbar, closeSnackbar } = useNotistack();
+  const errorSnackbar: EnqueueFunction = useCallback((message, options) => {
+    toast.error(message as string, { description: options?.description as string, duration: options?.duration, action: options?.action });
+  }, []);
 
-  // Create variant-specific callbacks
-  const errorSnackbar = useEnqueueFunction(enqueueSnackbar, 'error');
-  const infoSnackbar = useEnqueueFunction(enqueueSnackbar, 'info');
-  const warningSnackbar = useEnqueueFunction(enqueueSnackbar, 'warning');
-  const successSnackbar = useEnqueueFunction(enqueueSnackbar, 'success');
+  const infoSnackbar: EnqueueFunction = useCallback((message, options) => {
+    toast.info(message as string, { description: options?.description as string, duration: options?.duration, action: options?.action });
+  }, []);
 
-  const exceptionSnackbar: SnackbarContext['exceptionSnackbar'] = useCallback(
-    (error, options) => {
-      // Try to use message prop, but fallback to a default message that
-      // will just stringify the error provided
+  const warningSnackbar: EnqueueFunction = useCallback((message, options) => {
+    toast.warning(message as string, { description: options?.description as string, duration: options?.duration, action: options?.action });
+  }, []);
+
+  const successSnackbar: EnqueueFunction = useCallback((message, options) => {
+    toast.success(message as string, { description: options?.description as string, duration: options?.duration, action: options?.action });
+  }, []);
+
+  const exceptionSnackbar = useCallback(
+    (error: unknown, options?: SnackbarOptions) => {
       const message = error instanceof Error ? error.message : `An unexpected error occurred: ${error}`;
-
-      return errorSnackbar(message, options);
+      errorSnackbar(message, options);
     },
     [errorSnackbar]
   );
 
-  return {
-    enqueueSnackbar,
-    closeSnackbar,
-    errorSnackbar,
-    infoSnackbar,
-    warningSnackbar,
-    successSnackbar,
-    exceptionSnackbar,
-  };
-}
+  const closeSnackbar = useCallback((id?: SnackbarKey) => {
+    if (id !== undefined) toast.dismiss(id as string | number);
+    else toast.dismiss();
+  }, []);
 
-// Helper to create a variant-specific enqueue function
-function useEnqueueFunction(
-  enqueueSnackbar: NotistackContext['enqueueSnackbar'],
-  variant: OptionsObject['variant']
-): EnqueueFunction {
-  return useCallback(
-    (message, options) => {
-      const allOptions: OptionsObject = {
-        ...options,
-        variant,
-      };
-      return enqueueSnackbar(message, allOptions);
+  const enqueueSnackbar = useCallback(
+    (message: SnackbarMessage, options?: SnackbarOptions & { variant?: string }) => {
+      const variant = options?.variant;
+      if (variant === 'error') errorSnackbar(message, options);
+      else if (variant === 'warning') warningSnackbar(message, options);
+      else if (variant === 'success') successSnackbar(message, options);
+      else infoSnackbar(message, options);
     },
-    [enqueueSnackbar, variant]
+    [errorSnackbar, infoSnackbar, warningSnackbar, successSnackbar]
   );
+
+  return { errorSnackbar, infoSnackbar, warningSnackbar, successSnackbar, exceptionSnackbar, closeSnackbar, enqueueSnackbar };
 }

@@ -12,7 +12,6 @@
 // limitations under the License.
 
 import { ReactElement, useMemo } from 'react';
-import { Box } from '@mui/material';
 import { NearbySeriesArray } from './nearby-series';
 import { SeriesInfo } from './SeriesInfo';
 
@@ -34,12 +33,7 @@ export function TooltipContent(props: TooltipContentProps): ReactElement | null 
   }
   // TODO: use react-virtuoso to improve performance
   return (
-    <Box
-      sx={(theme) => ({
-        display: 'table',
-        padding: theme.spacing(0.5, 2),
-      })}
-    >
+    <div className="table px-4 py-0.5">
       {sortedFocusedSeries.map(({ datumIdx, seriesIdx, seriesName, y, formattedY, markerColor, isClosestToCursor }) => {
         if (datumIdx === null || seriesIdx === null) return null;
         const key = seriesIdx.toString() + datumIdx.toString();
@@ -57,6 +51,6 @@ export function TooltipContent(props: TooltipContentProps): ReactElement | null 
           />
         );
       })}
-    </Box>
+    </div>
   );
 }

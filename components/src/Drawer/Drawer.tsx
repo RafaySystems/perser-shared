@@ -11,47 +11,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Drawer as MuiDrawer, DrawerProps as MuiDrawerProps, useMediaQuery } from '@mui/material';
-import { ReactElement } from 'react';
-import { combineSx } from '../utils';
+import { ReactNode } from 'react';
+import { Sheet, SheetContent } from '../ui/sheet';
+import { cn } from '../lib/utils';
 
-export interface DrawerProps extends MuiDrawerProps {
+export interface DrawerProps {
   isOpen: boolean;
   onClose: () => void;
   anchor?: 'left' | 'right';
+  className?: string;
+  children?: ReactNode;
 }
 
-const DRAWER_DEFAULT_WIDTH = 1080;
-
-export const Drawer = ({
-  anchor = 'right',
-  isOpen,
-  onClose,
-  PaperProps,
-  children,
-  ...rest
-}: DrawerProps): ReactElement => {
-  const isSmaller = useMediaQuery(`(max-width:${DRAWER_DEFAULT_WIDTH}px)`);
-
+export function Drawer({ anchor = 'right', isOpen, onClose, className, children }: DrawerProps) {
   return (
-    <MuiDrawer
-      {...rest}
-      open={isOpen}
-      onClose={onClose}
-      anchor={anchor}
-      PaperProps={{
-        ...PaperProps,
-        sx: combineSx(
-          {
-            width: isSmaller ? '100%' : `${DRAWER_DEFAULT_WIDTH}px`,
-            overflow: 'hidden',
-          },
-          PaperProps?.sx
-        ),
-      }}
-      aria-hidden={!isOpen} // Ensure the drawer is not focusable when closed + disable console.error about focusable elements
-    >
-      {children}
-    </MuiDrawer>
+    <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <SheetContent
+        side={anchor}
+        className={cn('w-full sm:max-w-[1080px] overflow-hidden p-0', className)}
+      >
+        {children}
+      </SheetContent>
+    </Sheet>
   );
-};
+}

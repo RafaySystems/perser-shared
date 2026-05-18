@@ -12,12 +12,20 @@
 // limitations under the License.
 
 import { RequestHeaders, HTTPDatasourceSpec } from '@perses-dev/core'; // TODO this is the proxy definition that should go to a different lib
-import { Grid, IconButton, MenuItem, TextField, Typography } from '@mui/material';
+import {
+  Button,
+  TextField,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Label,
+} from '@perses-dev/components';
 import React, { Fragment, ReactElement, useState } from 'react';
 import { produce } from 'immer';
 import { Controller, useForm, useFieldArray } from 'react-hook-form';
-import MinusIcon from 'mdi-material-ui/Minus';
-import PlusIcon from 'mdi-material-ui/Plus';
+import { Minus as MinusIcon, Plus as PlusIcon } from 'lucide-react';
 import { OptionsEditorRadios } from '../OptionsEditorRadios';
 
 type HeaderEntry = {
@@ -115,33 +123,28 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                 value={value.proxy?.spec.url || ''}
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
-                InputProps={{
-                  readOnly: isReadonly,
-                }}
-                InputLabelProps={{ shrink: isReadonly ? true : undefined }}
-                onChange={(e) => {
-                  field.onChange(e);
+                readOnly={isReadonly}
+                onChange={(val) => {
+                  field.onChange(val);
                   onChange(
                     produce(value, (draft) => {
                       if (draft.proxy !== undefined) {
-                        draft.proxy.spec.url = e.target.value;
+                        draft.proxy.spec.url = val;
                       }
                     })
                   );
                 }}
-                sx={{ mb: 2 }}
+                className="mb-4"
               />
             )}
           />
-          <Typography variant="h5" mb={2}>
-            Allowed endpoints
-          </Typography>
-          <Grid container spacing={2} mb={2}>
+          <h5 className="text-sm font-semibold mb-4">Allowed endpoints</h5>
+          <div className="grid grid-cols-12 gap-4 mb-4">
             {value.proxy?.spec.allowedEndpoints && value.proxy?.spec.allowedEndpoints.length !== 0 ? (
               value.proxy.spec.allowedEndpoints.map(({ endpointPattern, method }, i) => {
                 return (
                   <Fragment key={i}>
-                    <Grid item xs={8}>
+                    <div className="col-span-8">
                       <Controller
                         name={`Endpoint pattern ${i}`}
                         render={({ field, fieldState }) => (
@@ -152,12 +155,9 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                             value={endpointPattern}
                             error={!!fieldState.error}
                             helperText={fieldState.error?.message}
-                            InputProps={{
-                              readOnly: isReadonly,
-                            }}
-                            InputLabelProps={{ shrink: isReadonly ? true : undefined }}
-                            onChange={(e) => {
-                              field.onChange(e);
+                            readOnly={isReadonly}
+                            onChange={(val) => {
+                              field.onChange(val);
                               onChange(
                                 produce(value, (draft) => {
                                   if (draft.proxy !== undefined) {
@@ -165,7 +165,7 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                                       (item, itemIndex) => {
                                         if (i === itemIndex) {
                                           return {
-                                            endpointPattern: e.target.value,
+                                            endpointPattern: val,
                                             method: item.method,
                                           };
                                         } else {
@@ -180,60 +180,64 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                           />
                         )}
                       />
-                    </Grid>
-                    <Grid item xs={3}>
+                    </div>
+                    <div className="col-span-3">
                       <Controller
                         name={`Method ${i}`}
                         render={({ field, fieldState }) => (
-                          <TextField
-                            {...field}
-                            select
-                            fullWidth
-                            label="Method"
-                            value={method}
-                            error={!!fieldState.error}
-                            helperText={fieldState.error?.message}
-                            InputProps={{
-                              readOnly: isReadonly,
-                            }}
-                            InputLabelProps={{ shrink: isReadonly ? true : undefined }}
-                            onChange={(e) => {
-                              field.onChange(e);
-                              onChange(
-                                produce(value, (draft) => {
-                                  if (draft.proxy !== undefined) {
-                                    draft.proxy.spec.allowedEndpoints = draft.proxy.spec.allowedEndpoints?.map(
-                                      (item, itemIndex) => {
-                                        if (i === itemIndex) {
-                                          return {
-                                            endpointPattern: item.endpointPattern,
-                                            method: e.target.value,
-                                          };
-                                        } else {
-                                          return item;
+                          <div className="flex flex-col gap-1.5">
+                            <Label>Method</Label>
+                            <Select
+                              value={method}
+                              onValueChange={(val) => {
+                                field.onChange(val);
+                                onChange(
+                                  produce(value, (draft) => {
+                                    if (draft.proxy !== undefined) {
+                                      draft.proxy.spec.allowedEndpoints = draft.proxy.spec.allowedEndpoints?.map(
+                                        (item, itemIndex) => {
+                                          if (i === itemIndex) {
+                                            return {
+                                              endpointPattern: item.endpointPattern,
+                                              method: val,
+                                            };
+                                          } else {
+                                            return item;
+                                          }
                                         }
-                                      }
-                                    );
-                                  }
-                                })
-                              );
-                            }}
-                          >
-                            <MenuItem value="GET">GET</MenuItem>
-                            <MenuItem value="POST">POST</MenuItem>
-                            <MenuItem value="PUT">PUT</MenuItem>
-                            <MenuItem value="PATCH">PATCH</MenuItem>
-                            <MenuItem value="DELETE">DELETE</MenuItem>
-                          </TextField>
+                                      );
+                                    }
+                                  })
+                                );
+                              }}
+                              disabled={isReadonly}
+                            >
+                              <SelectTrigger className={fieldState.error ? 'border-destructive' : ''}>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="GET">GET</SelectItem>
+                                <SelectItem value="POST">POST</SelectItem>
+                                <SelectItem value="PUT">PUT</SelectItem>
+                                <SelectItem value="PATCH">PATCH</SelectItem>
+                                <SelectItem value="DELETE">DELETE</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            {fieldState.error?.message && (
+                              <p className="text-xs text-destructive">{fieldState.error.message}</p>
+                            )}
+                          </div>
                         )}
                       />
-                    </Grid>
-                    <Grid item xs={1}>
+                    </div>
+                    <div className="col-span-1 flex items-end">
                       <Controller
                         name={`Remove Endpoint ${i}`}
                         render={({ field }) => (
-                          <IconButton
+                          <Button
                             {...field}
+                            variant="ghost"
+                            size="icon"
                             disabled={isReadonly}
                             // Remove the given allowed endpoint from the list
                             onClick={(e) => {
@@ -252,20 +256,22 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                             }}
                           >
                             <MinusIcon />
-                          </IconButton>
+                          </Button>
                         )}
                       />
-                    </Grid>
+                    </div>
                   </Fragment>
                 );
               })
             ) : (
-              <Grid item xs={4}>
-                <Typography sx={{ fontStyle: 'italic' }}>None</Typography>
-              </Grid>
+              <div className="col-span-4">
+                <p className="italic text-sm text-muted-foreground">None</p>
+              </div>
             )}
-            <Grid item xs={12} sx={{ paddingTop: '0px !important', paddingLeft: '5px !important' }}>
-              <IconButton
+            <div className="col-span-12 pt-0 pl-1">
+              <Button
+                variant="ghost"
+                size="icon"
                 disabled={isReadonly}
                 // Add a new (empty) allowed endpoint to the list
                 onClick={() =>
@@ -282,17 +288,15 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                 }
               >
                 <PlusIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
-          <Typography variant="h5" mb={2}>
-            Request Headers
-          </Typography>
-          <Grid container spacing={2} mb={2}>
+              </Button>
+            </div>
+          </div>
+          <h5 className="text-sm font-semibold mb-4">Request Headers</h5>
+          <div className="grid grid-cols-12 gap-4 mb-4">
             {fields.length > 0 ? (
               fields.map((field, index) => (
                 <Fragment key={field.id}>
-                  <Grid item xs={4}>
+                  <div className="col-span-4">
                     <Controller
                       control={headersForm.control}
                       name={`headers.${index}.name`}
@@ -301,23 +305,20 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                           {...controllerField}
                           fullWidth
                           label="Header name"
-                          error={!!fieldState.error || duplicateNames.has(controllerField.value)}
+                          error={!!fieldState.error || duplicateNames.has(controllerField.value as string)}
                           helperText={fieldState.error?.message}
-                          InputProps={{
-                            readOnly: isReadonly,
-                          }}
-                          InputLabelProps={{ shrink: isReadonly ? true : undefined }}
-                          onChange={(e) => {
-                            controllerField.onChange(e);
+                          readOnly={isReadonly}
+                          onChange={(val) => {
+                            controllerField.onChange(val);
                             const updatedHeaders = [...watchedHeaders];
-                            updatedHeaders[index] = { name: e.target.value, value: updatedHeaders[index]?.value ?? '' };
+                            updatedHeaders[index] = { name: val, value: updatedHeaders[index]?.value ?? '' };
                             syncHeadersToParent(updatedHeaders);
                           }}
                         />
                       )}
                     />
-                  </Grid>
-                  <Grid item xs={7}>
+                  </div>
+                  <div className="col-span-7">
                     <Controller
                       control={headersForm.control}
                       name={`headers.${index}.value`}
@@ -328,22 +329,21 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                           label="Header value"
                           error={!!fieldState.error}
                           helperText={fieldState.error?.message}
-                          InputProps={{
-                            readOnly: isReadonly,
-                          }}
-                          InputLabelProps={{ shrink: isReadonly ? true : undefined }}
-                          onChange={(e) => {
-                            controllerField.onChange(e);
+                          readOnly={isReadonly}
+                          onChange={(val) => {
+                            controllerField.onChange(val);
                             const updatedHeaders = [...watchedHeaders];
-                            updatedHeaders[index] = { name: updatedHeaders[index]?.name ?? '', value: e.target.value };
+                            updatedHeaders[index] = { name: updatedHeaders[index]?.name ?? '', value: val };
                             syncHeadersToParent(updatedHeaders);
                           }}
                         />
                       )}
                     />
-                  </Grid>
-                  <Grid item xs={1}>
-                    <IconButton
+                  </div>
+                  <div className="col-span-1 flex items-end">
+                    <Button
+                      variant="ghost"
+                      size="icon"
                       disabled={isReadonly}
                       aria-label={`Remove header ${watchedHeaders[index]?.name || index}`}
                       onClick={() => {
@@ -353,28 +353,33 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                       }}
                     >
                       <MinusIcon />
-                    </IconButton>
-                  </Grid>
+                    </Button>
+                  </div>
                 </Fragment>
               ))
             ) : (
-              <Grid item xs={4}>
-                <Typography sx={{ fontStyle: 'italic' }}>None</Typography>
-              </Grid>
+              <div className="col-span-4">
+                <p className="italic text-sm text-muted-foreground">None</p>
+              </div>
             )}
             {hasDuplicates && (
-              <Grid item xs={12}>
-                <Typography variant="body2" color="error">
+              <div className="col-span-12">
+                <p className="text-sm text-destructive">
                   Duplicate header names detected. Each header name must be unique.
-                </Typography>
-              </Grid>
+                </p>
+              </div>
             )}
-            <Grid item xs={12} sx={{ paddingTop: '0px !important', paddingLeft: '5px !important' }}>
-              <IconButton disabled={isReadonly} onClick={() => append({ name: '', value: '' })}>
+            <div className="col-span-12 pt-0 pl-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                disabled={isReadonly}
+                onClick={() => append({ name: '', value: '' })}
+              >
                 <PlusIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
+              </Button>
+            </div>
+          </div>
 
           <Controller
             name="Secret"
@@ -386,16 +391,13 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                 value={value.proxy?.spec.secret || ''}
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
-                InputProps={{
-                  readOnly: isReadonly,
-                }}
-                InputLabelProps={{ shrink: isReadonly ? true : undefined }}
-                onChange={(e) => {
-                  field.onChange(e);
+                readOnly={isReadonly}
+                onChange={(val) => {
+                  field.onChange(val);
                   onChange(
                     produce(value, (draft) => {
                       if (draft.proxy !== undefined) {
-                        draft.proxy.spec.secret = e.target.value;
+                        draft.proxy.spec.secret = val;
                       }
                     })
                   );
@@ -419,15 +421,12 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
               value={value.directUrl || ''}
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
-              InputProps={{
-                readOnly: isReadonly,
-              }}
-              InputLabelProps={{ shrink: isReadonly ? true : undefined }}
-              onChange={(e) => {
-                field.onChange(e);
+              readOnly={isReadonly}
+              onChange={(val) => {
+                field.onChange(val);
                 onChange(
                   produce(value, (draft) => {
-                    draft.directUrl = e.target.value;
+                    draft.directUrl = val;
                   })
                 );
               }}
@@ -472,9 +471,7 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
 
   return (
     <>
-      <Typography variant="h4" mt={2}>
-        HTTP Settings
-      </Typography>
+      <h4 className="text-sm font-semibold mt-4">HTTP Settings</h4>
       <OptionsEditorRadios
         isReadonly={isReadonly}
         tabs={tabs}

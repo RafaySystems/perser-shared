@@ -11,40 +11,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Table as MuiTable, styled, TableProps as MuiTableProps } from '@mui/material';
 import { forwardRef } from 'react';
+import { cn } from '../lib/utils';
 import { TableDensity } from './model/table-model';
 
-const StyledMuiTable = styled(MuiTable)(({ theme }) => ({
-  // This value is needed to have a consistent table layout when scrolling.
-  tableLayout: 'fixed',
-  borderCollapse: 'separate',
-  backgroundColor: theme.palette.background.default,
-}));
-
-type InnerTableProps = Omit<MuiTableProps, 'size'> & {
+interface InnerTableProps extends React.HTMLAttributes<HTMLTableElement> {
   density: TableDensity;
-};
-
-const TABLE_DENSITY_CONFIG: Record<TableDensity, MuiTableProps['size']> = {
-  compact: 'small',
-  standard: 'medium',
-  comfortable: 'medium',
-};
+  width?: number | string;
+}
 
 export const InnerTable = forwardRef<HTMLTableElement, InnerTableProps>(function InnerTable(
-  { density, ...otherProps },
+  { density, className, width, style, ...otherProps },
   ref
 ) {
   return (
-    <StyledMuiTable
+    <table
       {...otherProps}
       tabIndex={-1}
-      size={TABLE_DENSITY_CONFIG[density]}
       ref={ref}
-      sx={{
-        width: '100%',
-      }}
+      className={cn('w-full bg-background [border-collapse:separate] [table-layout:fixed]', className)}
+      style={{ width: width ?? '100%', ...style }}
     />
   );
 });

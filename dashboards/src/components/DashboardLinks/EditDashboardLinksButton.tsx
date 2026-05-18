@@ -12,35 +12,35 @@
 // limitations under the License.
 
 import { ReactElement, useState } from 'react';
-import { Button, ButtonProps } from '@mui/material';
-import PencilIcon from 'mdi-material-ui/PencilOutline';
-import { Drawer, InfoTooltip } from '@perses-dev/components';
+import { Pencil as PencilIcon } from 'lucide-react';
+import { Button, ButtonProps, Drawer, InfoTooltip } from '@perses-dev/components';
 import { Link } from '@perses-dev/spec';
-import { TOOLTIP_TEXT, editButtonStyle } from '../../constants';
+import { TOOLTIP_TEXT } from '../../constants';
 import { useDashboardLinks, useDashboardLinksActions } from '../../context';
 import { DashboardLinksEditor } from './DashboardLinksEditor';
 
-export interface EditDashboardLinksButtonProps extends Pick<ButtonProps, 'fullWidth'> {
+export interface EditDashboardLinksButtonProps {
   /**
    * The variant to use to display the button.
    */
-  variant?: 'text' | 'outlined';
+  variant?: ButtonProps['variant'];
 
   /**
    * The color to use to display the button.
    */
-  color?: 'primary' | 'secondary';
+  color?: string;
 
   /**
    * The label used inside the button.
    */
   label?: string;
+
+  fullWidth?: boolean;
 }
 
 export function EditDashboardLinksButton({
-  variant = 'text',
+  variant = 'ghost',
   label = 'Links',
-  color = 'primary',
   fullWidth,
 }: EditDashboardLinksButtonProps): ReactElement {
   const [isLinksEditorOpen, setIsLinksEditorOpen] = useState(false);
@@ -59,14 +59,12 @@ export function EditDashboardLinksButton({
     <>
       <InfoTooltip description={TOOLTIP_TEXT.editLinks}>
         <Button
-          startIcon={<PencilIcon />}
           onClick={openLinksEditor}
           aria-label={TOOLTIP_TEXT.editLinks}
           variant={variant}
-          color={color}
-          fullWidth={fullWidth}
-          sx={editButtonStyle}
+          className={`whitespace-nowrap min-w-0${fullWidth ? ' w-full' : ''}`}
         >
+          <PencilIcon className="mr-0.5" />
           {label}
         </Button>
       </InfoTooltip>

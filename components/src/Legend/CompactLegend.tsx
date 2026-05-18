@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box } from '@mui/material';
 import { ReactElement } from 'react';
 import { ListLegendItem, ListLegendItemProps } from './ListLegendItem';
 import { LegendItem, SelectedLegendItemState, isLegendItemVisuallySelected } from './legend-model';
@@ -40,7 +39,7 @@ export function CompactLegend({
   onItemMouseOut,
 }: CompactLegendProps): ReactElement {
   return (
-    <Box component="ul" sx={{ width: '100%', height, padding: [0, 1, 0, 0], overflowY: 'scroll', margin: 0 }}>
+    <ul className="w-full overflow-y-scroll m-0 pr-1 pl-0" style={{ height }}>
       {items.map((item, index) => (
         <ListLegendItem
           key={item.id}
@@ -50,13 +49,9 @@ export function CompactLegend({
           onMouseOver={onItemMouseOver}
           onMouseOut={onItemMouseOut}
           onClick={onLegendItemClick}
-          sx={{
-            width: 'auto',
-            float: 'left',
-            paddingRight: 1.5,
-          }}
+          className="w-auto float-left pr-6"
         />
       ))}
-    </Box>
+    </ul>
   );
 }

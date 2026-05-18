@@ -11,9 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Checkbox, FormControlLabel, Stack } from '@mui/material';
 import { ReactElement } from 'react';
 import { TextField } from '../controls';
+import { Checkbox } from '../ui/checkbox';
+import { cn } from '../lib/utils';
 
 export interface LinkEditorFormField<T> {
   value: T;
@@ -36,7 +37,7 @@ export const LinkEditorForm = (props: LinkEditorFormProps): ReactElement => {
   const { mode, url, name, newTabOpen, renderVariables, tooltip } = props;
 
   return (
-    <Stack direction="column" gap={2} flexGrow={1}>
+    <div className="flex flex-col gap-4 grow">
       <TextField
         label={url.label}
         error={url.error?.hasError}
@@ -50,10 +51,10 @@ export const LinkEditorForm = (props: LinkEditorFormProps): ReactElement => {
         value={url.value}
       />
       {(name || tooltip) && (
-        <Stack gap={1} direction={mode === 'inline' ? 'row' : 'column'}>
+        <div className={cn('flex gap-2', mode === 'inline' ? 'flex-row' : 'flex-col')}>
           {name && (
             <TextField
-              sx={{ flexGrow: '1' }}
+              className="grow"
               label={name.label}
               onChange={name?.onChange}
               placeholder={name?.placeholder}
@@ -62,42 +63,38 @@ export const LinkEditorForm = (props: LinkEditorFormProps): ReactElement => {
           )}
           {tooltip && (
             <TextField
-              sx={{ flexGrow: '1' }}
+              className="grow"
               label={tooltip.label}
               onChange={tooltip?.onChange}
               placeholder={tooltip?.placeholder}
               value={tooltip?.value}
             />
           )}
-        </Stack>
+        </div>
       )}
-      <Stack direction="row" gap={1}>
+      <div className="flex flex-row gap-2">
         {renderVariables && (
-          <FormControlLabel
-            label={renderVariables.label}
-            control={
-              <Checkbox
-                checked={renderVariables.value}
-                onChange={(e) => {
-                  renderVariables?.onChange(e.target.checked);
-                }}
-              />
-            }
-          />
-        )}
-
-        <FormControlLabel
-          label={newTabOpen.label}
-          control={
+          <label className="flex items-center gap-2 text-sm cursor-pointer">
             <Checkbox
-              checked={newTabOpen.value}
-              onChange={(e) => {
-                newTabOpen?.onChange(e.target.checked);
+              checked={renderVariables.value}
+              onCheckedChange={(checked) => {
+                renderVariables?.onChange(!!checked);
               }}
             />
-          }
-        />
-      </Stack>
-    </Stack>
+            {renderVariables.label}
+          </label>
+        )}
+
+        <label className="flex items-center gap-2 text-sm cursor-pointer">
+          <Checkbox
+            checked={newTabOpen.value}
+            onCheckedChange={(checked) => {
+              newTabOpen?.onChange(!!checked);
+            }}
+          />
+          {newTabOpen.label}
+        </label>
+      </div>
+    </div>
   );
 };

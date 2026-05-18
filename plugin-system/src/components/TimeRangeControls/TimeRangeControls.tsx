@@ -11,12 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import RefreshIcon from 'mdi-material-ui/Refresh';
-// eslint-disable-next-line import/no-duplicates
-import ZoomIn from 'mdi-material-ui/PlusCircleOutline';
-// eslint-disable-next-line import/no-duplicates
-import ZoomOut from 'mdi-material-ui/MinusCircleOutline';
-import { Stack } from '@mui/material';
+import { RefreshCw as RefreshIcon, PlusCircle as ZoomIn, MinusCircle as ZoomOut } from 'lucide-react';
 import {
   RefreshIntervalPicker,
   InfoTooltip,
@@ -172,7 +167,7 @@ export function TimeRangeControls({
   );
 
   return (
-    <Stack direction="row" spacing={1}>
+    <div className="flex flex-row gap-1">
       {showTimeRangeSelector && (
         <TimeRangeSelector
           timeOptions={timePresetsValue}
@@ -212,9 +207,9 @@ export function TimeRangeControls({
             timeOptions={DEFAULT_REFRESH_INTERVAL_OPTIONS}
             value={
               /* TODO: There is a bug here which should be fixed in a proper way. (This is only a quick remedy)
-                 display: 1m has the pastDuration of 60s. Initially (if the persisted value is 1m) when the page is loaded, instead of 60s, 1m is passed down.              
+                 display: 1m has the pastDuration of 60s. Initially (if the persisted value is 1m) when the page is loaded, instead of 60s, 1m is passed down.
                  This only happens for 1m, because for other items the display and the pastDuration are the same.  Example 30s-30s
-                 HERE The value MUST always be pastDuration, otherwise the component would not work as expected. 
+                 HERE The value MUST always be pastDuration, otherwise the component would not work as expected.
               */
               DEFAULT_REFRESH_INTERVAL_OPTIONS.some((i) => i.value.pastDuration === refreshInterval)
                 ? refreshInterval
@@ -225,6 +220,6 @@ export function TimeRangeControls({
           />
         </InfoTooltip>
       )}
-    </Stack>
+    </div>
   );
 }

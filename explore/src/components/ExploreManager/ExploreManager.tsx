@@ -11,12 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, Button, Card, Stack, Tab, Tabs, useMediaQuery } from '@mui/material';
 import { PluginLoaderComponent, useListPluginMetadata } from '@perses-dev/plugin-system';
 import { ReactElement, ReactNode, useEffect, useMemo } from 'react';
-import ChevronRight from 'mdi-material-ui/ChevronRight';
-import ChevronLeft from 'mdi-material-ui/ChevronLeft';
-import { useLocalStorage } from '@perses-dev/components';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
+import { Button, Card, useLocalStorage } from '@perses-dev/components';
 import { ExploreToolbar } from '../ExploreToolbar';
 import { useExplorerManagerContext } from './ExplorerManagerProvider';
 
@@ -32,7 +30,6 @@ export function ExploreManager(props: ExploreManagerProps): ReactElement {
 
   const plugins = useListPluginMetadata(['Explore']);
 
-  const isSmallScreen = useMediaQuery('(max-width: 768px)');
   const [isCollapsed, setIsCollapsed] = useLocalStorage<boolean>(EXPLORE_TABS_COLLAPSED_KEY, false);
 
   const explorerPluginsMap = useMemo(
@@ -55,61 +52,46 @@ export function ExploreManager(props: ExploreManagerProps): ReactElement {
   }
 
   return (
-    <Stack sx={{ width: '100%' }} px={2} pb={2} pt={1.5} gap={1}>
+    <div className="flex flex-col w-full px-2 pb-2 pt-[1.5] gap-1">
       <ExploreToolbar exploreTitleComponent={exploreTitleComponent} />
 
-      <Stack direction={isSmallScreen ? 'column' : 'row'} gap={2} sx={{ width: '100%' }}>
-        <Stack
-          sx={{
-            borderRight: isSmallScreen ? 0 : 1,
-            borderBottom: isSmallScreen ? 1 : 0,
-            borderColor: 'divider',
-            minWidth: isCollapsed ? 15 : 100,
-          }}
+      <div className="flex flex-col md:flex-row gap-2 w-full">
+        <div
+          className="border-b md:border-b-0 md:border-r border-border"
+          style={{ minWidth: isCollapsed ? 15 : 100 }}
         >
-          <Box sx={{ position: 'relative', height: 30, display: isSmallScreen ? 'none' : undefined }} test-id="qdqwd">
+          <div className="relative h-[30px] hidden md:block" test-id="qdqwd">
             <Button
               title={isCollapsed ? 'Expand explorer tabs' : 'Collapse explorer tabs'}
               aria-label={isCollapsed ? 'Expand explorer tabs' : 'Collapse explorer tabs'}
-              variant="text"
-              sx={{
-                position: 'absolute',
-                right: -15,
-                zIndex: 1,
-                padding: 0.5,
-                minWidth: 'auto',
-                backgroundColor: (theme) => theme.palette.background.default,
-              }}
+              variant="ghost"
+              className="absolute -right-[15px] z-[1] p-1 min-w-0"
               onClick={() => setIsCollapsed(!isCollapsed)}
             >
               {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
             </Button>
-          </Box>
+          </div>
 
-          <Tabs
-            orientation={isSmallScreen ? 'horizontal' : 'vertical'}
-            value={explorer}
-            onChange={(_, state) => setExplorer(state)}
-            variant={isSmallScreen ? 'fullWidth' : 'scrollable'}
-            sx={{
-              display: isCollapsed ? 'none' : 'flex',
-            }}
+          <div
+            className={`${isCollapsed ? 'hidden' : 'flex'} flex-row md:flex-col`}
           >
             {plugins.data
               ?.sort((a, b) => a.spec.display.name.localeCompare(b.spec.display.name))
-              .map((plugin) => (
-                <Tab
-                  key={`${plugin.module.name}-${plugin.spec.name}`}
-                  value={`${plugin.module.name}-${plugin.spec.name}`}
-                  label={plugin.spec.display.name}
-                  sx={{
-                    padding: 0.5,
-                  }}
-                />
-              ))}
-          </Tabs>
-        </Stack>
-        <Card sx={{ padding: '10px', width: '100%' }}>
+              .map((plugin) => {
+                const value = `${plugin.module.name}-${plugin.spec.name}`;
+                return (
+                  <button
+                    key={value}
+                    onClick={() => setExplorer(value)}
+                    className={`px-2 py-1 text-sm text-left hover:bg-accent transition-colors ${explorer === value ? 'bg-accent font-medium' : ''}`}
+                  >
+                    {plugin.spec.display.name}
+                  </button>
+                );
+              })}
+          </div>
+        </div>
+        <Card className="p-[10px] w-full">
           {currentPlugin && (
             <PluginLoaderComponent
               key={`${currentPlugin.module.name}-${currentPlugin.spec.name}`}
@@ -120,7 +102,7 @@ export function ExploreManager(props: ExploreManagerProps): ReactElement {
             />
           )}
         </Card>
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 }

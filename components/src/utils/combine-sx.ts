@@ -11,17 +11,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { SxProps, Theme } from '@mui/material';
+import { cn } from '../lib/utils';
 
 /**
- * Combines sx props from multiple sources. Useful when creating a component and
- * you want consumers to be able to provide SxProps that should be combined with
- * some built-in styles.
+ * @deprecated Use `cn()` from `../lib/utils` instead.
+ * Kept for backward-compat during migration — merges Tailwind class strings.
  */
-export function combineSx(...sxProps: Array<SxProps<Theme> | undefined>): SxProps<Theme> {
-  return sxProps.flatMap((sx) => {
-    if (sx === undefined) return [];
-    if (Array.isArray(sx)) return sx;
-    return [sx];
-  });
+export function combineSx(...classNames: Array<string | undefined>): string {
+  return cn(...classNames);
 }

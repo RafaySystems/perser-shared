@@ -188,12 +188,12 @@ const getPluginRuntime = (): ModuleFederation => {
             requiredVersion: '^9.1.0',
           },
         },
-        'mdi-material-ui': {
-          version: '7.4.0',
-          lib: () => require('mdi-material-ui'),
+        'lucide-react': {
+          version: '0.469.0',
+          lib: () => require('lucide-react'),
           shareConfig: {
             singleton: true,
-            requiredVersion: '^7.4.0',
+            requiredVersion: '^0.469.0',
           },
         },
         immer: {

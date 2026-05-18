@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box } from '@mui/material';
 import { ReactElement } from 'react';
 
 interface OptionsEditorTabPanelProps {
@@ -33,7 +32,7 @@ export function OptionsEditorTabPanel(props: OptionsEditorTabPanelProps): ReactE
       aria-labelledby={`options-editor-tab-${index}`}
       {...other}
     >
-      {isActive && <Box mt={2}>{children}</Box>}
+      {isActive && <div className="mt-2">{children}</div>}
     </div>
   );
 }

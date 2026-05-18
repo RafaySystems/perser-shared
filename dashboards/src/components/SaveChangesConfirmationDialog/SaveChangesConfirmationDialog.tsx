@@ -12,10 +12,9 @@
 // limitations under the License.
 
 import { ReactElement, useState } from 'react';
-import { Checkbox, FormGroup, FormControlLabel, Typography } from '@mui/material';
+import { Checkbox, Label, Dialog } from '@perses-dev/components';
 import { DEFAULT_REFRESH_INTERVAL_OPTIONS, useTimeRange } from '@perses-dev/plugin-system';
 import { isRelativeTimeRange } from '@perses-dev/spec';
-import { Dialog } from '@perses-dev/components';
 import { useSaveChangesConfirmationDialog, useVariableDefinitionActions } from '../../context';
 
 const SAVE_DEFAULTS_DIALOG_TEXT =
@@ -61,39 +60,36 @@ export const SaveChangesConfirmationDialog = (): ReactElement => {
           <Dialog.Header onClose={() => dialog.onCancel()}>Save Dashboard</Dialog.Header>
 
           <Dialog.Content>
-            <Typography marginBottom={2}>{dialog.description || SAVE_DEFAULTS_DIALOG_TEXT}</Typography>
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    disabled={!isSavedDurationModified || !isRelativeTimeRange(timeRange)}
-                    checked={saveDefaultTimeRange && isSavedDurationModified && isRelativeTimeRange(timeRange)}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSaveDefaultTimeRange(e.target.checked)}
-                  />
-                }
-                label={saveTimeRangeMessage}
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    disabled={!isSavedRefreshIntervalModified}
-                    checked={saveDefaultRefreshInterval && isSavedRefreshIntervalModified}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDefaultRefreshInterval(e.target.checked)}
-                  />
-                }
-                label={saveRefreshIntervalMessage}
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    disabled={!isSavedVariableModified}
-                    checked={saveDefaultVariables && isSavedVariableModified}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSaveDefaultVariables(e.target.checked)}
-                  />
-                }
-                label={saveVariableMessage}
-              />
-            </FormGroup>
+            <p className="text-sm mb-2">{dialog.description || SAVE_DEFAULTS_DIALOG_TEXT}</p>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="save-time-range"
+                  disabled={!isSavedDurationModified || !isRelativeTimeRange(timeRange)}
+                  checked={saveDefaultTimeRange && isSavedDurationModified && isRelativeTimeRange(timeRange)}
+                  onCheckedChange={(checked) => setSaveDefaultTimeRange(Boolean(checked))}
+                />
+                <Label htmlFor="save-time-range">{saveTimeRangeMessage}</Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="save-refresh-interval"
+                  disabled={!isSavedRefreshIntervalModified}
+                  checked={saveDefaultRefreshInterval && isSavedRefreshIntervalModified}
+                  onCheckedChange={(checked) => setDefaultRefreshInterval(Boolean(checked))}
+                />
+                <Label htmlFor="save-refresh-interval">{saveRefreshIntervalMessage}</Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="save-variables"
+                  disabled={!isSavedVariableModified}
+                  checked={saveDefaultVariables && isSavedVariableModified}
+                  onCheckedChange={(checked) => setSaveDefaultVariables(Boolean(checked))}
+                />
+                <Label htmlFor="save-variables">{saveVariableMessage}</Label>
+              </div>
+            </div>
           </Dialog.Content>
 
           <Dialog.Actions>

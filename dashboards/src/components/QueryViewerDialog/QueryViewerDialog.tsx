@@ -12,8 +12,7 @@
 // limitations under the License.
 
 import React, { ReactElement, useMemo } from 'react';
-import { Dialog } from '@perses-dev/components';
-import { Button, Divider } from '@mui/material';
+import { Dialog, Button, Separator } from '@perses-dev/components';
 import { PluginSpecEditor } from '@perses-dev/plugin-system';
 import { QueryDefinition } from '@perses-dev/spec';
 
@@ -38,7 +37,7 @@ export function QueryViewerDialog({ open, queryDefinitions, onClose }: QueryView
               onChange={(): void => {}}
               isReadonly
             />
-            {index < queryDefinitions.length - 1 && <Divider sx={{ my: 2 }} />}
+            {index < queryDefinitions.length - 1 && <Separator className="my-2" />}
           </React.Fragment>
         );
       }
@@ -52,7 +51,7 @@ export function QueryViewerDialog({ open, queryDefinitions, onClose }: QueryView
       <Dialog.Header>Query Viewer</Dialog.Header>
       <Dialog.Content>{queryRows}</Dialog.Content>
       <Dialog.Actions>
-        <Button variant="outlined" color="secondary" onClick={onClose}>
+        <Button variant="outline" onClick={onClose}>
           Close
         </Button>
       </Dialog.Actions>

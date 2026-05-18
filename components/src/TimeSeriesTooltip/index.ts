@@ -15,7 +15,8 @@ export * from './SeriesInfo';
 export * from './SeriesLabelsStack';
 export * from './SeriesMarker';
 export * from './TimeChartTooltip';
-export * from './TooltipContent';
+// Exported as TimeSeriestooltipContent to avoid collision with shadcn's TooltipContent
+export { TooltipContent as TimeSeriestooltipContent, type TooltipContentProps as TimeSeriestooltipContentProps } from './TooltipContent';
 export * from './TooltipHeader';
 export * from './nearby-series';
 export * from './tooltip-model';

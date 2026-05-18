@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Grid, Stack } from '@mui/material';
 import { ReactElement } from 'react';
 
 export type OptionsEditorColumnProps = {
@@ -27,8 +26,8 @@ export type OptionsEditorColumnProps = {
  */
 export const OptionsEditorColumn = ({ children }: OptionsEditorColumnProps): ReactElement => {
   return (
-    <Grid item xs={4}>
-      <Stack spacing={3}>{children}</Stack>
-    </Grid>
+    <div className="col-span-1">
+      <div className="flex flex-col gap-6">{children}</div>
+    </div>
   );
 };

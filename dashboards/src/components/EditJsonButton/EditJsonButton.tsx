@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import CodeIcon from 'mdi-material-ui/CodeBraces';
+import { Code2 as CodeIcon } from 'lucide-react';
 import { InfoTooltip, ToolbarIconButton } from '@perses-dev/components';
 import { ReactElement } from 'react';
 import { TOOLTIP_TEXT } from '../../constants';

@@ -11,25 +11,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { TableRow as MuiTableRow, TableRowProps as MuiTableRowProps, alpha } from '@mui/material';
 import { forwardRef } from 'react';
+import { cn } from '../lib/utils';
 import { TableDensity } from './model/table-model';
 
-interface TableRowProps extends MuiTableRowProps<'div'> {
+interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> {
   density: TableDensity;
 }
 
-export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(function TableRow(props, ref) {
+export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(function TableRow(
+  { density, className, ...props },
+  ref
+) {
   return (
-    <MuiTableRow
+    <tr
       {...props}
       ref={ref}
-      sx={{
-        backgroundColor: (theme) => theme.palette.background.default,
-        '&:hover': {
-          backgroundColor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.hoverOpacity),
-        },
-      }}
+      className={cn('bg-background hover:bg-primary/10 transition-colors', className)}
     />
   );
 });

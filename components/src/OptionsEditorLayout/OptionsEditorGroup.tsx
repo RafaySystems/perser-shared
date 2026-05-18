@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, Typography, Stack } from '@mui/material';
 import React, { ReactElement } from 'react';
 
 export type OptionsEditorGroupProps = {
@@ -28,14 +27,12 @@ export type OptionsEditorGroupProps = {
  */
 export const OptionsEditorGroup = ({ title, children, icon }: OptionsEditorGroupProps): ReactElement => {
   return (
-    <Box>
-      <Box display="flex" borderBottom={1} borderColor="grey.300" marginBottom={(theme) => theme.spacing(1)}>
-        <Typography variant="overline" component="h4">
-          {title}
-        </Typography>
-        {icon && <Box sx={{ marginLeft: 'auto' }}>{icon}</Box>}
-      </Box>
-      <Stack spacing={1}>{children}</Stack>
-    </Box>
+    <div>
+      <div className="flex border-b border-border mb-2">
+        <h4 className="text-xs font-medium uppercase tracking-widest">{title}</h4>
+        {icon && <div className="ml-auto">{icon}</div>}
+      </div>
+      <div className="flex flex-col gap-2">{children}</div>
+    </div>
   );
 };

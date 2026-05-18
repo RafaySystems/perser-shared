@@ -11,33 +11,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button, ButtonProps } from '@mui/material';
-import AddPanelIcon from 'mdi-material-ui/ChartBoxPlusOutline';
-import { InfoTooltip } from '@perses-dev/components';
+import { PlusSquare as AddPanelIcon } from 'lucide-react';
+import { Button, ButtonProps, InfoTooltip } from '@perses-dev/components';
 import { ReactElement } from 'react';
-import { TOOLTIP_TEXT, editButtonStyle } from '../../constants';
+import { TOOLTIP_TEXT } from '../../constants';
 import { useDashboardActions } from '../../context';
 
-export interface AddPanelButtonProps extends Pick<ButtonProps, 'fullWidth'> {
+export interface AddPanelButtonProps {
   /**
    * The variant to use to display the button.
    */
-  variant?: 'text' | 'outlined';
-
-  /**
-   * The color to use to display the button.
-   */
-  color?: 'primary' | 'secondary';
+  variant?: ButtonProps['variant'];
 
   /**
    * The label used inside the button.
    */
   label?: string;
+
+  fullWidth?: boolean;
 }
 
 export const AddPanelButton = ({
-  variant = 'text',
-  color = 'primary',
+  variant = 'ghost',
   label = 'Panel',
   fullWidth,
 }: AddPanelButtonProps): ReactElement => {
@@ -46,14 +41,12 @@ export const AddPanelButton = ({
   return (
     <InfoTooltip description={TOOLTIP_TEXT.addPanel}>
       <Button
-        startIcon={<AddPanelIcon />}
         onClick={openAddPanel}
         aria-label={TOOLTIP_TEXT.addPanel}
         variant={variant}
-        color={color}
-        fullWidth={fullWidth}
-        sx={editButtonStyle}
+        className={`whitespace-nowrap min-w-0${fullWidth ? ' w-full' : ''}`}
       >
+        <AddPanelIcon className="mr-0.5" />
         {label}
       </Button>
     </InfoTooltip>

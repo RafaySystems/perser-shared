@@ -11,8 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { TextField } from '@mui/material';
-import { OptionsEditorControl } from '@perses-dev/components';
+import { TextField, OptionsEditorControl } from '@perses-dev/components';
 import { FC } from 'react';
 
 export interface MetricLabelInputProps {
@@ -21,8 +20,7 @@ export interface MetricLabelInputProps {
 }
 
 export const MetricLabelInput: FC<MetricLabelInputProps> = ({ value, onChange }) => {
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const newValue = event.target.value;
+  const handleChange = (newValue: string): void => {
     onChange(newValue || undefined);
   };
 

@@ -12,9 +12,8 @@
 // limitations under the License.
 
 import React, { ReactElement, useMemo, useState } from 'react';
-import { Alert, Box, Card, Chip, CircularProgress, IconButton, Stack, Typography } from '@mui/material';
-import { InfoTooltip, useSnackbar } from '@perses-dev/components';
-import Clipboard from 'mdi-material-ui/ClipboardOutline';
+import { Alert, AlertDescription, Card, Badge, Spinner, Button, InfoTooltip, useSnackbar } from '@perses-dev/components';
+import { Clipboard } from 'lucide-react';
 import { ListVariableDefinition } from '@perses-dev/spec';
 import { TOOLTIP_TEXT } from '../../../constants';
 import { useListVariablePluginValues } from '../variable-model';
@@ -44,49 +43,69 @@ export function VariablePreview(props: VariablePreviewProps): ReactElement {
   const variablePreviewState = useMemo((): ReactElement | null => {
     if (isLoading) {
       return (
-        <Stack width="100%" sx={{ alignItems: 'center', justifyContent: 'center' }}>
-          <CircularProgress />
-        </Stack>
+        <div className="w-full flex items-center justify-center">
+          <Spinner />
+        </div>
       );
     } else if (error) {
-      return <Alert severity="error">{error}</Alert>;
+      return (
+        <Alert variant="destructive">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      );
     } else if (!values?.length) {
-      return <Alert severity="info">No results</Alert>;
+      return (
+        <Alert>
+          <AlertDescription>No results</AlertDescription>
+        </Alert>
+      );
     }
     return null;
   }, [error, isLoading, values]);
 
   return (
-    <Box>
-      <Stack direction="row" spacing={1} alignItems="center" mb={1}>
-        <Typography variant="h4">Preview Values</Typography>
+    <div>
+      <div className="flex flex-row gap-1 items-center mb-1">
+        <h4 className="text-sm font-semibold">Preview Values</h4>
         <InfoTooltip description={TOOLTIP_TEXT.copyVariableValues}>
-          <IconButton
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6"
             onClick={async () => {
               if (values?.length) {
                 await navigator.clipboard.writeText(values.map((value) => value).join(', '));
                 infoSnackbar('Preview values copied to clipboard!');
               }
             }}
-            size="small"
           >
-            <Clipboard />
-          </IconButton>
+            <Clipboard className="h-4 w-4" />
+          </Button>
         </InfoTooltip>
-      </Stack>
-      <Card variant="outlined">
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, m: 2 }}>
+      </div>
+      <Card className="border">
+        <div className="flex flex-wrap gap-1 m-2">
           {variablePreviewState}
           {values
             ?.slice(0, maxValues)
             .filter((val) => val)
             .map((val, index) => (
-              <Chip size="small" key={index} label={val} />
+              <Badge variant="secondary" key={index}>
+                {val}
+              </Badge>
             ))}
-          {notShown > 0 && <Chip onClick={showAll} variant="outlined" size="small" label={`+${notShown} more`} />}
-        </Box>
+          {notShown > 0 && (
+            <Badge
+              variant="outline"
+              className="cursor-pointer"
+              onClick={showAll}
+            >
+              +{notShown} more
+            </Badge>
+          )}
+        </div>
       </Card>
-    </Box>
+    </div>
   );
 }
 

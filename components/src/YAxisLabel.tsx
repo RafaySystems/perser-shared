@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, Typography } from '@mui/material';
 import { ReactElement } from 'react';
 
 interface YAxisLabelProps {
@@ -21,31 +20,21 @@ interface YAxisLabelProps {
 
 export function YAxisLabel({ name, height }: YAxisLabelProps): ReactElement {
   return (
-    <Box
+    <div
       style={{
-        maxWidth: height, // allows rotated text to truncate instead of causing overlap
+        maxWidth: height,
         top: `calc(${height}px / 2)`,
-      }}
-      sx={{
-        display: 'inline-block',
-        position: 'absolute',
         transform: 'translateX(-50%) rotate(-90deg)',
         transformOrigin: 'top',
-        textAlign: 'center',
-        zIndex: 1,
       }}
+      className="inline-block absolute text-center z-[1]"
     >
-      <Typography
-        variant="body1"
+      <p
         aria-label="y axis label"
-        sx={{
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-        }}
+        className="text-sm text-foreground whitespace-nowrap overflow-hidden text-ellipsis"
       >
         {name}
-      </Typography>
-    </Box>
+      </p>
+    </div>
   );
 }

@@ -11,13 +11,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { IconButton, IconButtonProps, styled } from '@mui/material';
-import { StyledComponent } from '@emotion/styled';
-import { Theme } from '@mui/material/styles';
+import { Button, ButtonProps, cn } from '@perses-dev/components';
+import { forwardRef } from 'react';
 
-export const HeaderIconButton: StyledComponent<IconButtonProps & { theme?: Theme }> = styled(IconButton)(
-  ({ theme }) => ({
-    borderRadius: theme.shape.borderRadius,
-    padding: '4px',
-  })
-);
+export type HeaderIconButtonProps = Omit<ButtonProps, 'variant' | 'size'> & {
+  size?: 'small' | 'default';
+};
+
+export const HeaderIconButton = forwardRef<HTMLButtonElement, HeaderIconButtonProps>(function HeaderIconButton(
+  { className, size: _size, ...props },
+  ref
+) {
+  return (
+    <Button
+      ref={ref}
+      variant="ghost"
+      size="icon"
+      className={cn('rounded p-1 h-auto w-auto', className)}
+      {...props}
+    />
+  );
+});

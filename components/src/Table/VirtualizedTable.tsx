@@ -12,9 +12,9 @@
 // limitations under the License.
 
 import { Column, ColumnSizingInfoState, ColumnSizingState, flexRender, HeaderGroup, Row } from '@tanstack/react-table';
-import { Box, TablePagination, TableRow as MuiTableRow } from '@mui/material';
 import { TableComponents, TableVirtuoso, TableVirtuosoHandle, TableVirtuosoProps } from 'react-virtuoso';
 import { ReactElement, useMemo, useRef } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { TableToolbar, TableToolbarProps } from './TableToolbar';
 import { TableRow } from './TableRow';
 import { TableBody } from './TableBody';
@@ -26,6 +26,7 @@ import { VirtualizedTableContainer } from './VirtualizedTableContainer';
 import { TableCellConfigs, TableProps, TableRowEventOpts } from './model/table-model';
 import { useVirtualizedTableKeyboardNav } from './hooks/useVirtualizedTableKeyboardNav';
 import { TableFoot } from './TableFoot';
+import { Button } from '../ui/button';
 
 type TableCellPosition = {
   row: number;
@@ -58,9 +59,6 @@ export type VirtualizedTableProps<TableData> = Required<
     >;
   };
 
-// Separating out the virtualized table because we may want a paginated table
-// in the future that does not need virtualization, and we'd likely lay them
-// out differently.
 export function VirtualizedTable<TableData>({
   width,
   height,
@@ -82,9 +80,6 @@ export function VirtualizedTable<TableData>({
   toolbarConfig,
 }: VirtualizedTableProps<TableData>): ReactElement {
   const virtuosoRef = useRef<TableVirtuosoHandle>(null);
-  // Use a ref for these values because they are only needed for keyboard
-  // focus interactions and setting them on state will lead to a significant
-  // amount of unnecessary re-renders.
   const visibleRange = useRef({
     startIndex: 0,
     endIndex: 0,
@@ -97,8 +92,6 @@ export function VirtualizedTable<TableData>({
   const keyboardNav = useVirtualizedTableKeyboardNav({
     visibleRange: visibleRange,
     virtualTable: virtuosoRef,
-
-    // We add 1 here for the header.
     maxRows: rows.length + 1,
     maxColumns: columns.length,
   });
@@ -107,7 +100,6 @@ export function VirtualizedTable<TableData>({
     if (cellPosition.row === keyboardNav.activeCell.row && cellPosition.column === keyboardNav.activeCell.column) {
       return keyboardNav.isActive ? 'trigger-focus' : 'focus-next';
     }
-
     return 'none';
   };
 
@@ -164,22 +156,16 @@ export function VirtualizedTable<TableData>({
     width,
   ]);
 
-  const handleChangePage = (_event: React.MouseEvent<HTMLButtonElement> | null, newPage: number): void => {
+  const handleChangePage = (_event: unknown, newPage: number): void => {
     if (!pagination || !onPaginationChange) return;
     onPaginationChange({ ...pagination, pageIndex: newPage });
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     if (!pagination || !onPaginationChange) return;
     onPaginationChange({ pageIndex: 0, pageSize: parseInt(event.target.value, 10) });
   };
 
-  /**
-   * Instead of calling `column.getSize()` on every render for every header
-   * and especially every data cell (very expensive),
-   * we will calculate all column sizes at once at the root table level in a useMemo
-   * and pass the column sizes down as CSS variables to the <table> element.
-   */
   const columnSizeVars = useMemo(() => {
     const colSizes: { [key: string]: number } = {};
     headers.forEach((headerGroup) => {
@@ -191,20 +177,19 @@ export function VirtualizedTable<TableData>({
         });
     });
     return colSizes;
-    // We want to recalculate column sizes whenever column sizes or column resizing info changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columnSizingInfo, columnSizing, headers]);
 
+  const totalPages = pagination ? Math.ceil(rowCount / pagination.pageSize) : 0;
+  const currentPage = pagination ? pagination.pageIndex : 0;
+
   return (
-    <Box style={{ width, height, ...columnSizeVars }}>
+    <div style={{ width, height, ...columnSizeVars }}>
       <TableToolbar {...toolbarConfig} width={width} />
       <TableVirtuoso
         ref={virtuosoRef}
         totalCount={rows.length}
         components={VirtuosoTableComponents}
-        // Note: this value is impacted by overscan. See this issue if overscan
-        // is added.
-        // https://github.com/petyosi/react-virtuoso/issues/118#issuecomment-642156138
         rangeChanged={setVisibleRange}
         fixedHeaderContent={() => {
           return (
@@ -265,16 +250,53 @@ export function VirtualizedTable<TableData>({
         fixedFooterContent={
           pagination
             ? (): ReactElement => (
-                <MuiTableRow sx={{ backgroundColor: (theme) => theme.palette.background.default }}>
-                  <TablePagination
-                    colSpan={columns.length}
-                    count={rowCount}
-                    page={pagination.pageIndex}
-                    rowsPerPage={pagination.pageSize}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </MuiTableRow>
+                <tr className="bg-background">
+                  <td colSpan={columns.length} className="px-3 py-2">
+                    <div className="flex items-center justify-end gap-3 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-1.5">
+                        <span>Rows per page:</span>
+                        <select
+                          value={pagination.pageSize}
+                          onChange={handleChangeRowsPerPage}
+                          className="bg-background border border-border rounded px-1 py-0.5 text-sm cursor-pointer"
+                          aria-label="rows per page"
+                        >
+                          {[10, 25, 50, 100].map((n) => (
+                            <option key={n} value={n}>
+                              {n}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <span>
+                        {currentPage * pagination.pageSize + 1}–
+                        {Math.min((currentPage + 1) * pagination.pageSize, rowCount)} of {rowCount}
+                      </span>
+                      <div className="flex items-center gap-0.5">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7"
+                          onClick={(e) => handleChangePage(e, currentPage - 1)}
+                          disabled={currentPage === 0}
+                          aria-label="Previous page"
+                        >
+                          <ChevronLeft className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7"
+                          onClick={(e) => handleChangePage(e, currentPage + 1)}
+                          disabled={currentPage >= totalPages - 1}
+                          aria-label="Next page"
+                        >
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
               )
             : undefined
         }
@@ -298,30 +320,14 @@ export function VirtualizedTable<TableData>({
                 const cellRenderFn = cell.column.columnDef.cell;
                 const cellContent = typeof cellRenderFn === 'function' ? cellRenderFn(cellContext) : null;
 
-                /*
-                     IMPORTANT:
-                     If Variables exist in the link, they should have been translated by the plugin already. (Being developed at the moment)
-                     Components have no access to any context (Which is intentional and correct)
-                     We may want to add parameters to a link from neighboring cells in the future as well.
-                     If this is the case, the value of the neighboring cells should be read from here and be replaced. (Bing discussed at the moment, not decided yet)
-                  */
-
                 const cellDescriptionDef = cell.column.columnDef.meta?.cellDescription;
                 let description: string | undefined = undefined;
                 if (typeof cellDescriptionDef === 'function') {
-                  // If the cell description is a function, set the value using
-                  // the function.
                   description = cellDescriptionDef(cellContext);
                 } else if (cellDescriptionDef && typeof cellContent === 'string') {
-                  // If the cell description is `true` AND the cell content is
-                  // a string (and thus viable as a `title` attribute), use the
-                  // cell content.
                   description = cellContent;
                 }
 
-                /* this has been specifically added for the data link,
-                     therefore, non string and numeric values should be excluded
-                  */
                 const adjacentCellsValuesMap = Object.entries(row.original as Record<string, unknown>)
                   ?.filter(([_, value]) => ['string', 'number'].includes(typeof value))
                   .reduce(
@@ -336,7 +342,7 @@ export function VirtualizedTable<TableData>({
                   <TableCell
                     key={cell.id}
                     data-testid={cell.id}
-                    title={description || cellConfig?.text || cellContent}
+                    title={description || cellConfig?.text || (cellContent as string | undefined)}
                     width={
                       cell.column.getCanResize()
                         ? `calc(var(--col-${cell.column.id}-size) * 1px)`
@@ -363,6 +369,6 @@ export function VirtualizedTable<TableData>({
           );
         }}
       />
-    </Box>
+    </div>
   );
 }

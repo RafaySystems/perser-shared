@@ -11,10 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, useForkRef } from '@mui/material';
 import { useInView } from 'react-intersection-observer';
 import { DataQueriesProvider, usePlugin, useSuggestedStepMs } from '@perses-dev/plugin-system';
-import React, { ReactElement, useMemo, useState } from 'react';
+import React, { ReactElement, useCallback, useMemo, useRef, useState } from 'react';
 import { isPanelGroupItemIdEqual, PanelGroupItemId } from '../../model'; // TODO
 import { useEditMode, usePanel, usePanelActions, useViewPanelGroup } from '../../context';
 import { usePanelFocusHandlers } from '../../keyboard-shortcuts';
@@ -25,6 +24,25 @@ export interface GridItemContentProps {
   panelGroupItemId: PanelGroupItemId;
   width: number; // necessary for determining the suggested step ms
   panelOptions?: PanelOptions;
+}
+
+/**
+ * Merge two refs into a single callback ref.
+ */
+function useMergedRef<T>(...refs: React.Ref<T>[]): React.RefCallback<T> {
+  return useCallback(
+    (value: T | null) => {
+      refs.forEach((ref) => {
+        if (typeof ref === 'function') {
+          ref(value);
+        } else if (ref && typeof ref === 'object') {
+          (ref as React.MutableRefObject<T | null>).current = value;
+        }
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    refs
+  );
 }
 
 /**
@@ -59,7 +77,7 @@ export function GridItemContent(props: GridItemContentProps): ReactElement {
     triggerOnce: false,
   });
 
-  const mergedRef = useForkRef(renderRef, queryRef);
+  const mergedRef = useMergedRef<HTMLDivElement>(renderRef, queryRef);
 
   const [openQueryViewer, setOpenQueryViewer] = useState(false);
 
@@ -113,16 +131,12 @@ export function GridItemContent(props: GridItemContentProps): ReactElement {
       : plugin?.queryOptions;
 
   return (
-    <Box
+    <div
       ref={mergedRef}
       tabIndex={-1}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      sx={{
-        width: '100%',
-        height: '100%',
-        outline: 'none',
-      }}
+      className="w-full h-full outline-none"
     >
       <DataQueriesProvider
         definitions={definitions}
@@ -145,6 +159,6 @@ export function GridItemContent(props: GridItemContentProps): ReactElement {
         queryDefinitions={queryDefinitions}
         onClose={() => setOpenQueryViewer(false)}
       />
-    </Box>
+    </div>
   );
 }

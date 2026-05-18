@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Switch, SwitchProps, ToggleButtonGroup, ToggleButton } from '@mui/material';
+import { Switch, ToggleGroup, ToggleGroupItem } from '@perses-dev/components';
 import {
   ErrorAlert,
   OptionsEditorControl,
@@ -69,7 +69,7 @@ export function LegendOptionsEditor({
   showValuesEditor = true,
   calculation = 'aggregation',
 }: LegendOptionsEditorProps): ReactElement {
-  const handleLegendShowChange: SwitchProps['onChange'] = (_: unknown, checked: boolean) => {
+  const handleLegendShowChange = (checked: boolean) => {
     // legend is hidden when legend obj is undefined
     const legendValue = checked === true ? { position: DEFAULT_LEGEND.position } : undefined;
     onChange(legendValue);
@@ -152,7 +152,7 @@ export function LegendOptionsEditor({
   return (
     <OptionsEditorGroup title="Legend">
       {!isValidLegend && <ErrorAlert error={{ name: 'invalid-legend', message: 'Invalid legend spec' }} />}
-      <OptionsEditorControl label="Show" control={<Switch checked={!!value} onChange={handleLegendShowChange} />} />
+      <OptionsEditorControl label="Show" control={<Switch checked={!!value} onCheckedChange={handleLegendShowChange} />} />
       {value && (
         <>
           <OptionsEditorControl
@@ -172,30 +172,30 @@ export function LegendOptionsEditor({
           <OptionsEditorControl
             label="Mode"
             control={
-              <ToggleButtonGroup
-                color="primary"
-                exclusive
+              <ToggleGroup
+                type="single"
                 value={currentMode}
                 aria-label="Mode"
-                onChange={(__, newValue) => {
-                  onChange({
-                    ...value,
-                    position: currentPosition,
-                    mode: newValue,
-                  });
+                onValueChange={(newValue) => {
+                  if (newValue) {
+                    onChange({
+                      ...value,
+                      position: currentPosition,
+                      mode: newValue as LegendSpecOptions['mode'],
+                    });
+                  }
                 }}
               >
                 {Object.entries(LEGEND_MODE_CONFIG).map(([modeId, config]) => (
-                  <ToggleButton
+                  <ToggleGroupItem
                     key={modeId}
                     value={modeId}
-                    selected={currentMode === modeId}
                     aria-label={`display ${modeId} mode`}
                   >
                     {config.label}
-                  </ToggleButton>
+                  </ToggleGroupItem>
                 ))}
-              </ToggleButtonGroup>
+              </ToggleGroup>
             }
           />
           {currentMode === 'table' && (

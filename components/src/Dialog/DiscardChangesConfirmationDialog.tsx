@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button } from '@mui/material';
 import { ReactElement } from 'react';
 import { Dialog } from './Dialog';
 
@@ -22,20 +21,19 @@ interface DiscardChangesConfirmationDialogProps {
   onDiscardChanges: () => void;
 }
 
-export const DiscardChangesConfirmationDialog = (props: DiscardChangesConfirmationDialogProps): ReactElement => {
-  const { description, isOpen, onCancel, onDiscardChanges } = props;
-
+export const DiscardChangesConfirmationDialog = ({
+  description,
+  isOpen,
+  onCancel,
+  onDiscardChanges,
+}: DiscardChangesConfirmationDialogProps): ReactElement => {
   return (
-    <Dialog open={isOpen} aria-labelledby="discard-dialog">
+    <Dialog open={isOpen}>
       <Dialog.Header>Discard Changes</Dialog.Header>
       <Dialog.Content>{description}</Dialog.Content>
       <Dialog.Actions>
-        <Button variant="contained" onClick={onDiscardChanges}>
-          Discard Changes
-        </Button>
-        <Button variant="outlined" color="secondary" onClick={onCancel}>
-          Cancel
-        </Button>
+        <Dialog.PrimaryButton onClick={onDiscardChanges}>Discard Changes</Dialog.PrimaryButton>
+        <Dialog.SecondaryButton onClick={onCancel}>Cancel</Dialog.SecondaryButton>
       </Dialog.Actions>
     </Dialog>
   );

@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box } from '@mui/material';
 import { ReactElement } from 'react';
 import { SeriesMarker } from './SeriesMarker';
 import { SeriesLabelsStack } from './SeriesLabelsStack';
@@ -57,48 +56,27 @@ export function SeriesInfo(props: SeriesInfoProps): ReactElement {
   const formattedSeriesInfo = seriesName.replace(/[,]/g, ', ');
 
   return (
-    <Box
-      sx={{
-        display: 'table-row',
-        paddingTop: 0.5,
-      }}
-    >
-      <Box
-        sx={{
-          display: 'table-cell',
-          maxWidth: '520px',
-        }}
-      >
-        <SeriesMarker markerColor={markerColor} sx={{ marginTop: 0.5 }} />
-        <Box
-          component="span"
-          sx={(theme) => ({
-            display: 'inline-block',
-            width: 'calc(100% - 20px)',
-            minWidth: 150,
+    <div className="table-row pt-0.5">
+      <div className="table-cell" style={{ maxWidth: '520px' }}>
+        <SeriesMarker markerColor={markerColor} className="mt-0.5" />
+        <span
+          className="inline-block w-[calc(100%-20px)] min-w-[150px] overflow-hidden text-white overflow-ellipsis"
+          style={{
             maxWidth: TOOLTIP_LABELS_MAX_WIDTH,
-            overflow: 'hidden',
-            color: theme.palette.common.white,
-            fontWeight: emphasizeText ? theme.typography.fontWeightBold : theme.typography.fontWeightRegular,
-            textOverflow: 'ellipsis',
+            fontWeight: emphasizeText ? 700 : 400,
             whiteSpace: wrapLabels ? 'normal' : 'nowrap',
-          })}
+          }}
           aria-label={emphasizeText ? EMPHASIZED_SERIES_DESCRIPTION : NEARBY_SERIES_DESCRIPTION}
         >
           {formattedSeriesInfo}
-        </Box>
-      </Box>
-      <Box
-        sx={(theme) => ({
-          display: 'table-cell',
-          paddingLeft: 1.5,
-          textAlign: 'right',
-          verticalAlign: 'top',
-          fontWeight: emphasizeText ? theme.typography.fontWeightBold : theme.typography.fontWeightRegular,
-        })}
+        </span>
+      </div>
+      <div
+        className="table-cell pl-6 text-right align-top"
+        style={{ fontWeight: emphasizeText ? 700 : 400 }}
       >
         {formattedY}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 }

@@ -14,8 +14,7 @@
 import { usePlugin, PanelProps, QueryData, PanelPlugin } from '@perses-dev/plugin-system';
 import { UnknownSpec, PanelDefinition, QueryDataType } from '@perses-dev/spec';
 import { ReactElement } from 'react';
-import { LoadingOverlay } from '@perses-dev/components';
-import { Skeleton } from '@mui/material';
+import { LoadingOverlay, Skeleton } from '@perses-dev/components';
 import { PanelPluginLoader } from './PanelPluginLoader';
 
 export interface PanelContentProps extends Omit<PanelProps<UnknownSpec>, 'queryResults'> {

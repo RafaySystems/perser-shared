@@ -11,22 +11,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Stack, Box, CircularProgress, styled, Popper, ClickAwayListener } from '@mui/material';
-import { isValidElement, PropsWithChildren, ReactElement, ReactNode, useMemo, useState, MouseEvent } from 'react';
+import { Popover, PopoverContent, PopoverTrigger, Spinner, cn } from '@perses-dev/components';
+import { isValidElement, PropsWithChildren, ReactElement, ReactNode, useMemo, useState } from 'react';
 import { InfoTooltip } from '@perses-dev/components';
 import { QueryData } from '@perses-dev/plugin-system';
-import DatabaseSearch from 'mdi-material-ui/DatabaseSearch';
-import ArrowCollapseIcon from 'mdi-material-ui/ArrowCollapse';
-import ArrowExpandIcon from 'mdi-material-ui/ArrowExpand';
-import PencilIcon from 'mdi-material-ui/PencilOutline';
-import DeleteIcon from 'mdi-material-ui/DeleteOutline';
-import DragIcon from 'mdi-material-ui/DragVertical';
-import ContentCopyIcon from 'mdi-material-ui/ContentCopy';
-import MenuIcon from 'mdi-material-ui/Menu';
-import AlertIcon from 'mdi-material-ui/Alert';
-import AlertCircleIcon from 'mdi-material-ui/AlertCircle';
-import InformationOutlineIcon from 'mdi-material-ui/InformationOutline';
-import LightningBoltIcon from 'mdi-material-ui/LightningBolt';
+import {
+  DatabaseZap as DatabaseSearch,
+  Minimize2 as ArrowCollapseIcon,
+  Maximize2 as ArrowExpandIcon,
+  Pencil as PencilIcon,
+  Trash2 as DeleteIcon,
+  GripVertical as DragIcon,
+  Copy as ContentCopyIcon,
+  Menu as MenuIcon,
+  AlertTriangle as AlertIcon,
+  AlertCircle as AlertCircleIcon,
+  Info as InformationOutlineIcon,
+  Zap as LightningBoltIcon,
+} from 'lucide-react';
 import { Link, Notice } from '@perses-dev/spec';
 import {
   ARIA_LABEL_TEXT,
@@ -70,12 +72,20 @@ export interface PanelActionsProps {
   showIcons: PanelOptions['showIcons'];
 }
 
-const ConditionalBox = styled(Box)({
-  display: 'none',
-  alignItems: 'center',
-  flexGrow: 1,
-  justifyContent: 'flex-end',
-});
+/** Flex container that is conditionally shown based on container query. Hidden by default. */
+function ConditionalBox({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}): ReactElement {
+  return (
+    <div className={cn('hidden items-center grow justify-end', className)}>
+      {children}
+    </div>
+  );
+}
 
 export const PanelActions: React.FC<PanelActionsProps> = ({
   editHandlers,
@@ -100,7 +110,7 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
               aria-describedby="info-tooltip"
               aria-hidden={false}
               fontSize="inherit"
-              sx={{ color: (theme) => theme.palette.text.secondary }}
+              className="text-muted-foreground"
             />
           </HeaderIconButton>
         </InfoTooltip>
@@ -118,7 +128,7 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
     const queryErrors = queryResults.filter((q) => q.error);
 
     if (isFetching && hasData) {
-      return <CircularProgress aria-label="loading" size="1.125rem" />;
+      return <Spinner className="h-[1.125rem] w-[1.125rem]" aria-label="loading" />;
     } else if (queryErrors.length > 0) {
       const errorTexts = queryErrors
         .map((q) => q.error)
@@ -128,12 +138,7 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
       return (
         <InfoTooltip description={errorTexts}>
           <HeaderIconButton aria-label="panel errors" size="small">
-            <AlertIcon
-              fontSize="inherit"
-              sx={{
-                color: (theme) => theme.palette.error.main,
-              }}
-            />
+            <AlertIcon fontSize="inherit" className="text-destructive" />
           </HeaderIconButton>
         </InfoTooltip>
       );
@@ -196,7 +201,6 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
 
   const editActions = useMemo((): ReactNode | undefined => {
     if (editHandlers !== undefined) {
-      // If there are edit handlers, always just show the edit buttons
       return (
         <>
           <InfoTooltip description={TOOLTIP_TEXT.editPanel}>
@@ -216,11 +220,7 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
             >
               <ContentCopyIcon
                 fontSize="inherit"
-                sx={{
-                  // Shrink this icon a little bit to look more consistent
-                  // with the other icons in the header.
-                  transform: 'scale(0.925)',
-                }}
+                className="scale-[0.925]"
               />
             </HeaderIconButton>
           </InfoTooltip>
@@ -242,31 +242,29 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
   const moveAction = useMemo((): ReactNode | undefined => {
     if (editActions && !readHandlers?.isPanelViewed) {
       return (
-        <Box sx={{ background: (theme) => theme.palette.background.default }}>
+        <div className="bg-background">
           <InfoTooltip description={TOOLTIP_TEXT.movePanel}>
             <HeaderIconButton aria-label={ARIA_LABEL_TEXT.movePanel(title)} size="small">
-              <DragIcon className="drag-handle" sx={{ cursor: 'grab' }} fontSize="inherit" />
+              <DragIcon className="drag-handle cursor-grab" fontSize="inherit" />
             </HeaderIconButton>
           </InfoTooltip>
-        </Box>
+        </div>
       );
     }
     return undefined;
   }, [editActions, readHandlers, title]);
 
-  const divider = <Box sx={{ flexGrow: 1 }}></Box>;
+  const divider = <div className="grow"></div>;
 
   // By default, the panel header shows certain icons only on hover if the panel is in non-editing, non-fullscreen mode
   const OnHover = ({ children }: PropsWithChildren): ReactNode =>
-    showIcons === 'hover' ? <Box sx={{ display: 'var(--panel-hover, none)' }}>{children}</Box> : <>{children}</>;
+    showIcons === 'hover' ? <div style={{ display: 'var(--panel-hover, none)' }}>{children}</div> : <>{children}</>;
 
   return (
     <>
       {/* small panel width: move all icons except move/grab to overflow menu */}
       <ConditionalBox
-        sx={(theme) => ({
-          [theme.containerQueries(HEADER_ACTIONS_CONTAINER_NAME).between(0, HEADER_SMALL_WIDTH)]: { display: 'flex' },
-        })}
+        className={`[@container_${HEADER_ACTIONS_CONTAINER_NAME}_(max-width:${HEADER_SMALL_WIDTH}px)]:flex`}
       >
         {divider}
         <OnHover>
@@ -281,11 +279,7 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
 
       {/* medium panel width: move edit icons to overflow menu */}
       <ConditionalBox
-        sx={(theme) => ({
-          [theme.containerQueries(HEADER_ACTIONS_CONTAINER_NAME).between(HEADER_SMALL_WIDTH, HEADER_MEDIUM_WIDTH)]: {
-            display: 'flex',
-          },
-        })}
+        className={`[@container_${HEADER_ACTIONS_CONTAINER_NAME}_(min-width:${HEADER_SMALL_WIDTH}px)_and_(max-width:${HEADER_MEDIUM_WIDTH}px)]:flex`}
       >
         <OnHover>
           {descriptionAction} {linksAction}
@@ -304,11 +298,7 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
 
       {/* large panel width: show all icons in panel header */}
       <ConditionalBox
-        sx={(theme) => ({
-          // flip the logic here; if the browser (or jsdom) does not support container queries, always show all icons
-          display: 'flex',
-          [theme.containerQueries(HEADER_ACTIONS_CONTAINER_NAME).down(HEADER_MEDIUM_WIDTH)]: { display: 'none' },
-        })}
+        className={`flex [@container_${HEADER_ACTIONS_CONTAINER_NAME}_(max-width:${HEADER_MEDIUM_WIDTH}px)]:hidden`}
       >
         <OnHover>
           {descriptionAction} {linksAction}
@@ -342,24 +332,9 @@ const OverflowMenu: React.FC<
     title?: string;
     icon?: ReactElement;
     direction?: 'row' | 'column';
-    placement?:
-      | 'bottom'
-      | 'top'
-      | 'left'
-      | 'right'
-      | 'bottom-start'
-      | 'bottom-end'
-      | 'top-start'
-      | 'top-end'
-      | 'left-start'
-      | 'left-end'
-      | 'right-start'
-      | 'right-end';
-    offsetX?: number;
-    offsetY?: number;
   }>
-> = ({ children, title, icon, direction = 'row', placement = 'bottom', offsetX = -2, offsetY = -25 }) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+> = ({ children, title, icon, direction = 'row' }) => {
+  const [open, setOpen] = useState(false);
 
   // do not show overflow menu if there is no content (for example, edit actions are hidden)
   const hasContent = isValidElement(children) || (Array.isArray(children) && children.some(isValidElement));
@@ -367,53 +342,33 @@ const OverflowMenu: React.FC<
     return null;
   }
 
-  const handleClick = (event: MouseEvent<HTMLElement>): void => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  };
-
-  const handleClose = (): void => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? 'actions-menu' : undefined;
-
   return (
-    <Box sx={{ background: (theme) => theme.palette.background.default }}>
-      <HeaderIconButton
-        className="show-actions"
-        aria-describedby={id}
-        onClick={handleClick}
-        aria-label={ARIA_LABEL_TEXT.showPanelActions(title)}
-        size="small"
-      >
-        {icon ?? <MenuIcon fontSize="inherit" />}
-      </HeaderIconButton>
-      <Popper
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        placement={placement}
-        modifiers={[
-          {
-            name: 'offset',
-            options: {
-              offset: [offsetX, offsetY],
-            },
-          },
-        ]}
-        sx={{
-          backgroundColor: (theme) => theme.palette.background.paper,
-          borderRadius: 1,
-          boxShadow: (theme) => theme.shadows[4],
-        }}
-      >
-        <ClickAwayListener onClickAway={handleClose}>
-          <Stack direction={direction} alignItems="center" sx={{ padding: 1 }} onClick={handleClose}>
+    <div className="bg-background">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <HeaderIconButton
+            className="show-actions"
+            aria-label={ARIA_LABEL_TEXT.showPanelActions(title)}
+            size="small"
+          >
+            {icon ?? <MenuIcon fontSize="inherit" />}
+          </HeaderIconButton>
+        </PopoverTrigger>
+        <PopoverContent
+          className="p-1 w-auto"
+          align="start"
+          onClick={() => setOpen(false)}
+        >
+          <div
+            className={cn(
+              'flex items-center p-1',
+              direction === 'column' ? 'flex-col' : 'flex-row'
+            )}
+          >
             {children}
-          </Stack>
-        </ClickAwayListener>
-      </Popper>
-    </Box>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 };

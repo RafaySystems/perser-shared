@@ -11,24 +11,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Card, CardContent, CardProps } from '@mui/material';
+import { cn } from '@perses-dev/components';
 import {
   ErrorAlert,
   ErrorBoundary,
   ItemActionsProvider,
   SelectionProvider,
-  combineSx,
   useId,
 } from '@perses-dev/components';
 import { PanelDefinition } from '@perses-dev/spec';
 import { ActionOptions, useDataQueriesContext, usePluginRegistry } from '@perses-dev/plugin-system';
-import { ReactNode, memo, useEffect, useMemo, useState } from 'react';
+import { HTMLAttributes, ReactNode, memo, useEffect, useMemo, useState } from 'react';
 import useResizeObserver from 'use-resize-observer';
 import { PanelGroupItemId } from '../../model';
 import { PanelContent } from './PanelContent';
 import { PanelHeader, PanelHeaderProps } from './PanelHeader';
 
-export interface PanelProps extends CardProps<'section'> {
+export interface PanelProps extends HTMLAttributes<HTMLElement> {
   definition: PanelDefinition;
   readHandlers?: PanelHeaderProps['readHandlers'];
   editHandlers?: PanelHeaderProps['editHandlers'];
@@ -168,11 +167,11 @@ export const Panel = memo(function Panel(props: PanelProps) {
     loadPluginActions();
   }, [definition.spec.plugin.kind, panelPropsForActions, getPlugin]);
 
-  const handleMouseEnter: CardProps['onMouseEnter'] = (e) => {
+  const handleMouseEnter: HTMLAttributes<HTMLElement>['onMouseEnter'] = (e) => {
     onMouseEnter?.(e);
   };
 
-  const handleMouseLeave: CardProps['onMouseLeave'] = (e) => {
+  const handleMouseLeave: HTMLAttributes<HTMLElement>['onMouseLeave'] = (e) => {
     onMouseLeave?.(e);
   };
 
@@ -187,19 +186,11 @@ export const Panel = memo(function Panel(props: PanelProps) {
   return (
     <SelectionProvider>
       <ItemActionsProvider>
-        <Card
-          component="section"
-          sx={combineSx(
-            {
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              flexFlow: 'column nowrap',
-              ':hover': { '--panel-hover': 'block' },
-            },
-            sx
+        <section
+          className={cn(
+            'rounded-lg border bg-card text-card-foreground shadow-sm w-full h-full flex flex-col flex-nowrap [&:hover]:--panel-hover-block',
+            className
           )}
-          variant="outlined"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           aria-labelledby={headerId}
@@ -221,23 +212,12 @@ export const Panel = memo(function Panel(props: PanelProps) {
               pluginActions={pluginActions}
               itemActionsListConfig={itemActionsListConfig}
               showIcons={showIcons}
-              sx={{ py: '2px', pl: '8px', pr: '2px' }}
+              className="py-0.5 pl-2 pr-0.5"
               dimension={contentDimensions}
             />
           )}
-          <CardContent
-            component="figure"
-            sx={{
-              position: 'relative',
-              overflow: 'hidden',
-              flexGrow: 1,
-              margin: 0,
-              padding: 0,
-              // Override MUI default style for last-child
-              ':last-child': {
-                padding: 0,
-              },
-            }}
+          <figure
+            className="relative overflow-hidden grow m-0 p-0"
             ref={setContentElement}
           >
             <ErrorBoundary FallbackComponent={ErrorAlert} resetKeys={[definition.spec, queryResults]}>
@@ -249,8 +229,9 @@ export const Panel = memo(function Panel(props: PanelProps) {
                 queryResults={queryResults}
               />
             </ErrorBoundary>
-          </CardContent>
+          </figure>
         </Card>
+        </section>
       </ItemActionsProvider>
     </SelectionProvider>
   );

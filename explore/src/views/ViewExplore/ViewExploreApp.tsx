@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box } from '@mui/material';
 import { ChartsProvider, useChartsTheme } from '@perses-dev/components';
 import { ReactElement, ReactNode } from 'react';
 import { ExploreManager, ExplorerManagerProviderWithQueryParams } from '../../components';
@@ -26,20 +25,12 @@ export function ViewExploreApp(props: ViewAppProps): ReactElement {
   const chartsTheme = useChartsTheme();
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        overflowX: 'hidden',
-        overflowY: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
+    <div className="grow overflow-x-hidden overflow-y-auto flex flex-col">
       <ChartsProvider chartsTheme={chartsTheme} enablePinning={false}>
         <ExplorerManagerProviderWithQueryParams>
           <ExploreManager exploreTitleComponent={exploreTitleComponent} />
         </ExplorerManagerProviderWithQueryParams>
       </ChartsProvider>
-    </Box>
+    </div>
   );
 }

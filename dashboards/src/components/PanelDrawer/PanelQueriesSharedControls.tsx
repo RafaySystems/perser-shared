@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Grid, Typography } from '@mui/material';
 import { ErrorAlert, ErrorBoundary } from '@perses-dev/components';
 import { PanelEditorContext, PanelPreview } from '@perses-dev/dashboards';
 import { DataQueriesProvider, PanelSpecEditor, usePlugin, useSuggestedStepMs } from '@perses-dev/plugin-system';
@@ -93,15 +92,13 @@ export function PanelQueriesSharedControls({
 
   return (
     <DataQueriesProvider definitions={previewDefinition} options={{ suggestedStepMs, ...pluginQueryOptions }}>
-      <Grid item xs={12}>
-        <Typography variant="h4" marginBottom={1}>
-          Preview
-        </Typography>
+      <div className="col-span-12 w-full">
+        <h4 className="text-sm font-medium mb-2">Preview</h4>
         <ErrorBoundary FallbackComponent={ErrorAlert}>
           <PanelPreview panelDefinition={panelDefinition} />
         </ErrorBoundary>
-      </Grid>
-      <Grid item xs={12}>
+      </div>
+      <div className="col-span-12 w-full">
         <ErrorBoundary FallbackComponent={ErrorAlert}>
           <PanelSpecEditor
             control={control}
@@ -112,7 +109,7 @@ export function PanelQueriesSharedControls({
             onPluginSpecChange={onPluginSpecChange}
           />
         </ErrorBoundary>
-      </Grid>
+      </div>
     </DataQueriesProvider>
   );
 }

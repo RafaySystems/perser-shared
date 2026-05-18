@@ -10,13 +10,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Switch, SwitchProps } from '@mui/material';
 
 import { ReactElement } from 'react';
 import { OptionsEditorControl } from '../OptionsEditorLayout';
 import { SettingsAutocomplete } from '../SettingsAutocomplete';
 import { FormatOptions, isUnitWithDecimalPlaces, isUnitWithShortValues, shouldShortenValues } from '../model';
 import { UnitSelector } from './UnitSelector';
+import { Switch } from '../ui/switch';
 
 export interface FormatControlsProps {
   value: FormatOptions;
@@ -62,7 +62,7 @@ export function FormatControls({ value, onChange, disabled = false }: FormatCont
     }
   };
 
-  const handleShortValuesChange: SwitchProps['onChange'] = (_: unknown, checked: boolean) => {
+  const handleShortValuesChange = (_: unknown, checked: boolean): void => {
     if (hasShortValues) {
       onChange({
         ...value,
@@ -78,7 +78,7 @@ export function FormatControls({ value, onChange, disabled = false }: FormatCont
         control={
           <Switch
             checked={hasShortValues ? shouldShortenValues(value.shortValues) : false}
-            onChange={handleShortValuesChange}
+            onCheckedChange={(checked) => handleShortValuesChange(undefined, checked)}
             disabled={!hasShortValues}
           />
         }

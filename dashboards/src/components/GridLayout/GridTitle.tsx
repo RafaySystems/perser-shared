@@ -11,15 +11,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, IconButton, Stack, Typography } from '@mui/material';
-import ExpandedIcon from 'mdi-material-ui/ChevronDown';
-import CollapsedIcon from 'mdi-material-ui/ChevronRight';
-import AddPanelIcon from 'mdi-material-ui/ChartBoxPlusOutline';
-import PencilIcon from 'mdi-material-ui/PencilOutline';
-import ArrowUpIcon from 'mdi-material-ui/ArrowUp';
-import ArrowDownIcon from 'mdi-material-ui/ArrowDown';
-import DeleteIcon from 'mdi-material-ui/DeleteOutline';
-import { InfoTooltip } from '@perses-dev/components';
+import {
+  ChevronDown as ExpandedIcon,
+  ChevronRight as CollapsedIcon,
+  PlusSquare as AddPanelIcon,
+  Pencil as PencilIcon,
+  ArrowUp as ArrowUpIcon,
+  ArrowDown as ArrowDownIcon,
+  Trash2 as DeleteIcon,
+} from 'lucide-react';
+import { Button, InfoTooltip } from '@perses-dev/components';
 import { useReplaceVariablesInString } from '@perses-dev/plugin-system';
 import { PanelGroupId } from '@perses-dev/spec';
 import { ReactElement } from 'react';
@@ -48,30 +49,33 @@ export function GridTitle(props: GridTitleProps): ReactElement {
   const { openDeletePanelGroupDialog } = useDeletePanelGroupDialog();
   const { isEditMode } = useEditMode();
 
-  const text = <Typography variant="h2">{title}</Typography>;
+  const text = <h2 className="text-base font-semibold">{title}</h2>;
 
   return (
-    <Box
+    <div
       onClick={collapse?.onToggleOpen}
-      sx={{
-        display: 'flex',
-        justifyContent: 'start',
-        alignItems: 'center',
-        cursor: collapse ? 'pointer' : 'auto',
-        backgroundColor: ({ palette }) => palette.background.paper,
-      }}
+      className="flex justify-start items-center cursor-auto bg-card data-[collapsible=true]:cursor-pointer"
+      data-collapsible={collapse ? 'true' : undefined}
       data-testid="panel-group-header"
     >
       {collapse ? (
         <>
-          <IconButton sx={{ marginRight: 1 }} aria-label={`${collapse.isOpen ? 'collapse' : 'expand'} group ${title}`}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="mr-1 h-auto w-auto p-1"
+            aria-label={`${collapse.isOpen ? 'collapse' : 'expand'} group ${title}`}
+          >
             {collapse.isOpen ? <ExpandedIcon /> : <CollapsedIcon />}
-          </IconButton>
+          </Button>
           {text}
           {isEditMode && (
-            <Stack direction="row" marginLeft="auto">
+            <div className="flex flex-row ml-auto">
               <InfoTooltip description={TOOLTIP_TEXT.addPanelToGroup}>
-                <IconButton
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-auto w-auto p-2"
                   aria-label={ARIA_LABEL_TEXT.addPanelToGroup(title)}
                   onClick={(e) => {
                     // Don't trigger expand/collapse
@@ -80,10 +84,13 @@ export function GridTitle(props: GridTitleProps): ReactElement {
                   }}
                 >
                   <AddPanelIcon />
-                </IconButton>
+                </Button>
               </InfoTooltip>
               <InfoTooltip description={TOOLTIP_TEXT.editGroup}>
-                <IconButton
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-auto w-auto p-2"
                   aria-label={ARIA_LABEL_TEXT.editGroup(title)}
                   onClick={(e) => {
                     // Don't trigger expand/collapse
@@ -92,10 +99,13 @@ export function GridTitle(props: GridTitleProps): ReactElement {
                   }}
                 >
                   <PencilIcon />
-                </IconButton>
+                </Button>
               </InfoTooltip>
               <InfoTooltip description={TOOLTIP_TEXT.deleteGroup}>
-                <IconButton
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-auto w-auto p-2"
                   aria-label={ARIA_LABEL_TEXT.deleteGroup(title)}
                   onClick={(e) => {
                     // Don't trigger expand/collapse
@@ -104,10 +114,13 @@ export function GridTitle(props: GridTitleProps): ReactElement {
                   }}
                 >
                   <DeleteIcon />
-                </IconButton>
+                </Button>
               </InfoTooltip>
               <InfoTooltip description={TOOLTIP_TEXT.moveGroupDown}>
-                <IconButton
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-auto w-auto p-2"
                   aria-label={ARIA_LABEL_TEXT.moveGroupDown(title)}
                   disabled={moveDown === undefined}
                   onClick={(e) => {
@@ -117,10 +130,13 @@ export function GridTitle(props: GridTitleProps): ReactElement {
                   }}
                 >
                   <ArrowDownIcon />
-                </IconButton>
+                </Button>
               </InfoTooltip>
               <InfoTooltip description={TOOLTIP_TEXT.moveGroupUp}>
-                <IconButton
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-auto w-auto p-2"
                   aria-label={ARIA_LABEL_TEXT.moveGroupUp(title)}
                   disabled={moveUp === undefined}
                   onClick={(e) => {
@@ -130,15 +146,15 @@ export function GridTitle(props: GridTitleProps): ReactElement {
                   }}
                 >
                   <ArrowUpIcon />
-                </IconButton>
+                </Button>
               </InfoTooltip>
-            </Stack>
+            </div>
           )}
         </>
       ) : (
         // If we don't need expand/collapse, just render the title text
         text
       )}
-    </Box>
+    </div>
   );
 }

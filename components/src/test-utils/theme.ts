@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { createTheme as createMuiTheme } from '@mui/material';
 import { PersesChartsTheme, EChartsTheme } from '../model';
 import { generateChartsTheme } from '../utils';
 import { SharedChartsState } from '../context';
@@ -34,7 +33,7 @@ const TEST_ECHARTS_THEME_OVERRIDES: EChartsTheme = {
   },
 };
 
-export const testChartsTheme: PersesChartsTheme = generateChartsTheme(createMuiTheme({}), {
+export const testChartsTheme: PersesChartsTheme = generateChartsTheme('light', {
   echartsTheme: TEST_ECHARTS_THEME_OVERRIDES,
 });
 

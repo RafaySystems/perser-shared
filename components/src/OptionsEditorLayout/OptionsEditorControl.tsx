@@ -11,19 +11,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { FormControl, FormLabel, FormControlLabelProps, Stack, Box, IconButton } from '@mui/material';
 import React, { ReactElement } from 'react';
-import InformationOutlineIcon from 'mdi-material-ui/InformationOutline';
+import { Info as InformationOutlineIcon } from 'lucide-react';
 import { useId } from '../utils';
 import { InfoTooltip } from '../InfoTooltip';
+import { Button } from '../ui/button';
 
-export type OptionsEditorControlProps = Pick<FormControlLabelProps, 'label' | 'control'> & {
+export type OptionsEditorControlProps = {
+  label: React.ReactNode;
+  control: React.ReactElement;
   description?: string;
 };
 
 export const OptionsEditorControl = ({ label, control, description }: OptionsEditorControlProps): ReactElement => {
-  // Make sure we have a unique ID we can use for associating labels and
-  // controls for a11y.
   const generatedControlId = useId('EditorSectionControl');
   const controlId = `${generatedControlId}-control`;
   const labelId = `${generatedControlId}-label`;
@@ -34,30 +34,31 @@ export const OptionsEditorControl = ({ label, control, description }: OptionsEdi
   };
 
   return (
-    <FormControl>
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Stack direction="row" alignItems="center" justifyContent="center">
-          <FormLabel id={labelId} htmlFor={controlId}>
+    <div>
+      <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-row items-center justify-center">
+          <label id={labelId} htmlFor={controlId} className="text-sm font-medium">
             {label}
-          </FormLabel>
+          </label>
           {description && (
-            <InfoTooltip description={description} enterDelay={100}>
-              <IconButton
-                size="small"
-                sx={(theme) => ({ borderRadius: theme.shape.borderRadius, padding: '4x', margin: '0 2px' })}
+            <InfoTooltip description={description} delayDuration={100}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded h-6 w-6 p-0 mx-0.5"
               >
                 <InformationOutlineIcon
                   aria-describedby="info-tooltip"
                   aria-hidden={false}
                   fontSize="inherit"
-                  sx={{ color: (theme) => theme.palette.grey[700] }}
+                  className="text-muted-foreground"
                 />
-              </IconButton>
+              </Button>
             </InfoTooltip>
           )}
-        </Stack>
-        <Box sx={{ width: '180px', textAlign: 'right' }}> {React.cloneElement(control, controlProps)}</Box>
-      </Stack>
-    </FormControl>
+        </div>
+        <div className="w-[180px] text-right">{React.cloneElement(control, controlProps)}</div>
+      </div>
+    </div>
   );
 };

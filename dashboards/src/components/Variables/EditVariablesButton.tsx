@@ -12,37 +12,37 @@
 // limitations under the License.
 
 import { ReactElement, useState } from 'react';
-import { Button, ButtonProps } from '@mui/material';
-import PencilIcon from 'mdi-material-ui/PencilOutline';
-import { Drawer, InfoTooltip } from '@perses-dev/components';
+import { Pencil as PencilIcon } from 'lucide-react';
+import { Button, ButtonProps, Drawer, InfoTooltip } from '@perses-dev/components';
 import { BuiltinVariableDefinition, VariableDefinition } from '@perses-dev/spec';
 import { useBuiltinVariableDefinitions } from '@perses-dev/plugin-system';
 import { ExternalVariableDefinition } from '../../model/VariableDefinition';
-import { TOOLTIP_TEXT, editButtonStyle } from '../../constants';
+import { TOOLTIP_TEXT } from '../../constants';
 import { useExternalVariableDefinitions, useVariableDefinitionActions, useVariableDefinitions } from '../../context';
 import { VariableEditor } from './VariableEditor';
 
-export interface EditVariablesButtonProps extends Pick<ButtonProps, 'fullWidth'> {
+export interface EditVariablesButtonProps {
   /**
    * The variant to use to display the button.
    */
-  variant?: 'text' | 'outlined';
+  variant?: ButtonProps['variant'];
 
   /**
    * The color to use to display the button.
    */
-  color?: 'primary' | 'secondary';
+  color?: string;
 
   /**
    * The label used inside the button.
    */
   label?: string;
+
+  fullWidth?: boolean;
 }
 
 export function EditVariablesButton({
-  variant = 'text',
+  variant = 'ghost',
   label = 'Variables',
-  color = 'primary',
   fullWidth,
 }: EditVariablesButtonProps): ReactElement {
   const [isVariableEditorOpen, setIsVariableEditorOpen] = useState(false);
@@ -63,14 +63,12 @@ export function EditVariablesButton({
     <>
       <InfoTooltip description={TOOLTIP_TEXT.editVariables}>
         <Button
-          startIcon={<PencilIcon />}
           onClick={openVariableEditor}
           aria-label={TOOLTIP_TEXT.editVariables}
           variant={variant}
-          color={color}
-          fullWidth={fullWidth}
-          sx={editButtonStyle}
+          className={`whitespace-nowrap min-w-0${fullWidth ? ' w-full' : ''}`}
         >
+          <PencilIcon className="mr-0.5" />
           {label}
         </Button>
       </InfoTooltip>

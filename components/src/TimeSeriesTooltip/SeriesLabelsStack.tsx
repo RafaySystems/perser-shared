@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, Divider, Stack, Typography } from '@mui/material';
 import { ReactElement } from 'react';
+import { Separator } from '../ui/separator';
 import { SeriesMarker } from './SeriesMarker';
 
 export interface SeriesLabelsStackProps {
@@ -25,43 +25,16 @@ export interface SeriesLabelsStackProps {
 export function SeriesLabelsStack(props: SeriesLabelsStackProps): ReactElement {
   const { formattedY, markerColor, metricName, metricLabels } = props;
   return (
-    <Stack spacing={0.5}>
-      <Box
-        sx={(theme) => ({
-          display: 'flex',
-          height: '16px',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'left',
-          color: theme.palette.common.white,
-          fontSize: '11px',
-        })}
-      >
-        <SeriesMarker markerColor={markerColor} sx={{ marginTop: 0.25 }} />
-        <Box component="span">
+    <div className="flex flex-col gap-0.5">
+      <div className="flex h-4 flex-row items-center justify-start text-white" style={{ fontSize: '11px' }}>
+        <SeriesMarker markerColor={markerColor} className="mt-0.5" />
+        <span>
           {metricName}
-          <Box
-            component="span"
-            sx={(theme) => ({
-              color: theme.palette.common.white,
-              fontWeight: 700,
-              paddingLeft: '2px',
-            })}
-          >
-            {formattedY}
-          </Box>
-        </Box>
-      </Box>
-      <Divider
-        sx={(theme) => ({
-          borderColor: theme.palette.grey['500'],
-        })}
-      />
-      <Box
-        sx={(theme) => ({
-          color: theme.palette.common.white,
-        })}
-      >
+          <span className="text-white font-bold pl-[2px]">{formattedY}</span>
+        </span>
+      </div>
+      <Separator className="border-gray-500" />
+      <div className="text-white">
         {metricLabels.map((label) => {
           // show labels on separate lines when many labels and only one focused series
           if (label) {
@@ -69,22 +42,16 @@ export function SeriesLabelsStack(props: SeriesLabelsStackProps): ReactElement {
             const formattedName = value !== undefined ? `${name}: ` : name;
             const formattedValue = value !== undefined ? value.replace(/(^"|"$)/g, '') : value;
             return (
-              <Box key={label} sx={{ display: 'flex', gap: '4px' }}>
-                <Typography sx={{ fontSize: '11px' }}>{formattedName}</Typography>
-                <Typography
-                  sx={(theme) => ({
-                    color: theme.palette.common.white,
-                    fontWeight: 700,
-                    fontSize: '11px',
-                  })}
-                >
+              <div key={label} className="flex gap-1">
+                <span style={{ fontSize: '11px' }}>{formattedName}</span>
+                <span className="text-white font-bold" style={{ fontSize: '11px' }}>
                   {formattedValue}
-                </Typography>
-              </Box>
+                </span>
+              </div>
             );
           }
         })}
-      </Box>
-    </Stack>
+      </div>
+    </div>
   );
 }

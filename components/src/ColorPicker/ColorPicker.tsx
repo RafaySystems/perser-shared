@@ -11,11 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { IconButton, Stack, TextField } from '@mui/material';
 import { ChangeEvent, ReactElement, useState } from 'react';
 import { HexColorPicker } from 'react-colorful';
-import CircleIcon from 'mdi-material-ui/Circle';
-import DeleteIcon from 'mdi-material-ui/Delete';
+import { Circle as CircleIcon, Trash2 as DeleteIcon } from 'lucide-react';
+import { Button } from '../ui/button';
 
 interface ColorPickerProps {
   color: string;
@@ -47,36 +46,38 @@ export const ColorPicker = ({ color, onChange, onClear, palette }: ColorPickerPr
   };
 
   return (
-    <Stack spacing={1}>
+    <div className="flex flex-col gap-2">
       <HexColorPicker color={color} onChange={handleColorChange} style={{ width: '100%' }} />
-      <Stack direction="row" flexWrap="wrap" justifyContent="space-evenly" width="200px">
+      <div className="flex flex-row flex-wrap justify-evenly w-[200px]">
         {palette &&
           palette.map((color, i) => (
-            <IconButton
+            <Button
               key={i}
-              size="small"
+              variant="ghost"
+              size="icon"
               aria-label={`change color to ${color}`}
-              sx={{ color }}
+              style={{ color }}
+              className="h-8 w-8"
               onClick={() => handleColorChange(color)}
             >
               <CircleIcon />
-            </IconButton>
+            </Button>
           ))}
-      </Stack>
-      <Stack direction="row" gap={1} alignItems="center">
-        <TextField
-          inputProps={{ 'aria-label': 'enter hex color' }}
-          fullWidth
+      </div>
+      <div className="flex flex-row gap-2 items-center">
+        <input
+          aria-label="enter hex color"
+          className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           value={value}
           onChange={handleInputChange}
         />
         {onClear && (
-          <IconButton onClick={onClear}>
+          <Button variant="ghost" size="icon" onClick={onClear}>
             <DeleteIcon />
-          </IconButton>
+          </Button>
         )}
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 };
 

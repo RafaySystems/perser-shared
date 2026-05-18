@@ -12,7 +12,21 @@
 // limitations under the License.
 
 import { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import { TextField, Popper, PopperProps, Checkbox, Autocomplete, createFilterOptions, Chip, Box } from '@mui/material';
+import {
+  Badge,
+  Button,
+  Checkbox,
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Separator,
+  Spinner,
+} from '@perses-dev/components';
 import {
   DEFAULT_ALL_VALUE,
   ListVariableDefinition,
@@ -32,6 +46,7 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { useVariableDefinitionAndState, useVariableDefinitionActions } from '../../context';
 import { MAX_VARIABLE_WIDTH, MIN_VARIABLE_WIDTH } from '../../constants';
 import { ListVariableListBoxProvider, ListVariableListBox } from './ListVariableListBox';
+import { Check as CheckIcon, ChevronDown as ChevronDownIcon } from 'lucide-react';
 
 type VariableProps = {
   name: VariableName;
@@ -68,13 +83,10 @@ export function useListVariableState(
   state: VariableState | undefined,
   variablesOptionsQuery: Partial<UseQueryResult<VariableOption[]>>
 ): {
-  // Value, Loading, Options are modified only when we want to save the changes made
   value: VariableValue | undefined;
   loading: boolean;
   options: VariableOption[] | undefined;
-  // selectedOptions is/are the option(s) selected in the view
   selectedOptions: VariableOption | VariableOption[];
-  // viewOptions are the options used in the view only (= options + All if allowed)
   viewOptions: VariableOption[];
 } {
   const allowMultiple = spec?.allowMultiple === true;
@@ -85,15 +97,12 @@ export function useListVariableState(
 
   let value = state?.value;
 
-  // Make sure value is an array if allowMultiple is true
   if (allowMultiple && !Array.isArray(value)) {
     value = typeof value === 'string' ? [value] : [];
   }
 
-  // Sort the provided list of options according to the method defined
   const sortedOptions = useMemo((): VariableOption[] => {
     const opts = options ? [...options] : [];
-
     if (!sort || sort === 'none') return opts;
     const sortMethod = SORT_METHODS[sort as SortMethodName];
     return !sortMethod ? opts : sortMethod.sort(opts);
@@ -101,8 +110,6 @@ export function useListVariableState(
 
   const viewOptions = useMemo(() => {
     let computedOptions = sortedOptions;
-
-    // Add the all value if it's allowed
     if (allowAllValue) {
       computedOptions = [{ value: DEFAULT_ALL_VALUE, label: 'All' }, ...computedOptions];
     }
@@ -124,20 +131,15 @@ export function useListVariableState(
 
   value = useMemo(() => {
     const firstOptionValue = viewOptions?.[allowAllValue ? 1 : 0]?.value;
-
-    // If there is no value but there are options, or the value is not in options, we set the value to the first option.
     if (firstOptionValue) {
       if (!valueIsInOptions || !value || value.length === 0) {
         return allowMultiple ? [firstOptionValue] : firstOptionValue;
       }
     }
-
     return value;
   }, [viewOptions, value, valueIsInOptions, allowMultiple, allowAllValue]);
 
   const selectedOptions = useMemo(() => {
-    // In the case Autocomplete.multiple equals false, Autocomplete.value expects a single object, not
-    // an array, hence this conditional
     if (Array.isArray(value)) {
       return viewOptions.filter((o) => {
         return value?.includes(o.value);
@@ -154,12 +156,8 @@ export function useListVariableState(
   return { value, loading, options, selectedOptions, viewOptions };
 }
 
-const StyledPopper = (props: PopperProps): ReactElement => (
-  <Popper {...props} sx={{ minWidth: 'fit-content' }} placement="bottom-start" />
-);
-
-const LETTER_HSIZE = 8; // approximation
-const ARROW_OFFSET = 40; // right offset for list variables (= take into account the dropdown toggle size)
+const LETTER_HSIZE = 8;
+const ARROW_OFFSET = 40;
 const getWidthPx = (inputValue: string, kind: 'list' | 'text'): number => {
   const width = (inputValue.length + 1) * LETTER_HSIZE + (kind === 'list' ? ARROW_OFFSET : 0);
   if (width < MIN_VARIABLE_WIDTH) {
@@ -181,19 +179,16 @@ function ListVariable({ name, source }: VariableProps): ReactElement {
     ctx.state,
     variablesOptionsQuery
   );
-  const [inputWidth, setInputWidth] = useState(MIN_VARIABLE_WIDTH);
-  // Used for multiple value variables, it will not clear variable input when selecting an option
-  const [inputValue, setInputValue] = useState('');
+  const [open, setOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
 
   const title = definition?.spec.display?.name ?? name;
   const allowMultiple = definition?.spec.allowMultiple === true;
   const allowAllValue = definition?.spec.allowAllValue === true;
 
-  const filterOptions = createFilterOptions<VariableOption>({});
-
   const filteredOptions = useMemo(
-    () => filterOptions(viewOptions, { inputValue, getOptionLabel: (o) => o.label }),
-    [inputValue, viewOptions, filterOptions]
+    () => viewOptions.filter((o) => o.label.toLowerCase().includes(searchValue.toLowerCase())),
+    [viewOptions, searchValue]
   );
 
   // Update value when changed
@@ -215,131 +210,85 @@ function ListVariable({ name, source }: VariableProps): ReactElement {
     }
   }, [setVariableOptions, name, options, source]);
 
-  const handleGlobalSelect = useCallback(
-    (options: VariableOption[]): void => {
-      setVariableValue(name, variableOptionToVariableValue(options), source);
+  const handleSelect = useCallback(
+    (optionValue: string) => {
+      if (allowMultiple) {
+        const currentValues = Array.isArray(value) ? (value as string[]) : [];
+        const newValues = currentValues.includes(optionValue)
+          ? currentValues.filter((v) => v !== optionValue)
+          : [...currentValues, optionValue];
+        if (newValues.length === 0 && allowAllValue) {
+          setVariableValue(name, DEFAULT_ALL_VALUE, source);
+        } else {
+          setVariableValue(name, newValues, source);
+        }
+      } else {
+        setVariableValue(name, optionValue, source);
+        setOpen(false);
+      }
     },
-    [name, setVariableValue, source]
+    [allowMultiple, allowAllValue, value, name, setVariableValue, source]
   );
 
-  const listBoxProviderValue = useMemo(
-    () => ({
-      options: viewOptions,
-      selectedOptions: selectedOptions as VariableOption[], // Only used when allowMultiple is true => selectedOptions is always an array
-      filteredOptions: filteredOptions,
-      allowAllValue,
-      onChange: handleGlobalSelect,
-    }),
-    [allowAllValue, filteredOptions, handleGlobalSelect, selectedOptions, viewOptions]
+  const displayLabel = useMemo(() => {
+    if (Array.isArray(selectedOptions)) {
+      if (selectedOptions.length === 0) return title;
+      if (selectedOptions.length === 1) return selectedOptions[0]?.label ?? title;
+      return `${selectedOptions.length} selected`;
+    }
+    return (selectedOptions as VariableOption).label || title;
+  }, [selectedOptions, title]);
+
+  const inputWidth = getWidthPx(displayLabel, 'list');
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="justify-between text-xs h-[38px]"
+          style={{ minWidth: `${inputWidth}px`, maxWidth: `${MAX_VARIABLE_WIDTH}px` }}
+        >
+          <span className="truncate">{title}: {displayLabel}</span>
+          {loading ? <Spinner className="h-3 w-3 ml-1" /> : <ChevronDownIcon className="ml-1 h-4 w-4 shrink-0 opacity-50" />}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="p-0 min-w-[fit-content]" align="start">
+        <Command>
+          <CommandInput
+            placeholder={`Search ${title}...`}
+            value={searchValue}
+            onValueChange={setSearchValue}
+          />
+          <CommandEmpty>No options found.</CommandEmpty>
+          <CommandGroup className="max-h-60 overflow-y-auto">
+            {filteredOptions.map((option) => {
+              const isSelected = Array.isArray(selectedOptions)
+                ? selectedOptions.some((s) => s.value === option.value)
+                : (selectedOptions as VariableOption).value === option.value;
+              return (
+                <CommandItem
+                  key={option.value}
+                  value={option.value}
+                  onSelect={() => handleSelect(option.value)}
+                  className="flex items-center gap-2"
+                >
+                  {allowMultiple && (
+                    <Checkbox checked={isSelected} className="pointer-events-none" />
+                  )}
+                  {!allowMultiple && isSelected && <CheckIcon className="h-4 w-4" />}
+                  {!allowMultiple && !isSelected && <span className="h-4 w-4" />}
+                  {option.label}
+                </CommandItem>
+              );
+            })}
+          </CommandGroup>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
-
-  const autocompleteComponent = useMemo(() => {
-    return (
-      <Autocomplete
-        disablePortal
-        loading={loading}
-        disableCloseOnSelect={allowMultiple}
-        multiple={allowMultiple}
-        fullWidth
-        limitTags={3}
-        size="small"
-        disableClearable
-        slotProps={{ listbox: { component: allowMultiple ? ListVariableListBox : undefined } }}
-        slots={{ popper: StyledPopper }}
-        sx={{
-          '& .MuiInputBase-root': {
-            minHeight: '38px',
-          },
-          '& .MuiAutocomplete-tag': {
-            margin: '1px 2px', // Default margin of 2px (Y axis) make min height of the autocomplete 40px
-          },
-        }}
-        filterOptions={filterOptions}
-        options={viewOptions}
-        value={selectedOptions}
-        onChange={(_, value) => {
-          if ((value === null || (Array.isArray(value) && value.length === 0)) && allowAllValue) {
-            setVariableValue(name, DEFAULT_ALL_VALUE, source);
-          } else {
-            setVariableValue(name, variableOptionToVariableValue(value as VariableOption), source);
-          }
-        }}
-        inputValue={allowMultiple ? inputValue : undefined}
-        onInputChange={(_, newInputValue) => {
-          if (!allowMultiple) {
-            setInputWidth(getWidthPx(newInputValue, 'list'));
-          }
-        }}
-        onBlur={() => {
-          if (allowMultiple) {
-            setInputValue('');
-          }
-        }}
-        renderInput={(params) => {
-          return allowMultiple ? (
-            <TextField {...params} label={title} onChange={(e) => setInputValue(e.target.value)} />
-          ) : (
-            <TextField {...params} label={title} style={{ width: `${inputWidth}px` }} />
-          );
-        }}
-        renderOption={(props, option, { selected }) => {
-          const { key, ...optionProps } = props;
-          return (
-            <li key={key} {...optionProps} style={{ padding: 0 }}>
-              <Checkbox style={{ marginRight: 8 }} checked={selected} />
-              {option.label}
-            </li>
-          );
-        }}
-        renderTags={(value, getTagProps, ownerState) => {
-          // When focused, if there are too much value selected, it will use all screen place. Putting limit to 200px (~6 lines of chips)
-          if (ownerState.focused) {
-            return (
-              <Box sx={{ maxHeight: 200, overflowY: 'auto' }}>
-                {value.map((option, index) => (
-                  <Chip {...getTagProps({ index })} key={index} label={option.label} size="small" />
-                ))}
-              </Box>
-            );
-          }
-
-          const limitTags: number | undefined = ownerState.limitTags;
-          const numTags: number = value.length;
-
-          return (
-            <>
-              {value.slice(0, limitTags).map((option, index) => (
-                <Chip {...getTagProps({ index })} key={index} label={option.label} size="small" />
-              ))}
-
-              {limitTags && numTags > limitTags && ` +${numTags - limitTags}`}
-            </>
-          );
-        }}
-      />
-    );
-  }, [
-    allowAllValue,
-    allowMultiple,
-    filterOptions,
-    inputValue,
-    inputWidth,
-    loading,
-    name,
-    selectedOptions,
-    setVariableValue,
-    source,
-    title,
-    viewOptions,
-  ]);
-
-  if (allowMultiple) {
-    return (
-      <ListVariableListBoxProvider value={listBoxProviderValue}>{autocompleteComponent}</ListVariableListBoxProvider>
-    );
-  }
-
-  return autocompleteComponent;
 }
 
 function TextVariable({ name, source }: VariableProps): ReactElement {
@@ -354,31 +303,27 @@ function TextVariable({ name, source }: VariableProps): ReactElement {
     setTempValue(state?.value ?? '');
   }, [state?.value]);
 
+  const label = definition?.spec.display?.name ?? name;
+
   return (
-    <TextField
-      title={tempValue as string}
-      value={tempValue}
-      onChange={(e) => {
-        setTempValue(e.target.value);
-        setInputWidth(getWidthPx(e.target.value, 'text'));
-      }}
-      onBlur={() => setVariableValue(name, tempValue, source)}
-      placeholder={name}
-      label={definition?.spec.display?.name ?? name}
-      slotProps={{
-        input: {
-          readOnly: definition?.spec.constant ?? false,
-        },
-      }}
-      sx={{
-        width: `${inputWidth}px`,
-        '& .MuiInputBase-root': {
-          minHeight: '38px',
-        },
-        '& .MuiInputBase-input': {
+    <div className="flex flex-col gap-0.5">
+      <label className="text-xs text-muted-foreground px-1">{label}</label>
+      <input
+        className="border rounded-md px-2 py-1 text-xs h-[38px] bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+        title={tempValue as string}
+        value={tempValue as string}
+        readOnly={definition?.spec.constant ?? false}
+        onChange={(e) => {
+          setTempValue(e.target.value);
+          setInputWidth(getWidthPx(e.target.value, 'text'));
+        }}
+        onBlur={() => setVariableValue(name, tempValue, source)}
+        placeholder={name}
+        style={{
+          width: `${inputWidth}px`,
           textOverflow: 'ellipsis',
-        },
-      }}
-    />
+        }}
+      />
+    </div>
   );
 }

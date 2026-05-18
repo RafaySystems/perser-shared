@@ -13,8 +13,7 @@
 
 import { ReactElement, useState } from 'react';
 import { useVariableValues } from '@perses-dev/plugin-system';
-import { Dialog } from '@perses-dev/components';
-import { Button } from '@mui/material';
+import { Dialog, Button } from '@perses-dev/components';
 import { usePanelGroupEditor } from '../../context';
 import { PanelGroupEditorForm, panelGroupEditorFormId, PanelGroupEditorFormProps } from './PanelGroupEditorForm';
 
@@ -60,10 +59,10 @@ export function PanelGroupDialog(): ReactElement {
             />
           </Dialog.Content>
           <Dialog.Actions>
-            <Button variant="contained" type="submit" form={panelGroupEditorFormId}>
+            <Button variant="default" type="submit" form={panelGroupEditorFormId}>
               {panelGroupEditor.mode === 'Edit' ? 'Apply' : 'Add'}
             </Button>
-            <Button variant="outlined" color="secondary" onClick={panelGroupEditor.close}>
+            <Button variant="outline" onClick={panelGroupEditor.close}>
               Cancel
             </Button>
           </Dialog.Actions>

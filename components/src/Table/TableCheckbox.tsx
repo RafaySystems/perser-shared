@@ -11,51 +11,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Checkbox, CheckboxProps, alpha } from '@mui/material';
 import { ReactElement } from 'react';
+import { Checkbox } from '../ui/checkbox';
+import { cn } from '../lib/utils';
 import { TableDensity } from './model/table-model';
 
-export interface TableCheckboxProps extends Pick<CheckboxProps, 'checked' | 'indeterminate' | 'onChange'> {
+export interface TableCheckboxProps {
+  checked?: boolean;
+  indeterminate?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   color?: string;
   density: TableDensity;
 }
 
-export function TableCheckbox({ color, density, ...otherProps }: TableCheckboxProps): ReactElement {
+export function TableCheckbox({ color, density, checked, indeterminate, onChange }: TableCheckboxProps): ReactElement {
   const isCompact = density === 'compact';
 
   return (
     <Checkbox
-      size={isCompact ? 'small' : 'medium'}
-      {...otherProps}
-      // Disable ripple and set background color below because of some issues
-      // with re-rendering with the keyboard interactions that causes the ripple
-      // animation to stutter.
-      focusRipple={false}
-      // Tab index is handled by the overall keyboard interactions for the table
-      // to avoid trapping a keyboard user in a table by requiring them to tab
-      // through every single checkbox.
-      tabIndex={-1}
-      sx={{
-        color: color,
-
-        padding: (theme) => theme.spacing(isCompact ? 0.25 : 0.5),
-
-        // Centering.
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-
-        '&.Mui-checked': {
-          color: color,
-        },
-
-        '&.Mui-focusVisible': {
-          background: color ? alpha(color, 0.5) : undefined,
-        },
-
-        '& .MuiSvgIcon-root': { fontSize: isCompact ? 16 : 18 },
+      checked={checked}
+      // shadcn Checkbox doesn't natively support indeterminate; wire via data-attr
+      data-state={indeterminate ? 'indeterminate' : checked ? 'checked' : 'unchecked'}
+      onCheckedChange={(checkedState) => {
+        if (onChange) {
+          const syntheticEvent = {
+            target: { checked: checkedState === true },
+            nativeEvent: {},
+          } as unknown as React.ChangeEvent<HTMLInputElement>;
+          onChange(syntheticEvent);
+        }
       }}
+      tabIndex={-1}
+      className={cn(
+        'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
+        isCompact ? 'h-4 w-4' : 'h-[18px] w-[18px]',
+        isCompact ? 'p-[1px]' : 'p-0.5'
+      )}
+      style={color ? { color, borderColor: color } : undefined}
+      aria-label="Select row"
     />
   );
 }

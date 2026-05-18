@@ -12,13 +12,15 @@
 // limitations under the License.
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, Divider, FormControlLabel, Grid, Stack, Switch, TextField, Typography } from '@mui/material';
 import {
   DiscardChangesConfirmationDialog,
   FormActions,
   Action,
   getSubmitText,
   getTitleAction,
+  TextField,
+  Switch,
+  Separator,
 } from '@perses-dev/components';
 import { DispatchWithoutAction, ReactElement, useState } from 'react';
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
@@ -80,15 +82,8 @@ export function DatasourceEditorForm(props: DatasourceEditorFormProps): ReactEle
 
   return (
     <FormProvider {...form}>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: (theme) => theme.spacing(1, 2),
-          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
-        }}
-      >
-        <Typography variant="h2">{titleAction} Datasource</Typography>
+      <div className="flex items-center px-4 py-2 border-b border-border">
+        <h2 className="text-xl font-semibold">{titleAction} Datasource</h2>
         <FormActions
           action={action}
           submitText={submitText}
@@ -99,10 +94,10 @@ export function DatasourceEditorForm(props: DatasourceEditorFormProps): ReactEle
           onDelete={onDelete}
           onCancel={handleCancel}
         />
-      </Box>
-      <Box padding={2} sx={{ overflowY: 'scroll' }}>
-        <Grid container spacing={2} mb={2}>
-          <Grid item xs={4}>
+      </div>
+      <div className="p-4 overflow-y-scroll">
+        <div className="grid grid-cols-12 gap-4 mb-4">
+          <div className="col-span-4">
             <Controller
               control={form.control}
               name="name"
@@ -111,24 +106,20 @@ export function DatasourceEditorForm(props: DatasourceEditorFormProps): ReactEle
                   {...field}
                   required
                   fullWidth
-                  name="name"
                   label="Name"
-                  InputLabelProps={{ shrink: action === 'read' ? true : undefined }}
-                  InputProps={{
-                    disabled: action === 'update' && !isDraft,
-                    readOnly: action === 'read',
-                  }}
+                  disabled={action === 'update' && !isDraft}
+                  readOnly={action === 'read'}
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                   value={field.value ?? ''}
-                  onChange={(event) => {
-                    field.onChange(event);
+                  onChange={(val) => {
+                    field.onChange(val);
                   }}
                 />
               )}
             />
-          </Grid>
-          <Grid item xs={8}>
+          </div>
+          <div className="col-span-8">
             <Controller
               control={form.control}
               name="spec.display.name"
@@ -136,23 +127,19 @@ export function DatasourceEditorForm(props: DatasourceEditorFormProps): ReactEle
                 <TextField
                   {...field}
                   fullWidth
-                  name="title"
                   label="Display Label"
-                  InputLabelProps={{ shrink: action === 'read' ? true : undefined }}
-                  InputProps={{
-                    readOnly: action === 'read',
-                  }}
+                  readOnly={action === 'read'}
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                   value={field.value ?? ''}
-                  onChange={(event) => {
-                    field.onChange(event);
+                  onChange={(val) => {
+                    field.onChange(val);
                   }}
                 />
               )}
             />
-          </Grid>
-          <Grid item xs={12}>
+          </div>
+          <div className="col-span-12">
             <Controller
               control={form.control}
               name="spec.display.description"
@@ -160,54 +147,45 @@ export function DatasourceEditorForm(props: DatasourceEditorFormProps): ReactEle
                 <TextField
                   {...field}
                   fullWidth
-                  name="description"
                   label="Description"
-                  InputLabelProps={{ shrink: action === 'read' ? true : undefined }}
-                  InputProps={{
-                    readOnly: action === 'read',
-                  }}
+                  readOnly={action === 'read'}
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                   value={field.value ?? ''}
-                  onChange={(event) => {
-                    field.onChange(event);
+                  onChange={(val) => {
+                    field.onChange(val);
                   }}
                 />
               )}
             />
-          </Grid>
-          <Grid item xs={6} sx={{ paddingTop: '5px !important' }}>
-            <Stack>
+          </div>
+          <div className="col-span-6">
+            <div className="flex flex-col gap-1">
               <Controller
                 control={form.control}
                 name="spec.default"
                 render={({ field }) => (
-                  <FormControlLabel
-                    label="Set as default"
-                    control={
-                      <Switch
-                        {...field}
-                        checked={!!field.value}
-                        readOnly={action === 'read'}
-                        onChange={(event) => {
-                          if (action === 'read') return; // ReadOnly prop is not blocking user interaction...
-                          field.onChange(event);
-                        }}
-                      />
-                    }
-                  />
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <Switch
+                      checked={!!field.value}
+                      disabled={action === 'read'}
+                      onCheckedChange={(checked) => {
+                        if (action === 'read') return;
+                        field.onChange(checked);
+                      }}
+                    />
+                    <span className="text-sm">Set as default</span>
+                  </label>
                 )}
               />
-              <Typography variant="caption">
+              <p className="text-xs text-muted-foreground">
                 Whether this datasource should be the default {form.getValues().spec.plugin.kind} to be used
-              </Typography>
-            </Stack>
-          </Grid>
-        </Grid>
-        <Divider />
-        <Typography py={1} variant="h3">
-          Plugin Options
-        </Typography>
+              </p>
+            </div>
+          </div>
+        </div>
+        <Separator />
+        <h3 className="text-base font-semibold py-2">Plugin Options</h3>
         <Controller
           control={form.control}
           name="spec.plugin"
@@ -231,7 +209,7 @@ export function DatasourceEditorForm(props: DatasourceEditorFormProps): ReactEle
             />
           )}
         />
-      </Box>
+      </div>
       <DiscardChangesConfirmationDialog
         description="Are you sure you want to discard your changes? Changes cannot be recovered."
         isOpen={isDiscardDialogOpened}

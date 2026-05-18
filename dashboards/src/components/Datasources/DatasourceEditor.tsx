@@ -11,23 +11,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { Plus as AddIcon, Pencil as PencilIcon, Trash2 as TrashIcon } from 'lucide-react';
 import {
-  Box,
+  Action,
   Button,
-  IconButton,
-  Stack,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
+  TableHeader,
   TableRow,
-  Typography,
-} from '@mui/material';
-import AddIcon from 'mdi-material-ui/Plus';
-import PencilIcon from 'mdi-material-ui/Pencil';
-import TrashIcon from 'mdi-material-ui/TrashCan';
-import { Action } from '@perses-dev/components';
+} from '@perses-dev/components';
 import { DatasourceSpec } from '@perses-dev/spec';
 import { DatasourceDefinition, DatasourceEditorForm, ValidationProvider } from '@perses-dev/plugin-system';
 import { ReactElement, useState } from 'react';
@@ -117,79 +111,70 @@ export function DatasourceEditor(props: {
         </ValidationProvider>
       ) : (
         <>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              padding: (theme) => theme.spacing(1, 2),
-              borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
-            }}
-          >
-            <Typography variant="h2">Edit Dashboard Datasources</Typography>
-            <Stack direction="row" spacing={1} marginLeft="auto">
+          <div className="flex items-center px-4 py-2 border-b">
+            <h2 className="text-base font-semibold">Edit Dashboard Datasources</h2>
+            <div className="flex flex-row gap-2 ml-auto">
               <Button
                 disabled={props.datasources === datasources}
-                variant="contained"
+                variant="default"
                 onClick={() => {
                   props.onChange(datasources);
                 }}
               >
                 Apply
               </Button>
-              <Button color="secondary" variant="outlined" onClick={handleCancel}>
+              <Button variant="outline" onClick={handleCancel}>
                 Cancel
               </Button>
-            </Stack>
-          </Box>
-          <Box padding={2} sx={{ overflowY: 'scroll' }}>
-            <Stack spacing={2}>
-              <Stack spacing={2}>
-                <TableContainer>
-                  <Table sx={{ minWidth: 650 }} aria-label="table of datasources">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Type</TableCell>
-                        <TableCell>Description</TableCell>
-                        <TableCell align="right">Actions</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {Object.entries(datasources).map(([name, spec]) => {
-                        return (
-                          <TableRow key={name}>
-                            <TableCell component="th" scope="row" sx={{ fontWeight: 'bold' }}>
-                              {name}
-                            </TableCell>
-                            <TableCell>{spec.plugin.kind}</TableCell>
-                            <TableCell>{spec.display?.description ?? ''}</TableCell>
-                            <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
-                              <IconButton onClick={() => editDatasource(name)}>
-                                <PencilIcon />
-                              </IconButton>
-                              <IconButton onClick={() => removeDatasource(name)}>
-                                <TrashIcon />
-                              </IconButton>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                <Box display="flex">
-                  <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    sx={{ marginLeft: 'auto' }}
-                    onClick={addDatasource}
-                  >
-                    Add Datasource
-                  </Button>
-                </Box>
-              </Stack>
-            </Stack>
-          </Box>
+            </div>
+          </div>
+          <div className="p-4 overflow-y-auto flex flex-col gap-4">
+            <Table aria-label="table of datasources" className="min-w-[650px]">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Description</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {Object.entries(datasources).map(([name, spec]) => {
+                  return (
+                    <TableRow key={name}>
+                      <TableCell className="font-bold">{name}</TableCell>
+                      <TableCell>{spec.plugin.kind}</TableCell>
+                      <TableCell>{spec.display?.description ?? ''}</TableCell>
+                      <TableCell className="text-right whitespace-nowrap">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => editDatasource(name)}
+                          className="h-8 w-8"
+                        >
+                          <PencilIcon />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeDatasource(name)}
+                          className="h-8 w-8"
+                        >
+                          <TrashIcon />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+            <div className="flex justify-end">
+              <Button variant="default" onClick={addDatasource}>
+                <AddIcon className="mr-1 h-4 w-4" />
+                Add Datasource
+              </Button>
+            </div>
+          </div>
         </>
       )}
     </>

@@ -12,7 +12,6 @@
 // limitations under the License.
 
 import { DispatchWithoutAction, ReactElement, useCallback, useState } from 'react';
-import { Box, Typography, Switch, TextField, Grid, FormControlLabel, MenuItem, Stack, Divider } from '@mui/material';
 import { VariableDefinition, ListVariableDefinition } from '@perses-dev/spec';
 
 import {
@@ -23,6 +22,15 @@ import {
   Action,
   getSubmitText,
   getTitleAction,
+  TextField,
+  Switch,
+  Separator,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Label,
 } from '@perses-dev/components';
 import { Control, Controller, FormProvider, SubmitHandler, useForm, useFormContext, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -45,30 +53,25 @@ interface KindVariableEditorFormProps {
 function TextVariableEditorForm({ action, control }: KindVariableEditorFormProps): ReactElement {
   return (
     <>
-      <Typography py={1} variant="subtitle1">
-        Text Options
-      </Typography>
-      <Stack spacing={2}>
+      <p className="py-2 text-sm font-medium">Text Options</p>
+      <div className="flex flex-col gap-4">
         <Controller
           control={control}
           name="spec.value"
           render={({ field, fieldState }) => (
             <>
-              <Box>
+              <div>
                 <VariablePreview values={[field.value]} />
-              </Box>
+              </div>
               <TextField
                 {...field}
                 label="Value"
-                InputLabelProps={{ shrink: action === 'read' ? true : undefined }}
-                InputProps={{
-                  readOnly: action === 'read',
-                }}
+                readOnly={action === 'read'}
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
                 value={field.value ?? ''}
-                onChange={(event) => {
-                  field.onChange(event);
+                onChange={(val) => {
+                  field.onChange(val);
                 }}
               />
             </>
@@ -78,24 +81,20 @@ function TextVariableEditorForm({ action, control }: KindVariableEditorFormProps
           control={control}
           name="spec.constant"
           render={({ field }) => (
-            <FormControlLabel
-              label="Constant"
-              control={
-                <Switch
-                  {...field}
-                  checked={!!field.value}
-                  readOnly={action === 'read'}
-                  value={field.value ?? false}
-                  onChange={(event) => {
-                    if (action === 'read') return; // ReadOnly prop is not blocking user interaction...
-                    field.onChange(event);
-                  }}
-                />
-              }
-            />
+            <label className="flex items-center gap-2 cursor-pointer">
+              <Switch
+                checked={!!field.value}
+                disabled={action === 'read'}
+                onCheckedChange={(checked) => {
+                  if (action === 'read') return;
+                  field.onChange(checked);
+                }}
+              />
+              <span className="text-sm">Constant</span>
+            </label>
           )}
         />
-      </Stack>
+      </div>
     </>
   );
 }
@@ -159,16 +158,14 @@ function ListVariableEditorForm({ action, control }: KindVariableEditorFormProps
 
   return (
     <>
-      <Typography py={1} variant="subtitle1">
-        List Options
-      </Typography>
-      <Stack spacing={2} mb={2}>
-        <Box>
+      <p className="py-2 text-sm font-medium">List Options</p>
+      <div className="flex flex-col gap-4 mb-4">
+        <div>
           <ErrorBoundary FallbackComponent={FallbackPreview} resetKeys={[previewDefinition]}>
             <VariableListPreview sortMethod={sortMethod} definition={previewDefinition} />
           </ErrorBoundary>
-        </Box>
-        <Stack>
+        </div>
+        <div>
           <ErrorBoundary FallbackComponent={ErrorAlert}>
             <Controller
               control={control}
@@ -197,9 +194,9 @@ function ListVariableEditorForm({ action, control }: KindVariableEditorFormProps
               }}
             />
           </ErrorBoundary>
-        </Stack>
+        </div>
 
-        <Stack>
+        <div>
           <Controller
             control={control}
             name="spec.capturingRegexp"
@@ -207,17 +204,14 @@ function ListVariableEditorForm({ action, control }: KindVariableEditorFormProps
               <TextField
                 {...field}
                 label="Capturing Regexp Filter"
-                InputLabelProps={{ shrink: action === 'read' ? true : undefined }}
-                InputProps={{
-                  readOnly: action === 'read',
-                }}
+                readOnly={action === 'read'}
                 error={!!fieldState.error}
                 value={field.value ?? ''}
-                onChange={(event) => {
-                  if (event.target.value === '') {
+                onChange={(val) => {
+                  if (val === '') {
                     field.onChange(undefined);
                   } else {
-                    field.onChange(event);
+                    field.onChange(val);
                   }
                 }}
                 helperText={
@@ -228,122 +222,109 @@ function ListVariableEditorForm({ action, control }: KindVariableEditorFormProps
               />
             )}
           />
-        </Stack>
+        </div>
 
-        <Stack>
+        <div>
           <Controller
             control={control}
             name="spec.sort"
             render={({ field, fieldState }) => (
-              <TextField
-                select
-                {...field}
-                fullWidth
-                label="Sort"
-                InputLabelProps={{ shrink: action === 'read' ? true : undefined }}
-                InputProps={{
-                  readOnly: action === 'read',
-                }}
-                error={!!fieldState.error}
-                helperText={fieldState.error?.message}
-                value={field.value ?? 'none'}
-                onChange={(event) => {
-                  field.onChange(event);
-                }}
-              >
-                {Object.keys(SORT_METHODS).map((key) => {
-                  if (!SORT_METHODS[key as SortMethodName]) return null;
-                  const { label } = SORT_METHODS[key as SortMethodName];
-                  return (
-                    <MenuItem key={key} value={key}>
-                      {label}
-                    </MenuItem>
-                  );
-                })}
-              </TextField>
+              <div className="flex flex-col gap-1.5">
+                <Label>Sort</Label>
+                <Select
+                  value={field.value ?? 'none'}
+                  onValueChange={(val) => field.onChange(val)}
+                  disabled={action === 'read'}
+                >
+                  <SelectTrigger className={fieldState.error ? 'border-destructive' : ''}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.keys(SORT_METHODS).map((key) => {
+                      if (!SORT_METHODS[key as SortMethodName]) return null;
+                      const { label } = SORT_METHODS[key as SortMethodName];
+                      return (
+                        <SelectItem key={key} value={key}>
+                          {label}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+                {fieldState.error?.message && (
+                  <p className="text-xs text-destructive">{fieldState.error.message}</p>
+                )}
+              </div>
             )}
           />
-        </Stack>
-      </Stack>
+        </div>
+      </div>
 
-      <Divider />
+      <Separator />
 
-      <Typography py={1} variant="subtitle1">
-        Dropdown Options
-      </Typography>
-      <Stack spacing="2">
-        <Stack>
+      <p className="py-2 text-sm font-medium">Dropdown Options</p>
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
           <Controller
             control={control}
             name="spec.allowMultiple"
             render={({ field }) => (
-              <FormControlLabel
-                label="Allow Multiple Values"
-                control={
-                  <Switch
-                    {...field}
-                    checked={!!field.value}
-                    readOnly={action === 'read'}
-                    value={field.value ?? false}
-                    onChange={(event) => {
-                      if (action === 'read') return; // ReadOnly prop is not blocking user interaction...
-                      field.onChange(event);
-                    }}
-                  />
-                }
-              />
+              <label className="flex items-center gap-2 cursor-pointer">
+                <Switch
+                  checked={!!field.value}
+                  disabled={action === 'read'}
+                  onCheckedChange={(checked) => {
+                    if (action === 'read') return;
+                    field.onChange(checked);
+                  }}
+                />
+                <span className="text-sm">Allow Multiple Values</span>
+              </label>
             )}
           />
-          <Typography variant="caption">Enables multiple values to be selected at the same time</Typography>
-        </Stack>
-        <Stack>
+          <p className="text-xs text-muted-foreground">Enables multiple values to be selected at the same time</p>
+        </div>
+        <div className="flex flex-col gap-1">
           <Controller
             control={control}
             name="spec.allowAllValue"
             render={({ field }) => (
-              <FormControlLabel
-                label="Allow All option"
-                control={
-                  <Switch
-                    {...field}
-                    checked={!!field.value}
-                    readOnly={action === 'read'}
-                    value={field.value ?? false}
-                    onChange={(event) => {
-                      if (action === 'read') return; // ReadOnly prop is not blocking user interaction...
-                      field.onChange(event);
-                    }}
-                  />
-                }
-              />
+              <label className="flex items-center gap-2 cursor-pointer">
+                <Switch
+                  checked={!!field.value}
+                  disabled={action === 'read'}
+                  onCheckedChange={(checked) => {
+                    if (action === 'read') return;
+                    field.onChange(checked);
+                  }}
+                />
+                <span className="text-sm">Allow All option</span>
+              </label>
             )}
           />
-          <Typography mb={1} variant="caption">
+          <p className="text-xs text-muted-foreground mb-2">
             Enables an option to include all variable values
-          </Typography>
+          </p>
           {_allowAllValue && (
-            <Stack spacing={1}>
-              <FormControlLabel
-                label="Use Custom All Value"
-                control={
-                  <Switch
-                    checked={_customAllValue !== undefined}
-                    readOnly={action === 'read'}
-                    onChange={(event) => {
-                      if (action === 'read') return;
-                      const isEnabled = event.target.checked;
-                      if (isEnabled) {
-                        form.setValue('spec.customAllValue', '');
-                      } else {
-                        form.setValue('spec.customAllValue', undefined);
-                      }
-                    }}
-                  />
-                }
-              />
-              <Typography variant="caption" sx={{ mt: -0.5 }}>
+            <div className="flex flex-col gap-2">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <Switch
+                  checked={_customAllValue !== undefined}
+                  disabled={action === 'read'}
+                  onCheckedChange={(checked) => {
+                    if (action === 'read') return;
+                    if (checked) {
+                      form.setValue('spec.customAllValue', '');
+                    } else {
+                      form.setValue('spec.customAllValue', undefined);
+                    }
+                  }}
+                />
+                <span className="text-sm">Use Custom All Value</span>
+              </label>
+              <p className="text-xs text-muted-foreground -mt-1">
                 Enable to set a custom value when &quot;All&quot; is selected
-              </Typography>
+              </p>
               {_customAllValue !== undefined && (
                 <Controller
                   control={control}
@@ -353,24 +334,21 @@ function ListVariableEditorForm({ action, control }: KindVariableEditorFormProps
                       {...field}
                       fullWidth
                       label="Custom All Value"
-                      InputLabelProps={{ shrink: action === 'read' ? true : undefined }}
-                      InputProps={{
-                        readOnly: action === 'read',
-                      }}
+                      readOnly={action === 'read'}
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message}
                       value={field.value ?? ''}
-                      onChange={(event) => {
-                        field.onChange(event.target.value || '');
+                      onChange={(val) => {
+                        field.onChange(val || '');
                       }}
                     />
                   )}
                 />
               )}
-            </Stack>
+            </div>
           )}
-        </Stack>
-      </Stack>
+        </div>
+      </div>
     </>
   );
 }
@@ -440,15 +418,8 @@ export function VariableEditorForm({
 
   return (
     <FormProvider {...form}>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: (theme) => theme.spacing(1, 2),
-          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
-        }}
-      >
-        <Typography variant="h2">{titleAction} Variable</Typography>
+      <div className="flex items-center px-4 py-2 border-b border-border">
+        <h2 className="text-xl font-semibold">{titleAction} Variable</h2>
         <FormActions
           action={action}
           submitText={submitText}
@@ -459,10 +430,10 @@ export function VariableEditorForm({
           onDelete={onDelete}
           onCancel={handleCancel}
         />
-      </Box>
-      <Box padding={2} sx={{ overflowY: 'scroll' }}>
-        <Grid container spacing={2} mb={2}>
-          <Grid item xs={8}>
+      </div>
+      <div className="p-4 overflow-y-scroll">
+        <div className="grid grid-cols-12 gap-4 mb-4">
+          <div className="col-span-8">
             <Controller
               control={form.control}
               name="spec.name"
@@ -472,22 +443,19 @@ export function VariableEditorForm({
                   required
                   fullWidth
                   label="Name"
-                  InputLabelProps={{ shrink: action === 'read' ? true : undefined }}
-                  InputProps={{
-                    disabled: action === 'update' && !isDraft,
-                    readOnly: action === 'read',
-                  }}
+                  disabled={action === 'update' && !isDraft}
+                  readOnly={action === 'read'}
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                   value={field.value ?? ''}
-                  onChange={(event) => {
-                    field.onChange(event);
+                  onChange={(val) => {
+                    field.onChange(val);
                   }}
                 />
               )}
             />
-          </Grid>
-          <Grid item xs={4}>
+          </div>
+          <div className="col-span-4">
             <Controller
               control={form.control}
               name="spec.display.name"
@@ -496,21 +464,18 @@ export function VariableEditorForm({
                   {...field}
                   fullWidth
                   label="Display Label"
-                  InputLabelProps={{ shrink: action === 'read' ? true : undefined }}
-                  InputProps={{
-                    readOnly: action === 'read',
-                  }}
+                  readOnly={action === 'read'}
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                   value={field.value ?? ''}
-                  onChange={(event) => {
-                    field.onChange(event);
+                  onChange={(val) => {
+                    field.onChange(val);
                   }}
                 />
               )}
             />
-          </Grid>
-          <Grid item xs={8}>
+          </div>
+          <div className="col-span-8">
             <Controller
               control={form.control}
               name="spec.display.description"
@@ -519,53 +484,50 @@ export function VariableEditorForm({
                   {...field}
                   fullWidth
                   label="Description"
-                  InputLabelProps={{ shrink: action === 'read' ? true : undefined }}
-                  InputProps={{
-                    readOnly: action === 'read',
-                  }}
+                  readOnly={action === 'read'}
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                   value={field.value ?? ''}
-                  onChange={(event) => {
-                    field.onChange(event);
+                  onChange={(val) => {
+                    field.onChange(val);
                   }}
                 />
               )}
             />
-          </Grid>
-          <Grid item xs={4}>
+          </div>
+          <div className="col-span-4">
             <Controller
               control={form.control}
               name="kind"
               render={({ field, fieldState }) => (
-                <TextField
-                  select
-                  {...field}
-                  fullWidth
-                  label="Type"
-                  InputLabelProps={{ shrink: action === 'read' ? true : undefined }}
-                  InputProps={{
-                    readOnly: action === 'read',
-                  }}
-                  error={!!fieldState.error}
-                  helperText={fieldState.error?.message}
-                  value={field.value ?? 'TextVariable'}
-                  onChange={(event) => {
-                    field.onChange(event);
-                  }}
-                >
-                  {VARIABLE_TYPES.map((v) => (
-                    <MenuItem key={v.kind} value={v.kind}>
-                      {v.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                <div className="flex flex-col gap-1.5">
+                  <Label>Type</Label>
+                  <Select
+                    value={field.value ?? 'TextVariable'}
+                    onValueChange={(val) => field.onChange(val)}
+                    disabled={action === 'read'}
+                  >
+                    <SelectTrigger className={fieldState.error ? 'border-destructive' : ''}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {VARIABLE_TYPES.map((v) => (
+                        <SelectItem key={v.kind} value={v.kind}>
+                          {v.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {fieldState.error?.message && (
+                    <p className="text-xs text-destructive">{fieldState.error.message}</p>
+                  )}
+                </div>
               )}
             />
-          </Grid>
-        </Grid>
+          </div>
+        </div>
 
-        <Divider />
+        <Separator />
 
         {kind === 'TextVariable' && (
           <ErrorBoundary FallbackComponent={ErrorAlert}>
@@ -577,7 +539,7 @@ export function VariableEditorForm({
             <ListVariableEditorForm action={action} control={form.control} />
           </ErrorBoundary>
         )}
-      </Box>
+      </div>
       <DiscardChangesConfirmationDialog
         description="Are you sure you want to discard these changes? Changes cannot be recovered."
         isOpen={isDiscardDialogOpened}

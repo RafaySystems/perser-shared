@@ -11,9 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, Divider, Typography, Stack, Switch } from '@mui/material';
-import Pin from 'mdi-material-ui/Pin';
-import PinOutline from 'mdi-material-ui/PinOutline';
+import { Pin, PinOff as PinOutline } from 'lucide-react';
 import { memo, ReactElement } from 'react';
 import { useTimeZone } from '../context/TimeZoneProvider';
 import { NearbySeriesArray } from './nearby-series';
@@ -23,6 +21,8 @@ import {
   PIN_TOOLTIP_HELP_TEXT,
   UNPIN_TOOLTIP_HELP_TEXT,
 } from './tooltip-model';
+import { Separator } from '../ui/separator';
+import { Switch } from '../ui/switch';
 
 export interface TooltipHeaderProps {
   nearbySeries: NearbySeriesArray;
@@ -54,19 +54,12 @@ export const TooltipHeader = memo(function TooltipHeader({
     const formattedDate = formatWithUserTimeZone(date, 'MMM dd, yyyy - ');
     const formattedTime = formatWithUserTimeZone(date, 'HH:mm:ss');
     return (
-      <Box>
-        <Typography
-          variant="caption"
-          sx={(theme) => ({
-            color: theme.palette.common.white,
-          })}
-        >
-          {formattedDate}
-        </Typography>
-        <Typography variant="caption">
+      <div>
+        <span className="text-xs text-white">{formattedDate}</span>
+        <span className="text-xs">
           <strong>{formattedTime}</strong>
-        </Typography>
-      </Box>
+        </span>
+      </div>
     );
   };
 
@@ -76,61 +69,38 @@ export const TooltipHeader = memo(function TooltipHeader({
   const pinTooltipHelpText = isTooltipPinned ? UNPIN_TOOLTIP_HELP_TEXT : PIN_TOOLTIP_HELP_TEXT;
 
   return (
-    <Box
-      sx={(theme) => ({
-        width: '100%',
+    <div
+      className="w-full sticky top-0 left-0"
+      style={{
         maxWidth: TOOLTIP_MAX_WIDTH,
-        padding: theme.spacing(1.5, 2, 0.5, 2),
-        backgroundColor: theme.palette.designSystem?.grey[800] ?? TOOLTIP_BG_COLOR_FALLBACK,
-        position: 'sticky',
-        top: 0,
-        left: 0,
-      })}
+        padding: '12px 16px 4px 16px',
+        backgroundColor: TOOLTIP_BG_COLOR_FALLBACK,
+      }}
     >
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'start',
-          alignItems: 'center',
-          paddingBottom: 0.5,
-        }}
-      >
+      <div className="w-full flex justify-start items-center pb-0.5">
         {formatTimeSeriesHeader(seriesTimeMs)}
-        <Stack direction="row" gap={1} sx={{ marginLeft: 'auto' }}>
+        <div className="flex flex-row gap-2 ml-auto">
           {showAllSeriesToggle && (
-            <Stack direction="row" gap={0.5} alignItems="center" sx={{ textAlign: 'right' }}>
-              <Typography sx={{ fontSize: 11 }}>Show All</Typography>
+            <div className="flex flex-row gap-0.5 items-center text-right">
+              <span style={{ fontSize: 11 }}>Show All</span>
               <Switch
                 checked={showAllSeries}
-                size="small"
-                onChange={(_, checked) => {
+                onCheckedChange={(checked) => {
                   if (onShowAllClick !== undefined) {
                     return onShowAllClick(checked);
                   }
                 }}
-                sx={(theme) => ({
-                  '& .MuiSwitch-switchBase': {
-                    color: theme.palette.common.white,
-                  },
-                  '& .MuiSwitch-track': {
-                    backgroundColor: theme.palette.common.white,
-                  },
-                })}
+                className="[&>span]:bg-white data-[state=unchecked]:bg-white/30"
               />
-            </Stack>
+            </div>
           )}
           {enablePinning && (
-            <Stack direction="row" alignItems="center">
-              <Typography
-                sx={{
-                  marginRight: 0.5,
-                  fontSize: 11,
-                  verticalAlign: 'middle',
-                }}
+            <div className="flex flex-row items-center">
+              <span
+                style={{ marginRight: '4px', fontSize: 11, verticalAlign: 'middle' }}
               >
                 {pinTooltipHelpText}
-              </Typography>
+              </span>
               {isTooltipPinned ? (
                 <Pin
                   onClick={() => {
@@ -138,24 +108,16 @@ export const TooltipHeader = memo(function TooltipHeader({
                       onUnpinClick();
                     }
                   }}
-                  sx={{
-                    fontSize: 16,
-                    cursor: 'pointer',
-                  }}
+                  style={{ fontSize: 16, cursor: 'pointer' }}
                 />
               ) : (
-                <PinOutline sx={{ fontSize: 16 }} />
+                <PinOutline style={{ fontSize: 16 }} />
               )}
-            </Stack>
+            </div>
           )}
-        </Stack>
-      </Box>
-      <Divider
-        sx={(theme) => ({
-          width: '100%',
-          borderColor: theme.palette.grey['500'],
-        })}
-      />
-    </Box>
+        </div>
+      </div>
+      <Separator className="w-full border-gray-500" />
+    </div>
   );
 });

@@ -11,15 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Divider, IconButton, Stack, Tooltip, Typography } from '@mui/material';
-import ChevronRight from 'mdi-material-ui/ChevronRight';
-import ChevronDown from 'mdi-material-ui/ChevronDown';
-import EyeOffIcon from 'mdi-material-ui/EyeOffOutline';
-import EyeIcon from 'mdi-material-ui/EyeOutline';
-import DeleteIcon from 'mdi-material-ui/DeleteOutline';
+import { ChevronRight, ChevronDown, EyeOff as EyeOffIcon, Eye as EyeIcon, Trash2 as DeleteIcon } from 'lucide-react';
 import { ReactElement } from 'react';
 import { Transform, TRANSFORM_TEXT } from '../model';
 import { TransformEditor, TransformEditorProps } from './TransformEditor';
+import { Button } from '../ui/button';
+import { Separator } from '../ui/separator';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 export interface TransformEditorContainerProps extends TransformEditorProps {
   index?: number;
@@ -42,20 +40,21 @@ export function TransformEditorContainer({
   }
 
   return (
-    <Stack {...props}>
-      <Stack
-        direction="row"
-        alignItems="center"
-        borderBottom={1}
-        borderColor={(theme) => theme.palette.divider}
-        justifyContent="space-between"
-        gap={4}
+    <div {...props}>
+      <div
+        className="flex flex-row items-center border-b border-border justify-between gap-4"
       >
-        <Stack direction="row" gap={1}>
-          <IconButton data-testid={`transform-toggle#${index}`} size="small" onClick={() => onCollapse(!isCollapsed)}>
+        <div className="flex flex-row gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            data-testid={`transform-toggle#${index}`}
+            className="h-8 w-8"
+            onClick={() => onCollapse(!isCollapsed)}
+          >
             {isCollapsed ? <ChevronRight /> : <ChevronDown />}
-          </IconButton>
-          <Typography variant="overline" component="h4" sx={{ textTransform: 'none' }}>
+          </Button>
+          <h4 className="text-xs font-medium uppercase tracking-widest self-center" style={{ textTransform: 'none' }}>
             {value.kind ? (
               <span>
                 <strong>{TRANSFORM_TEXT[value.kind]}</strong>
@@ -63,31 +62,46 @@ export function TransformEditorContainer({
             ) : (
               <strong>Select a transformation kind</strong>
             )}
-          </Typography>
-        </Stack>
+          </h4>
+        </div>
 
-        <Stack direction="row" gap={1}>
+        <div className="flex flex-row gap-2">
           {isCollapsed && (
             <>
-              <Tooltip
-                title={value.spec?.disabled ? 'Enable transformation' : 'Disable transformation'}
-                placement="top"
-              >
-                <IconButton size="small" sx={{ marginLeft: 'auto' }} onClick={handleTransformDisable}>
-                  {value.spec?.disabled ? <EyeOffIcon /> : <EyeIcon />}
-                </IconButton>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="ml-auto h-8 w-8"
+                    onClick={handleTransformDisable}
+                  >
+                    {value.spec?.disabled ? <EyeOffIcon /> : <EyeIcon />}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  {value.spec?.disabled ? 'Enable transformation' : 'Disable transformation'}
+                </TooltipContent>
               </Tooltip>
-              <Divider flexItem orientation="vertical" variant="middle" />
+              <Separator orientation="vertical" className="h-auto self-stretch mx-1" />
             </>
           )}
-          <Tooltip title="Remove transformation" placement="top">
-            <IconButton size="small" sx={{ marginLeft: 'auto' }} onClick={onDelete}>
-              <DeleteIcon />
-            </IconButton>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="ml-auto h-8 w-8"
+                onClick={onDelete}
+              >
+                <DeleteIcon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top">Remove transformation</TooltipContent>
           </Tooltip>
-        </Stack>
-      </Stack>
+        </div>
+      </div>
       {!isCollapsed && <TransformEditor value={value} onChange={onChange} />}
-    </Stack>
+    </div>
   );
 }

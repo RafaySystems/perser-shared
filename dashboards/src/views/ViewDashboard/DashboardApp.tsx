@@ -12,7 +12,6 @@
 // limitations under the License.
 
 import { ReactElement, ReactNode, useState } from 'react';
-import { Box } from '@mui/material';
 import { ChartsProvider, ErrorAlert, ErrorBoundary, useChartsTheme } from '@perses-dev/components';
 import { useDatasourceStore } from '@perses-dev/plugin-system';
 import { DashboardSpec } from '@perses-dev/spec';
@@ -129,15 +128,7 @@ const DashboardAppContent = (props: DashboardAppProps): ReactElement => {
   });
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        overflowX: 'hidden',
-        overflowY: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
+    <div className="grow overflow-x-hidden overflow-y-auto flex flex-col">
       <DashboardToolbar
         dashboardName={dashboardResource.metadata.name}
         dashboardTitleComponent={dashboardTitleComponent}
@@ -149,7 +140,7 @@ const DashboardAppContent = (props: DashboardAppProps): ReactElement => {
         onEditButtonClick={onEditButtonClick}
         onCancelButtonClick={onCancelButtonClick}
       />
-      <Box sx={{ paddingTop: 2, paddingX: 2, height: '100%' }}>
+      <div className="pt-2 px-2 h-full">
         <ErrorBoundary FallbackComponent={ErrorAlert}>
           <Dashboard
             emptyDashboardProps={{
@@ -170,7 +161,7 @@ const DashboardAppContent = (props: DashboardAppProps): ReactElement => {
         {isLeavingConfirmDialogEnabled && isEditMode && (
           <LeaveDialog original={originalDashboard} current={dashboard} />
         )}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };

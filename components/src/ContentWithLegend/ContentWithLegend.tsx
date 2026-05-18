@@ -12,10 +12,27 @@
 // limitations under the License.
 
 import { ReactElement } from 'react';
-import { Box, useTheme } from '@mui/material';
 import { getLegendSize } from '../model';
 import { Legend } from '../Legend';
 import { ContentWithLegendProps, getContentWithLegendLayout } from './model/content-with-legend-model';
+import { usePaletteMode } from '../theme/ThemeProvider';
+
+// Minimal theme stub that satisfies the spacing/typography requirements of getContentWithLegendLayout
+function buildMinimalTheme(mode: 'light' | 'dark') {
+  const spacingUnit = 8;
+  const spacing = (...args: number[]): string => {
+    if (args.length === 0) return '8px';
+    return args.map((v) => `${v * spacingUnit}px`).join(' ');
+  };
+  return {
+    spacing,
+    palette: { mode },
+    typography: {
+      body1: { lineHeight: 1.5, fontSize: '0.875rem' },
+      body2: { lineHeight: 1.43, fontSize: '0.875rem' },
+    },
+  } as any;
+}
 
 /**
  * Component to help lay out content alongside a `Legend` component based on the
@@ -34,7 +51,9 @@ export function ContentWithLegend({
   minChildrenWidth = 100,
   minChildrenHeight = 100,
 }: ContentWithLegendProps): ReactElement {
-  const theme = useTheme();
+  const mode = usePaletteMode();
+  const theme = buildMinimalTheme(mode);
+
   const { content, legend, margin } = getContentWithLegendLayout({
     width,
     height,
@@ -47,29 +66,21 @@ export function ContentWithLegend({
   });
 
   return (
-    <Box
-      style={{
-        width,
-        height,
-      }}
-      sx={{
-        position: 'relative',
-        overflow: 'hidden',
-      }}
+    <div
+      className="relative overflow-hidden"
+      style={{ width, height }}
     >
-      <Box
+      <div
         style={{
           width: content.width,
           height: content.height,
-        }}
-        sx={{
           marginRight: `${margin.right}px`,
           marginBottom: `${margin.bottom}px`,
         }}
       >
         {typeof children === 'function' ? children({ width: content.width, height: content.height }) : children}
-      </Box>
+      </div>
       {legendProps && legend.show && <Legend {...legendProps} height={legend.height} width={legend.width} />}
-    </Box>
+    </div>
   );
 }

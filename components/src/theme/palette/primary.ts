@@ -11,10 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { PaletteMode, SimplePaletteColorOptions } from '@mui/material';
+import { PaletteMode } from '../../theme/theme';
+
 import { blue } from './colors';
 
-export const primary = (mode: PaletteMode): SimplePaletteColorOptions => {
+export const primary = (mode: PaletteMode) => {
   return mode === 'light'
     ? {
         main: blue[500],

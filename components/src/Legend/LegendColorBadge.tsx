@@ -12,29 +12,21 @@
 // limitations under the License.
 
 import { memo, ReactElement } from 'react';
-import { Box, BoxProps } from '@mui/material';
-import { combineSx } from '../utils';
+import { cn } from '../lib/utils';
 
-export interface LegendColorBadgeProps extends BoxProps<'div'> {
+export interface LegendColorBadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   color: string;
 }
 
 export const LegendColorBadge = memo(function LegendColorBadge({
   color,
-  sx,
+  className,
   ...others
 }: LegendColorBadgeProps): ReactElement {
   return (
-    <Box
+    <div
       {...others}
-      sx={combineSx(
-        {
-          height: 4,
-          width: 16,
-          margin: (theme) => theme.spacing(0.5),
-        },
-        sx
-      )}
+      className={cn('h-1 w-4 m-0.5', className)}
       style={{ backgroundColor: color }}
     />
   );

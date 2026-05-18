@@ -20,7 +20,6 @@ import {
 } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
 import { attachClosestEdge, extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
-import { Stack } from '@mui/material';
 import { idle, State } from './model';
 import { DropIndicator } from './DropIndicator';
 
@@ -158,10 +157,10 @@ export function DragAndDropElement({ children, data }: DragAndDropElementProps):
   }, [data]);
 
   return (
-    <Stack ref={ref} spacing={1} style={{ opacity: state.type === 'is-dragging' ? 0.5 : 'unset' }}>
+    <div ref={ref} className="flex flex-col gap-2" style={{ opacity: state.type === 'is-dragging' ? 0.5 : 'unset' }}>
       {state.type === 'is-dragging-over' && state.closestEdge === 'top' ? <DropIndicator /> : null}
       {children}
       {state.type === 'is-dragging-over' && state.closestEdge === 'bottom' ? <DropIndicator /> : null}
-    </Stack>
+    </div>
   );
 }

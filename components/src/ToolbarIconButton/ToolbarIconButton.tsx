@@ -11,20 +11,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ForwardedRef, forwardRef, ReactElement } from 'react';
-import { Button, styled, ButtonProps } from '@mui/material';
+import { forwardRef } from 'react';
+import { Button, ButtonProps } from '../ui/button';
+import { cn } from '../lib/utils';
 
-type ToolbarIconButtonProps = ButtonProps;
+export type ToolbarIconButtonProps = Omit<ButtonProps, 'variant' | 'size'> & {
+  variant?: ButtonProps['variant'];
+};
 
-function IconButton(props: ToolbarIconButtonProps, ref: ForwardedRef<HTMLButtonElement>): ReactElement {
-  return <StyledIconButton ref={ref} variant="outlined" color="secondary" {...props} />;
-}
-
-const StyledIconButton = styled(Button)(({ theme }) => ({
-  // Using a button with some adjusted styles because it is easier to inherit
-  // styling and variants from themes than with an IconButton.
-  padding: theme.spacing(0.5),
-  minWidth: 'auto',
-}));
-
-export const ToolbarIconButton = forwardRef(IconButton);
+export const ToolbarIconButton = forwardRef<HTMLButtonElement, ToolbarIconButtonProps>(
+  ({ className, variant = 'outline', ...props }, ref) => (
+    <Button ref={ref} variant={variant} size="icon" className={cn('h-8 w-8', className)} {...props} />
+  )
+);
+ToolbarIconButton.displayName = 'ToolbarIconButton';

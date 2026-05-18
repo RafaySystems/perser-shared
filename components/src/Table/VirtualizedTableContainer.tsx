@@ -11,14 +11,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { TableContainer as MuiTableContainer, TableContainerProps as MuiTableContainerProps } from '@mui/material';
 import { forwardRef } from 'react';
-import { combineSx } from '../utils/combine-sx';
+import { cn } from '../lib/utils';
 
-type VirtualizedTableContainerProps = MuiTableContainerProps;
+type VirtualizedTableContainerProps = React.HTMLAttributes<HTMLDivElement>;
 
 export const VirtualizedTableContainer = forwardRef<HTMLDivElement, VirtualizedTableContainerProps>(
-  function VirtualizedTableContainer(props, ref) {
-    return <MuiTableContainer {...props} tabIndex={-1} ref={ref} sx={combineSx({ flexGrow: 1 }, props.sx)} />;
+  function VirtualizedTableContainer({ className, ...props }, ref) {
+    return (
+      <div
+        {...props}
+        tabIndex={-1}
+        ref={ref}
+        className={cn('flex-grow overflow-auto relative', className)}
+      />
+    );
   }
 );

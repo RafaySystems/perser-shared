@@ -12,19 +12,20 @@
 // limitations under the License.
 
 import { ReactElement } from 'react';
-import { Button, ButtonProps } from '@mui/material';
+import { Button, ButtonProps } from '@perses-dev/components';
 import { OnSaveDashboard, useSaveDashboard } from '../../context';
 
-export interface SaveDashboardButtonProps extends Pick<ButtonProps, 'fullWidth'> {
+export interface SaveDashboardButtonProps {
   onSave?: OnSaveDashboard;
   isDisabled: boolean;
-  variant?: 'contained' | 'text' | 'outlined';
+  variant?: ButtonProps['variant'];
+  fullWidth?: boolean;
 }
 
 export const SaveDashboardButton = ({
   onSave,
   isDisabled,
-  variant = 'contained',
+  variant = 'default',
 }: SaveDashboardButtonProps): ReactElement => {
   const { saveDashboard, isSaving } = useSaveDashboard(onSave);
 

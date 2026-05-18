@@ -11,18 +11,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button, Stack, StackProps } from '@mui/material';
 import { ReactElement, useState } from 'react';
-import AddIcon from 'mdi-material-ui/Plus';
+import { Plus as AddIcon } from 'lucide-react';
 import { Transform } from '../model';
 import { TransformEditorContainer } from './TransformEditorContainer';
+import { Button } from '../ui/button';
+import { cn } from '../lib/utils';
 
-export interface TransformsEditorProps extends Omit<StackProps, 'onChange'> {
+export interface TransformsEditorProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   value: Transform[];
   onChange: (transforms: Transform[]) => void;
 }
 
-export function TransformsEditor({ value, onChange, ...props }: TransformsEditorProps): ReactElement {
+export function TransformsEditor({ value, onChange, className, ...props }: TransformsEditorProps): ReactElement {
   const [transformsCollapsed, setTransformsCollapsed] = useState(value.map(() => true));
 
   function handleTransformChange(index: number, transform: Transform): void {
@@ -60,7 +61,7 @@ export function TransformsEditor({ value, onChange, ...props }: TransformsEditor
   }
 
   return (
-    <Stack gap={1} {...props}>
+    <div className={cn('flex flex-col gap-2', className)} {...props}>
       {value.map((transform, i) => (
         <TransformEditorContainer
           key={i}
@@ -73,9 +74,10 @@ export function TransformsEditor({ value, onChange, ...props }: TransformsEditor
         />
       ))}
 
-      <Button variant="contained" startIcon={<AddIcon />} sx={{ marginTop: 1 }} onClick={handleTransformAdd}>
+      <Button variant="default" className="mt-2" onClick={handleTransformAdd}>
+        <AddIcon />
         Add Transformation
       </Button>
-    </Stack>
+    </div>
   );
 }

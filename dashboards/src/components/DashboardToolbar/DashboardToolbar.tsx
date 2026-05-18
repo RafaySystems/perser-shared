@@ -11,8 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Typography, Stack, Button, Box, useTheme, useMediaQuery, Alert } from '@mui/material';
-import { ErrorBoundary, ErrorAlert } from '@perses-dev/components';
+import { Alert, AlertDescription, Button, ErrorBoundary, ErrorAlert } from '@perses-dev/components';
 import { TimeRangeControls, useTimeZoneParams } from '@perses-dev/plugin-system';
 import { ReactElement, ReactNode } from 'react';
 import { OnSaveDashboard, useEditMode, useDashboardLinks } from '../../context';
@@ -59,91 +58,74 @@ export const DashboardToolbar = (props: DashboardToolbarProps): ReactElement => 
   const { timeZone, setTimeZone } = useTimeZoneParams('local');
   const dashboardLinks = useDashboardLinks();
 
-  const isBiggerThanSm = useMediaQuery(useTheme().breakpoints.up('sm'));
-  const isBiggerThanMd = useMediaQuery(useTheme().breakpoints.up('md'));
-
   const dashboardTitle = dashboardTitleComponent ? (
     dashboardTitleComponent
   ) : (
-    <Typography variant="h2">{dashboardName}</Typography>
+    <h2 className="text-base font-semibold">{dashboardName}</h2>
   );
 
   const testId = 'dashboard-toolbar';
 
   return (
     <>
-      <Stack data-testid={testId}>
-        <Box
-          px={2}
-          py={1.5}
-          display="flex"
-          sx={{ gap: 2, backgroundColor: (theme) => theme.palette.primary.main + (isEditMode ? '30' : '0') }}
+      <div data-testid={testId} className="flex flex-col">
+        <div
+          className="px-2 py-1.5 flex gap-2"
+          style={{ backgroundColor: isEditMode ? 'color-mix(in srgb, var(--primary) 30%, transparent)' : undefined }}
         >
           {dashboardTitle}
           {isLinksEnabled && (
-            <Stack display="flex" justifyItems="center" alignItems="center" justifyContent="center">
+            <div className="flex justify-items-center items-center justify-center">
               <LinksDisplay links={dashboardLinks} variant="dashboard" />
-            </Stack>
+            </div>
           )}
           {isEditMode ? (
-            <Stack direction="row" gap={1} ml="auto">
+            <div className="flex flex-row gap-1 ml-auto">
               {isReadonly && (
-                <Alert severity="warning" sx={{ backgroundColor: 'transparent', padding: 0 }}>
-                  Dashboard managed via code only. Download JSON and commit changes to save.
+                <Alert variant="default" className="bg-transparent p-0 border-0">
+                  <AlertDescription>
+                    Dashboard managed via code only. Download JSON and commit changes to save.
+                  </AlertDescription>
                 </Alert>
               )}
-              <Stack direction="row" spacing={0.5} ml={1} whiteSpace="nowrap">
+              <div className="flex flex-row gap-0.5 ml-1 whitespace-nowrap">
                 {isVariableEnabled && <EditVariablesButton />}
                 {isDatasourceEnabled && <EditDatasourcesButton />}
                 {isLinksEnabled && <EditDashboardLinksButton />}
                 <AddPanelButton />
                 <AddGroupButton />
-              </Stack>
+              </div>
               <SaveDashboardButton onSave={onSave} isDisabled={isReadonly} />
-              <Button variant="outlined" onClick={onCancelButtonClick}>
+              <Button variant="outline" onClick={onCancelButtonClick}>
                 Cancel
               </Button>
-            </Stack>
+            </div>
           ) : (
             <>
-              {isBiggerThanSm && (
-                <Stack direction="row" gap={1} ml="auto">
-                  <EditButton onClick={onEditButtonClick} />
-                </Stack>
-              )}
+              <div className="hidden sm:flex flex-row gap-1 ml-auto">
+                <EditButton onClick={onEditButtonClick} />
+              </div>
             </>
           )}
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            width: '100%',
-            alignItems: 'start',
-            padding: (theme) => theme.spacing(1, 2, 0, 2),
-            flexDirection: isBiggerThanMd ? 'row' : 'column',
-            flexWrap: 'nowrap',
-            gap: 1,
-          }}
-        >
-          <Box width="100%">
+        </div>
+        <div className="flex w-full items-start px-2 pt-1 flex-col md:flex-row flex-nowrap gap-1">
+          <div className="w-full">
             <ErrorBoundary FallbackComponent={ErrorAlert}>
               <DashboardStickyToolbar
                 initialVariableIsSticky={initialVariableIsSticky}
-                sx={{
-                  backgroundColor: ({ palette }) => palette.background.default,
-                }}
+                className="bg-background"
               />
             </ErrorBoundary>
-          </Box>
-          <Stack direction="row" ml="auto" flexWrap="wrap" justifyContent="end">
-            <Stack direction="row" spacing={1} mt={1} ml={1}>
+          </div>
+          <div className="flex flex-row ml-auto flex-wrap justify-end">
+            <div className="flex flex-row gap-1 mt-1 ml-1">
               <TimeRangeControls timeZone={timeZone} onTimeZoneChange={(tz) => setTimeZone(tz.value)} />
               <DownloadButton />
               <EditJsonButton isReadonly={!isEditMode} />
-            </Stack>
-          </Stack>
-        </Box>
-      </Stack>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

@@ -12,8 +12,7 @@
 // limitations under the License.
 
 import { FormEvent, ReactElement } from 'react';
-import { Dialog } from '@perses-dev/components';
-import { Button } from '@mui/material';
+import { Dialog, Button } from '@perses-dev/components';
 import { useDeletePanelGroupDialog, useViewPanel } from '../../context';
 
 export const DeletePanelGroupDialog = (): ReactElement => {
@@ -41,10 +40,10 @@ export const DeletePanelGroupDialog = (): ReactElement => {
           all the panels within the group.
         </Dialog.Content>
         <Dialog.Actions>
-          <Button variant="contained" type="submit">
+          <Button variant="default" type="submit">
             Delete
           </Button>
-          <Button variant="outlined" color="secondary" onClick={() => closeDeletePanelGroupDialog()}>
+          <Button variant="outline" onClick={() => closeDeletePanelGroupDialog()}>
             Cancel
           </Button>
         </Dialog.Actions>

@@ -11,49 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type {} from './types/ThemeExtension';
-import { PersesColor } from './palette';
-
 export * from './theme';
-export * from './typography';
-
-//Use Typescript interface augmentation to extend the MUI type definition
-declare module '@mui/material/styles/createPalette' {
-  interface TypeBackground {
-    navigation: string;
-    tooltip: string;
-    overlay: string;
-    border: string;
-    lighter: string;
-    code: string;
-  }
-
-  interface TypeText {
-    navigation: string;
-    accent: string;
-    link: string;
-    linkHover: string;
-  }
-}
-
-declare module '@mui/material/styles' {
-  interface Palette {
-    /**
-     * The base colors from Perses design system. Use sparingly since
-     * this is meant as an escape hatch when the theme's other semantic colors
-     * won't get you what you need.
-     */
-    designSystem: {
-      blue: PersesColor;
-      green: PersesColor;
-      grey: PersesColor;
-      orange: PersesColor;
-      purple: PersesColor;
-      red: PersesColor;
-    };
-  }
-
-  interface PaletteOptions {
-    designSystem?: Palette['designSystem'];
-  }
-}
+export * from './ThemeProvider';
+export * from './palette';

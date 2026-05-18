@@ -11,101 +11,92 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { StyledComponent } from '@emotion/styled';
+import { MouseEvent, ReactElement, ReactNode } from 'react';
+import { Button, ButtonProps } from '../ui/button';
+import { cn } from '../lib/utils';
 import {
-  Button,
-  ButtonProps,
-  DialogActions,
-  DialogContent,
-  DialogProps,
-  DialogTitle,
-  DialogTitleProps,
-  IconButton,
-  Dialog as MuiDialog,
-  DialogContentProps as MuiDialogContentProps,
-  styled,
-  Theme,
-} from '@mui/material';
-import CloseIcon from 'mdi-material-ui/Close';
-import { MouseEvent, ReactElement } from 'react';
-import { combineSx } from '../utils';
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from '../ui/sheet';
 
-export interface DialogHeaderProps extends DialogTitleProps {
-  /**
-   * Callback fired when close button is clicked. If undefined, close button will not appear in header.
-   */
+export interface DialogProps {
+  open: boolean;
+  onClose?: (e: MouseEvent<HTMLElement> | unknown) => void;
+  children?: ReactNode;
+  className?: string;
+}
+
+export interface DialogHeaderProps {
   onClose?: (e: MouseEvent<HTMLElement>) => void;
+  children?: ReactNode;
+  className?: string;
+  description?: string;
 }
 
 export type DialogButtonProps = Omit<ButtonProps, 'variant' | 'color' | 'type'>;
 
-export type DialogContentProps = MuiDialogContentProps;
+const Header = ({ children, onClose, description, className }: DialogHeaderProps): ReactElement => (
+  <SheetHeader className={cn('pr-8', className)}>
+    <SheetTitle className="truncate">{children}</SheetTitle>
+    {description && <SheetDescription>{description}</SheetDescription>}
+  </SheetHeader>
+);
 
-const Header = ({ children, onClose, ...props }: DialogHeaderProps): ReactElement => {
-  return (
-    <>
-      <DialogTitle style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} {...props}>
-        {children}
-      </DialogTitle>
-      {onClose && (
-        <IconButton aria-label="Close" onClick={onClose} sx={dialogCloseIconButtonStyle}>
-          <CloseIcon />
-        </IconButton>
-      )}
-    </>
-  );
-};
-
-const Content = ({ children, sx, ...props }: DialogContentProps): ReactElement => (
-  <DialogContent dividers {...props} sx={combineSx({ minWidth: `500px`, textWrap: 'balance' }, sx)}>
-    {children}
-  </DialogContent>
+const Content = ({ children, className }: { children?: ReactNode; className?: string }): ReactElement => (
+  <div className={cn('min-w-0 flex-1 overflow-y-auto px-6 py-4', className)}>{children}</div>
 );
 
 const PrimaryButton = ({ children, ...props }: DialogButtonProps): ReactElement => (
-  <Button variant="contained" type="submit" {...props}>
+  <Button variant="default" type="submit" {...props}>
     {children}
   </Button>
 );
 
 const SecondaryButton = ({ children, ...props }: DialogButtonProps): ReactElement => (
-  <Button variant="outlined" color="secondary" {...props}>
+  <Button variant="outline" {...props}>
     {children}
   </Button>
 );
 
-/*
- * Material-ui has a prop "scroll=paper" that is specifically for dialog header and actions to be sticky and body to scroll,
- * but that doesn't work when dialog content is wrapped in form.
- * https://github.com/mui-org/material-ui/issues/13253
- * This component adds style to get expected behavior & should be used whenever we have a Form inside a Dialog
- */
-const Form: StyledComponent<React.ComponentProps<'form'>> = styled('form')({
-  overflowY: 'auto',
-  display: 'flex',
-  flexDirection: 'column',
-});
+const Form = ({ children, className, ...props }: React.ComponentProps<'form'>): ReactElement => (
+  <form className={cn('flex flex-col overflow-y-auto', className)} {...props}>
+    {children}
+  </form>
+);
+
+const Actions = ({ children, className }: { children?: ReactNode; className?: string }): ReactElement => (
+  <SheetFooter className={cn('px-6 py-4 border-t', className)}>{children}</SheetFooter>
+);
 
 /**
- * Render the CSS of the dialog's close button, according to the given material theme.
- * @param theme material theme
+ * All dialogs are rendered as side-panel Drawers (Sheet) for a consistent
+ * slide-in UX. Replace `<Dialog open={…} onClose={…}>` with this component.
  */
-const dialogCloseIconButtonStyle = (theme: Theme): Record<string, unknown> => {
-  return { position: 'absolute', top: theme.spacing(0.5), right: theme.spacing(0.5) };
-};
-
 export const Dialog: React.FC<DialogProps> & {
   Header: typeof Header;
   Form: typeof Form;
   Content: typeof Content;
   PrimaryButton: typeof PrimaryButton;
   SecondaryButton: typeof SecondaryButton;
-  Actions: typeof DialogActions;
-} = ({ children, ...props }) => <MuiDialog {...props}>{children}</MuiDialog>;
+  Actions: typeof Actions;
+} = ({ open, onClose, children, className }) => (
+  <Sheet open={open} onOpenChange={(isOpen) => !isOpen && onClose?.(isOpen)}>
+    <SheetContent side="right" className={cn('flex flex-col w-full sm:max-w-[680px] p-0', className)}>
+      {children}
+    </SheetContent>
+  </Sheet>
+);
 
 Dialog.Header = Header;
 Dialog.Form = Form;
 Dialog.Content = Content;
 Dialog.PrimaryButton = PrimaryButton;
 Dialog.SecondaryButton = SecondaryButton;
-Dialog.Actions = DialogActions;
+Dialog.Actions = Actions;
+
+export { SheetClose as DialogClose };

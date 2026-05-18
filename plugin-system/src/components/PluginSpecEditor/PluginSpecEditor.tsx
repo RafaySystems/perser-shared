@@ -11,10 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ErrorAlert } from '@perses-dev/components';
+import { ErrorAlert, Spinner } from '@perses-dev/components';
 import { UnknownSpec } from '@perses-dev/spec';
 import { ReactElement } from 'react';
-import { CircularProgress, Stack } from '@mui/material';
 import { OptionsEditorProps } from '../../model';
 import { usePlugin } from '../../runtime';
 import { PluginEditorSelection } from '../PluginEditor';
@@ -37,9 +36,9 @@ export function PluginSpecEditor(props: PluginSpecEditorProps): ReactElement | n
 
   if (isLoading) {
     return (
-      <Stack width="100%" sx={{ alignItems: 'center', justifyContent: 'center' }}>
-        <CircularProgress />
-      </Stack>
+      <div className="w-full flex items-center justify-center">
+        <Spinner />
+      </div>
     );
   }
 

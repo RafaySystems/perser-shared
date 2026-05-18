@@ -11,17 +11,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, MenuItem, Popover, Select, IconButton, TextField } from '@mui/material';
-import Calendar from 'mdi-material-ui/Calendar';
-import EarthIcon from 'mdi-material-ui/Earth';
 import { TimeRangeValue, isRelativeTimeRange, AbsoluteTimeRange, toAbsoluteTimeRange } from '@perses-dev/spec';
 import { ReactElement, useMemo, useRef, useState } from 'react';
+import { CalendarDays, Globe } from 'lucide-react';
 import { useTimeZone } from '../context';
 import { TimeZoneOption, getTimeZoneOptions } from '../model/timeZoneOption';
 import { TimeOption } from '../model';
 import { SettingsAutocomplete, SettingsAutocompleteOption } from '../SettingsAutocomplete';
+import { Button } from '../ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { DateTimeRangePicker } from './DateTimeRangePicker';
 import { buildCustomTimeOption, formatTimeRange } from './utils';
+import { cn } from '../lib/utils';
 
 interface TimeRangeSelectorProps {
   /**
@@ -30,7 +32,6 @@ interface TimeRangeSelectorProps {
   value: TimeRangeValue;
   /**
    * The list of time options to display in the dropdown.
-   * The component will automatically add the last two options as a zoom out x2 and a custom absolute time range.
    */
   timeOptions: TimeOption[];
   /**
@@ -55,8 +56,6 @@ interface TimeRangeSelectorProps {
 /**
  * Date & time selection component to customize what data renders on dashboard.
  * This includes relative shortcuts and the ability to pick absolute start and end times.
- * @param props
- * @constructor
  */
 export function TimeRangeSelector({
   value,
@@ -71,8 +70,8 @@ export function TimeRangeSelector({
   const { timeZone: ctxTimeZone } = useTimeZone();
   const timeZone = timeZoneProp ?? ctxTimeZone;
 
-  const anchorEl = useRef();
   const [showCustomDateSelector, setShowCustomDateSelector] = useState(false);
+  const [tzPopoverOpen, setTzPopoverOpen] = useState(false);
 
   const convertedTimeRange = useMemo(() => {
     return isRelativeTimeRange(value) ? toAbsoluteTimeRange(value) : value;
@@ -83,10 +82,7 @@ export function TimeRangeSelector({
     [value, timeZone]
   );
 
-  const [open, setOpen] = useState(false);
   const tzOptions = timeZoneOptions ?? getTimeZoneOptions();
-  const [tzAnchorEl, setTzAnchorEl] = useState<HTMLElement | null>(null);
-  const tzOpen = Boolean(tzAnchorEl);
   const tzLabel = tzOptions.find((o) => o.value === timeZone)?.display ?? timeZone;
   const tzAutocompleteOptions = tzOptions.map((o) => ({ id: o.value, label: o.display }));
   let tzAutocompleteValue: SettingsAutocompleteOption | undefined = undefined;
@@ -95,117 +91,113 @@ export function TimeRangeSelector({
     if (current) tzAutocompleteValue = { id: current.value, label: current.display };
   }
 
+  const currentDisplay = formatTimeRange(value, timeZone);
+
   return (
-    <>
-      <Popover
-        anchorEl={tzAnchorEl}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={tzOpen}
-        onClose={() => setTzAnchorEl(null)}
-        sx={(theme) => ({ padding: theme.spacing(1) })}
-      >
-        <Box
-          sx={{ p: 1, minWidth: 260 }}
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
+    <div className="flex items-center gap-1">
+      {/* Timezone popover */}
+      <Popover open={tzPopoverOpen} onOpenChange={setTzPopoverOpen}>
+        <PopoverContent
+          align="end"
+          className="p-2 w-72"
+          onClick={(e) => e.stopPropagation()}
         >
           <SettingsAutocomplete
             options={tzAutocompleteOptions}
             value={tzAutocompleteValue}
             onChange={(_e, option) => {
               if (option) {
-                const selected = tzOptions.find((o) => o.value === option.id);
+                const selected = tzOptions.find((o) => o.value === (option as SettingsAutocompleteOption).id);
                 if (selected) onTimeZoneChange?.(selected);
               }
-              setTzAnchorEl(null);
+              setTzPopoverOpen(false);
             }}
             disableClearable
-            renderInput={(params) => <TextField {...params} placeholder="Search timezones" size="small" />}
+            placeholder="Search timezones"
           />
-        </Box>
-      </Popover>
-      <Popover
-        anchorEl={anchorEl.current}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        open={showCustomDateSelector}
-        onClose={() => setShowCustomDateSelector(false)}
-        sx={(theme) => ({ padding: theme.spacing(2) })}
-      >
-        <DateTimeRangePicker
-          initialTimeRange={convertedTimeRange}
-          onChange={(value: AbsoluteTimeRange) => {
-            onChange(value);
-            setShowCustomDateSelector(false);
-            setOpen(false);
-          }}
-          onCancel={() => setShowCustomDateSelector(false)}
-          timeZone={timeZone}
-        />
-      </Popover>
-      <Box ref={anchorEl}>
-        <Select
-          open={open}
-          value={formatTimeRange(value, timeZone)}
-          onClick={() => setOpen(!open)}
-          IconComponent={Calendar}
-          inputProps={{ 'aria-label': `Select time range. Currently set to ${value}` }}
-          sx={{
-            '.MuiSelect-icon': { marginTop: '1px', transform: 'none' },
-            '.MuiSelect-select.MuiSelect-outlined.MuiInputBase-input': { paddingRight: '36px' },
-            '.MuiSelect-select': height ? { lineHeight: height, paddingY: 0 } : {},
-          }}
-        >
-          <MenuItem
-            disableRipple
-            onClick={(e: React.MouseEvent) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-            sx={{ cursor: 'default', '&:hover': { backgroundColor: 'transparent' }, py: 0.5, px: 1 }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <Box sx={{ typography: 'subtitle1' }}>Time Range</Box>
-                <Box sx={{ color: 'text.secondary', typography: 'caption', mt: 0.25 }}>Timezone: {tzLabel}</Box>
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', pr: 1, ml: 1.5 }}>
-                <IconButton
-                  size="small"
-                  aria-label="Select timezone"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setTzAnchorEl(e.currentTarget);
-                  }}
-                >
-                  <EarthIcon fontSize="small" />
-                </IconButton>
-              </Box>
-            </Box>
-          </MenuItem>
-          {timeOptions.map((item, idx) => (
-            <MenuItem
-              key={idx}
-              value={formatTimeRange(item.value, timeZone)}
-              onClick={() => {
-                onChange(item.value);
+        </PopoverContent>
+
+        {/* Custom date selector popover */}
+        <Popover open={showCustomDateSelector} onOpenChange={setShowCustomDateSelector}>
+          <PopoverContent align="center" className="p-0 w-auto">
+            <DateTimeRangePicker
+              initialTimeRange={convertedTimeRange}
+              onChange={(val: AbsoluteTimeRange) => {
+                onChange(val);
+                setShowCustomDateSelector(false);
               }}
+              onCancel={() => setShowCustomDateSelector(false)}
+              timeZone={timeZone}
+            />
+          </PopoverContent>
+
+          {/* Main time range selector */}
+          <Select
+            value={currentDisplay}
+            onValueChange={(val) => {
+              if (val === '__custom__') {
+                setShowCustomDateSelector(true);
+                return;
+              }
+              const found = timeOptions.find((o) => formatTimeRange(o.value, timeZone) === val);
+              if (found) onChange(found.value);
+            }}
+          >
+            <SelectTrigger
+              className={cn('min-w-[160px]', height ? '' : '')}
+              style={height ? { lineHeight: height, paddingTop: 0, paddingBottom: 0 } : undefined}
+              aria-label={`Select time range. Currently set to ${value}`}
             >
-              {item.display}
-            </MenuItem>
-          ))}
-          {showCustomTimeRange && (
-            <MenuItem
-              value={formatTimeRange(lastOption.value, timeZone)}
-              onClick={() => setShowCustomDateSelector(true)}
-            >
-              {lastOption.display}
-            </MenuItem>
-          )}
-        </Select>
-      </Box>
-    </>
+              <div className="flex items-center gap-1.5">
+                <CalendarDays className="h-4 w-4 shrink-0 text-muted-foreground" />
+                <SelectValue />
+              </div>
+            </SelectTrigger>
+            <SelectContent>
+              {/* Header row with timezone info */}
+              <div
+                className="flex items-center justify-between px-2 py-1.5 cursor-default"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              >
+                <div className="flex flex-col items-start">
+                  <span className="text-sm font-medium">Time Range</span>
+                  <span className="text-xs text-muted-foreground mt-0.5">Timezone: {tzLabel}</span>
+                </div>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 ml-2"
+                    aria-label="Select timezone"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setTzPopoverOpen(true);
+                    }}
+                  >
+                    <Globe className="h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+              </div>
+
+              {timeOptions.map((item, idx) => (
+                <SelectItem key={idx} value={formatTimeRange(item.value, timeZone)}>
+                  {item.display}
+                </SelectItem>
+              ))}
+
+              {showCustomTimeRange && (
+                <SelectItem value="__custom__">
+                  {lastOption.display}
+                </SelectItem>
+              )}
+            </SelectContent>
+          </Select>
+        </Popover>
+      </Popover>
+    </div>
   );
 }

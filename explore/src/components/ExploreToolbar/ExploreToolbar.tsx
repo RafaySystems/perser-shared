@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Stack, Box, useTheme, useMediaQuery } from '@mui/material';
 import { TimeRangeControls, useTimeZoneParams } from '@perses-dev/plugin-system';
 import React, { ReactElement } from 'react';
 
@@ -22,25 +21,18 @@ export interface ExploreToolbarProps {
 export const ExploreToolbar = (props: ExploreToolbarProps): ReactElement => {
   const { exploreTitleComponent } = props;
 
-  const isBiggerThanLg = useMediaQuery(useTheme().breakpoints.up('lg'));
   const { timeZone, setTimeZone } = useTimeZoneParams('local');
 
   const testId = 'explore-toolbar';
 
   return (
-    <Stack data-testid={testId}>
-      <Box sx={{ display: 'flex', width: '100%' }}>
+    <div data-testid={testId}>
+      <div className="flex w-full">
         {exploreTitleComponent}
-        <Stack
-          direction="row"
-          spacing={1}
-          ml="auto"
-          flexWrap={isBiggerThanLg ? 'nowrap' : 'wrap-reverse'}
-          justifyContent="end"
-        >
+        <div className="flex flex-row gap-1 ml-auto flex-wrap-reverse lg:flex-nowrap justify-end">
           <TimeRangeControls timeZone={timeZone} onTimeZoneChange={(tz) => setTimeZone(tz.value)} />
-        </Stack>
-      </Box>
-    </Stack>
+        </div>
+      </div>
+    </div>
   );
 };

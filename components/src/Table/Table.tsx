@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Stack, useTheme } from '@mui/material';
 import {
   ColumnDef,
   ExpandedState,
@@ -37,9 +36,6 @@ const DEFAULT_GET_ROW_ID = (data: unknown, index: number): string => {
   return `${index}`;
 };
 
-// Setting these defaults one enables them to be consistent across renders instead
-// of being recreated every time, which can be important for perf because react
-// does not do deep equality checking for objects and arrays.
 const DEFAULT_ROW_SELECTION: NonNullable<TableProps<unknown>['rowSelection']> = {};
 const DEFAULT_SORTING: NonNullable<TableProps<unknown>['sorting']> = [];
 
@@ -75,8 +71,6 @@ export function Table<TableData>({
   defaultColumnConfig,
   ...otherProps
 }: TableProps<TableData>): ReactElement {
-  const theme = useTheme();
-
   const hasSubRows = !!getSubRows;
 
   const [expanded, setExpanded] = useState<ExpandedState>({});
@@ -103,14 +97,9 @@ export function Table<TableData>({
       if (rowSelectionVariant === 'standard' || isModified) {
         row.toggleSelected();
       } else {
-        // Legend variant (when action not modified with shift/meta key).
-        // Note that this behavior needs to be kept in sync with behavior in
-        // the Legend component for list-based legends.
         if (row.getIsSelected() && !table.getIsAllRowsSelected()) {
-          // Row was already selected. Revert to select all.
           table.toggleAllRowsSelected();
         } else {
-          // Focus the selected row.
           onRowSelectionChange?.({
             [row.id]: true,
           });
@@ -143,9 +132,9 @@ export function Table<TableData>({
       header: 'Actions',
       cell: ({ row }): ReactElement => {
         return (
-          <Stack direction="row" alignItems="center">
+          <div className="flex flex-row items-center">
             {getItemActions?.({ id: row.id, data: row.original })}
-          </Stack>
+          </div>
         );
       },
       enableSorting: false,
@@ -163,7 +152,7 @@ export function Table<TableData>({
             checked={table.getIsAllRowsSelected()}
             indeterminate={table.getIsSomeRowsSelected()}
             onChange={table.getToggleAllRowsSelectedHandler()}
-            color={theme.palette.text.primary}
+            color="hsl(var(--foreground))"
             density={density}
           />
         );
@@ -184,7 +173,7 @@ export function Table<TableData>({
       enableSorting: false,
       enableResizing: false,
     };
-  }, [theme.palette.text.primary, density, getCheckboxColor, handleCheckboxChange]);
+  }, [density, getCheckboxColor, handleCheckboxChange]);
 
   const tableColumns: Array<ColumnDef<TableData>> = useMemo(() => {
     const initTableColumns = persesColumnsToTanstackColumns(columns, defaultColumnConfig);
@@ -207,8 +196,6 @@ export function Table<TableData>({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: pagination ? getPaginationRowModel() : undefined,
-    // without this setting, the getPaginationRowModel setting persists and it is not possible to switch from paginated to unpaginated
-    // can be removed once https://github.com/TanStack/table/pull/5974 is merged
     manualPagination: !pagination,
     enableRowSelection: !!checkboxSelection,
     onRowSelectionChange: handleRowSelectionChange,
@@ -217,8 +204,6 @@ export function Table<TableData>({
     getSubRows: getSubRows,
     getExpandedRowModel: hasSubRows ? getExpandedRowModel() : undefined,
     ...fuzzySearchOptions,
-    // For now, defaulting to sort by descending first. We can expose the ability
-    // to customize it if/when we have use cases for it.
     sortDescFirst: true,
     columnResizeMode,
     onExpandedChange: setExpanded,

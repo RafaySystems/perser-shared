@@ -11,7 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { FormControl, FormControlLabel, Radio, RadioGroup, RadioGroupProps, Box } from '@mui/material';
+import { RadioGroup, RadioGroupItem } from '@perses-dev/components';
+import { Label } from '@perses-dev/components';
 import { ReactElement, ReactNode, useState } from 'react';
 import { OptionsEditorTabPanel } from '../OptionsEditorTabPanel';
 
@@ -34,7 +35,7 @@ export const OptionsEditorRadios = (props: OptionsEditorRadiosProps): ReactEleme
   const { tabs, defaultTab, onModeChange, isReadonly } = props;
   const [activeTab, setActiveTab] = useState(defaultTab);
 
-  const handleChange: RadioGroupProps['onChange'] = (_, value) => {
+  const handleChange = (value: string) => {
     const v = parseInt(value);
     setActiveTab(v);
     onModeChange(v);
@@ -42,28 +43,29 @@ export const OptionsEditorRadios = (props: OptionsEditorRadiosProps): ReactEleme
 
   return (
     <>
-      <Box sx={{ borderBottom: 1, borderColor: (theme) => theme.palette.divider }}>
-        <FormControl>
-          <RadioGroup
-            row
-            defaultValue={defaultTab}
-            value={activeTab}
-            onChange={handleChange}
-            aria-labelledby="Configuration radio"
-          >
-            {tabs.map(({ label }, i) => {
-              return <FormControlLabel disabled={isReadonly} key={label} value={i} control={<Radio />} label={label} />;
-            })}
-          </RadioGroup>
-        </FormControl>
-      </Box>
-      {tabs.map(({ label, content }, i) => {
-        return (
-          <OptionsEditorTabPanel key={label} value={activeTab} index={i}>
-            {content}
-          </OptionsEditorTabPanel>
-        );
-      })}
+      <div className="border-b border-border">
+        <RadioGroup
+          className="flex flex-row gap-4 py-2"
+          defaultValue={String(defaultTab)}
+          value={String(activeTab)}
+          onValueChange={handleChange}
+          aria-label="Configuration radio"
+        >
+          {tabs.map(({ label }, i) => (
+            <div key={label} className="flex items-center gap-2">
+              <RadioGroupItem value={String(i)} id={`radio-tab-${i}`} disabled={isReadonly} />
+              <Label htmlFor={`radio-tab-${i}`} className={isReadonly ? 'opacity-50 cursor-not-allowed' : ''}>
+                {label}
+              </Label>
+            </div>
+          ))}
+        </RadioGroup>
+      </div>
+      {tabs.map(({ label, content }, i) => (
+        <OptionsEditorTabPanel key={label} value={activeTab} index={i}>
+          {content}
+        </OptionsEditorTabPanel>
+      ))}
     </>
   );
 };

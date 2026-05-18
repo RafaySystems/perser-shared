@@ -11,11 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button } from '@mui/material';
-import AddGroupIcon from 'mdi-material-ui/PlusBoxOutline';
-import { InfoTooltip } from '@perses-dev/components';
+import { PlusSquare as AddGroupIcon } from 'lucide-react';
+import { Button, InfoTooltip } from '@perses-dev/components';
 import { ReactElement } from 'react';
-import { TOOLTIP_TEXT, editButtonStyle } from '../../constants';
+import { TOOLTIP_TEXT } from '../../constants';
 import { useDashboardActions } from '../../context';
 
 export const AddGroupButton = (): ReactElement => {
@@ -24,11 +23,12 @@ export const AddGroupButton = (): ReactElement => {
   return (
     <InfoTooltip description={TOOLTIP_TEXT.addGroup}>
       <Button
-        startIcon={<AddGroupIcon />}
+        variant="ghost"
         onClick={openAddPanelGroup}
         aria-label={TOOLTIP_TEXT.addGroup}
-        sx={editButtonStyle}
+        className="whitespace-nowrap min-w-0"
       >
+        <AddGroupIcon className="mr-0.5" />
         Panel Group
       </Button>
     </InfoTooltip>

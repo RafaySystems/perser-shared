@@ -13,9 +13,9 @@
 
 import { CSSProperties, memo, useEffect, useLayoutEffect, useRef } from 'react';
 import { ECharts, EChartsCoreOption, init, connect, use } from 'echarts/core';
-import { Box, SxProps, Theme } from '@mui/material';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
+import { cn } from '../lib/utils';
 
 import {
   BarChart as EChartsBarChart,
@@ -151,7 +151,7 @@ export interface EChartsProps<T> {
   option: EChartsCoreOption;
   theme?: string | EChartsTheme;
   renderer?: 'canvas' | 'svg';
-  sx?: SxProps<Theme>;
+  className?: string;
   style?: CSSProperties;
   onEvents?: OnEventsType<T>;
   _instance?: React.MutableRefObject<ECharts | undefined>;
@@ -163,7 +163,7 @@ export const EChart = memo(function EChart<T>({
   option,
   theme,
   renderer,
-  sx,
+  className,
   style,
   onEvents,
   _instance,
@@ -234,27 +234,15 @@ export const EChart = memo(function EChart<T>({
     };
   }, [onEvents]);
 
-  // TODO: re-evaluate how this is triggered. It's technically working right
-  // now because the sx prop is an object that gets re-created, but that also
-  // means it runs unnecessarily some of the time and theoretically might
-  // not run in some other cases. Maybe it should use a resize observer?
   useEffect(() => {
-    // TODO: fix this debouncing. This likely isn't working as intended because
-    // the debounced function is re-created every time this useEffect is called.
-    const updateSize = debounce(
-      () => {
-        if (!chartElement.current) return;
-        chartElement.current.resize();
-      },
-      200,
-      {
-        leading: true,
-      }
-    );
+    const updateSize = debounce(() => {
+      if (!chartElement.current) return;
+      chartElement.current.resize();
+    }, 200, { leading: true });
     updateSize();
-  }, [sx, style]);
+  }, [className, style]);
 
-  return <Box ref={containerRef} sx={sx} style={style}></Box>;
+  return <div ref={containerRef} className={cn('w-full h-full', className)} style={style} />;
 });
 
 // Validate event config and bind custom events

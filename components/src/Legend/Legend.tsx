@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box } from '@mui/material';
 import { produce } from 'immer';
 import { ReactElement, ReactNode } from 'react';
 import { getLegendMode } from '../model';
@@ -140,37 +139,22 @@ export function Legend({
 
   if (options.position === 'right') {
     return (
-      <Box
-        style={{
-          width: width,
-          height: height,
-        }}
-        sx={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          backgroundColor: (theme) => `${theme.palette.background.default}`,
-        }}
+      <div
+        className="absolute top-0 right-0 bg-background"
+        style={{ width, height }}
       >
         {legendContent}
-      </Box>
+      </div>
     );
   }
 
   // Position bottom
   return (
-    <Box
-      style={{
-        width: width,
-        height: height,
-      }}
-      sx={{
-        position: 'absolute',
-        bottom: 0,
-        backgroundColor: (theme) => `${theme.palette.background.default}`,
-      }}
+    <div
+      className="absolute bottom-0 bg-background"
+      style={{ width, height }}
     >
       {legendContent}
-    </Box>
+    </div>
   );
 }

@@ -11,7 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { PaletteMode, PaletteOptions } from '@mui/material';
+import { PaletteMode } from '../../theme/theme';
+
 import { text } from './text';
 import { background } from './background';
 import { greyOption } from './grey';
@@ -26,7 +27,7 @@ import { warning } from './warning';
 /**
  * Returns the MUI PaletteOptions for the given mode.
  */
-export function getPaletteOptions(mode: PaletteMode): PaletteOptions {
+export function getPaletteOptions(mode: PaletteMode) {
   // Palette options should be split out into their own files with functions
   // for creating the option values based on light/dark mode
   return {

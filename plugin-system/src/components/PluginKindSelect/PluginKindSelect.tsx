@@ -11,29 +11,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { MenuItem, TextField, TextFieldProps } from '@mui/material';
-import { forwardRef, ReactElement, useCallback, useMemo } from 'react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Label } from '@perses-dev/components';
+import { forwardRef, ReactElement, useCallback, useMemo, HTMLAttributes } from 'react';
 import { PluginType } from '../../model';
 import { useListPluginMetadata } from '../../runtime';
 import { PluginEditorSelection } from '../PluginEditor';
 
-export interface PluginKindSelectProps extends Omit<TextFieldProps, 'value' | 'onChange' | 'children'> {
+export interface PluginKindSelectProps extends Omit<HTMLAttributes<HTMLDivElement>, 'value' | 'onChange' | 'children'> {
   filteredQueryPlugins?: string[];
   pluginTypes: PluginType[];
   value?: PluginEditorSelection;
   onChange?: (s: PluginEditorSelection) => void;
+  label?: string;
+  disabled?: boolean;
+  error?: boolean;
+  helperText?: string;
+  fullWidth?: boolean;
+  margin?: string;
+  sx?: Record<string, unknown>;
+  slotProps?: { input?: { readOnly?: boolean } };
 }
 
 /**
- * Displays a MUI Select input for selecting a plugin's kind from a list of all the available plugins of some specific
+ * Displays a Select input for selecting a plugin's kind from a list of all the available plugins of some specific
  * plugin types. (e.g. "Show a list of all the Panel plugins", or "Show a list of all the Variable plugins", or "Show
  * a list of all the TimeSeriesQuery, TraceQuery, ProfileQuery, and LogQuery plugins").
  * The value of the select is the kind of the plugin, but you can also listen to the `onPluginTypeChange` event to know
  * when the user changes the plugin type (it fires at start for the default value.)
  */
-export const PluginKindSelect = forwardRef((props: PluginKindSelectProps, ref): ReactElement => {
-  const { pluginTypes, value: propValue, onChange, filteredQueryPlugins, ...others } = props;
+export const PluginKindSelect = forwardRef((props: PluginKindSelectProps, _ref): ReactElement => {
+  const {
+    pluginTypes,
+    value: propValue,
+    onChange,
+    filteredQueryPlugins,
+    label,
+    disabled,
+    error,
+    helperText,
+    fullWidth,
+    slotProps,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    margin: _margin,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    sx: _sx,
+    ...others
+  } = props;
   const { data, isLoading } = useListPluginMetadata(pluginTypes);
+  const isReadonly = slotProps?.input?.readOnly ?? false;
 
   const sortedData = useMemo(() => {
     if (filteredQueryPlugins?.length) {
@@ -45,48 +70,57 @@ export const PluginKindSelect = forwardRef((props: PluginKindSelectProps, ref): 
     return data?.sort((a, b) => a.spec.display.name.localeCompare(b.spec.display.name));
   }, [data, filteredQueryPlugins]);
 
-  // Pass an empty value while options are still loading so MUI doesn't complain about us using an "out of range" value
+  // Pass an empty value while options are still loading so the select doesn't complain about an "out of range" value
   const value = !propValue || isLoading ? '' : selectionToOptionValue(propValue);
 
-  const handleChange = (event: { target: { value: string } }): void => {
-    onChange?.(optionValueToSelection(event.target.value));
-  };
-
-  const renderValue = useCallback(
-    (selected: unknown) => {
-      if (selected === '') {
-        return '';
+  const handleChange = useCallback(
+    (val: string) => {
+      if (val) {
+        onChange?.(optionValueToSelection(val));
       }
-      const selectedValue = optionValueToSelection(selected as string);
-      return sortedData?.find((v) => v.kind === selectedValue.type && v.spec.name === selectedValue.kind)?.spec.display
-        .name;
     },
-    [sortedData]
+    [onChange]
   );
 
-  // TODO: Does this need a loading indicator of some kind?
+  const displayValue = sortedData?.find((v) => {
+    const sel = propValue;
+    return sel && v.kind === sel.type && v.spec.name === sel.kind;
+  })?.spec.display.name;
+
   return (
-    <TextField
-      select
-      inputRef={ref}
+    <div
+      className={fullWidth ? 'w-full flex flex-col gap-1' : 'flex flex-col gap-1 min-w-[120px]'}
       {...others}
-      value={value}
-      aria-label={value}
-      onChange={handleChange}
-      SelectProps={{ renderValue }}
       data-testid="plugin-kind-select"
     >
-      {isLoading && <MenuItem value="">Loading...</MenuItem>}
-      {sortedData?.map((metadata) => (
-        <MenuItem
-          data-testid="option"
-          key={metadata.kind + metadata.spec.name}
-          value={selectionToOptionValue({ type: metadata.kind, kind: metadata.spec.name })}
-        >
-          {metadata.spec.display.name}
-        </MenuItem>
-      ))}
-    </TextField>
+      {label && <Label>{label}</Label>}
+      <Select value={value} onValueChange={handleChange} disabled={disabled || isReadonly}>
+        <SelectTrigger className={error ? 'border-destructive' : ''} aria-label={displayValue ?? value}>
+          <SelectValue placeholder={isLoading ? 'Loading...' : ''}>
+            {displayValue ?? (value ? value : undefined)}
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          {isLoading && (
+            <SelectItem value="" disabled>
+              Loading...
+            </SelectItem>
+          )}
+          {sortedData?.map((metadata) => (
+            <SelectItem
+              data-testid="option"
+              key={metadata.kind + metadata.spec.name}
+              value={selectionToOptionValue({ type: metadata.kind, kind: metadata.spec.name })}
+            >
+              {metadata.spec.display.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      {helperText && (
+        <p className={`text-xs ${error ? 'text-destructive' : 'text-muted-foreground'}`}>{helperText}</p>
+      )}
+    </div>
   );
 });
 PluginKindSelect.displayName = 'PluginKindSelect';

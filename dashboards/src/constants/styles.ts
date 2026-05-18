@@ -11,15 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { SxProps, Theme } from '@mui/material';
+/** Tailwind class string for toolbar edit buttons */
+export const editButtonClassName = 'whitespace-nowrap min-w-0';
 
-export const editButtonStyle: SxProps<Theme> = {
-  whiteSpace: 'nowrap',
-  minWidth: 'auto',
-  '& .MuiButton-startIcon': {
-    marginRight: 0.5,
-  },
-};
+/** @deprecated use editButtonClassName instead */
+export const editButtonStyle = {};
 
 export const MIN_VARIABLE_WIDTH = 120;
 export const MAX_VARIABLE_WIDTH = 500;

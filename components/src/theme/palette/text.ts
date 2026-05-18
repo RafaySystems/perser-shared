@@ -11,10 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { PaletteOptions, PaletteMode } from '@mui/material';
+import { PaletteMode } from '../../theme/theme';
+
 import { grey, white, blue } from './colors';
 
-export const text = (mode: PaletteMode): PaletteOptions['text'] => {
+export const text = (mode: PaletteMode): Record<string, string> => {
   const navigation = grey[800];
   const accent = grey[300];
   return mode === 'light'

@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Theme } from '@mui/material';
+import { PaletteMode } from '../../theme/theme';
 import { LegendPositions, getLegendMode, LegendSize } from '../../model';
 import { LegendProps } from '../../Legend';
 import { getTableCellLayout } from '../../Table';
@@ -74,7 +74,8 @@ export interface ContentWithLegendProps {
 export interface ContentWithLegendLayoutOpts
   extends Required<Omit<ContentWithLegendProps, 'children' | 'legendProps'>> {
   legendProps?: ContentWithLegendProps['legendProps'];
-  theme: Theme;
+  /** Minimal theme descriptor — only `mode` is required for layout decisions */
+  theme: { mode: PaletteMode };
 }
 
 export interface ContentWithLegendLayout {
@@ -112,6 +113,17 @@ const LEGEND_HEIGHT_SM = 40;
 const LEGEND_HEIGHT_LG = 100;
 
 /**
+ * A minimal spacing/typography provider compatible with getTableCellLayout.
+ */
+const LAYOUT_THEME = {
+  spacing: (n: number): string => `${n * 8}px`,
+  typography: {
+    body1: { lineHeight: '24px', fontSize: '0.875rem' },
+    body2: { lineHeight: '20px', fontSize: '0.75rem' },
+  },
+};
+
+/**
  * Returns information for laying out content alongside a legend.
  */
 export function getContentWithLegendLayout({
@@ -122,7 +134,6 @@ export function getContentWithLegendLayout({
   minChildrenHeight,
   minChildrenWidth,
   spacing,
-  theme,
 }: ContentWithLegendLayoutOpts): ContentWithLegendLayout {
   const legendOptions = legendProps?.options;
   const hasLegend = !!legendOptions;
@@ -154,11 +165,8 @@ export function getContentWithLegendLayout({
   let legendHeight;
 
   if (mode === 'list') {
-    // TODO: normalize list to share similar height options as the table
-    // when we add more size options.
     legendWidth = position === 'right' ? 200 : width;
 
-    // TODO: account for number of legend items returned when adjusting legend spacing
     legendHeight = LEGEND_HEIGHT_SM;
     if (position === 'right') {
       legendHeight = height;
@@ -167,8 +175,7 @@ export function getContentWithLegendLayout({
     }
   } else {
     // Table mode
-
-    const tableLayout = getTableCellLayout(theme, 'compact');
+    const tableLayout = getTableCellLayout(LAYOUT_THEME, 'compact');
 
     const tableColumns = legendProps?.tableProps?.columns || [];
     const columnsWidth = tableColumns.reduce((total, col) => {
@@ -180,7 +187,6 @@ export function getContentWithLegendLayout({
 
     legendWidth = position === 'right' ? TABLE_LEGEND_SIZE[legendSize]['right'] + columnsWidth : width;
 
-    // Use the smaller of the size-based row count or the number of legend items + 1 for the header.
     const rowsToShow = Math.min(TABLE_LEGEND_SIZE[legendSize]['bottom'], legendProps.data.length + 1);
     legendHeight = position === 'bottom' ? rowsToShow * tableLayout.height : height;
   }
@@ -192,7 +198,6 @@ export function getContentWithLegendLayout({
     (position === 'right' && contentWidth < minChildrenWidth) ||
     (position === 'bottom' && contentHeight < minChildrenHeight)
   ) {
-    // Legend does not fit. Just show the content.
     return noLegendLayout;
   }
 

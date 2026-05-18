@@ -11,64 +11,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Checkbox, IconButton, InputAdornment, ListItemText, Menu, MenuItem, Stack, Tooltip } from '@mui/material';
 import { Column } from '@tanstack/react-table';
 import { ReactElement, useCallback, useState } from 'react';
-import Magnify from 'mdi-material-ui/Magnify';
-import Close from 'mdi-material-ui/Close';
-import ViewColumn from 'mdi-material-ui/ViewColumn';
-import UnfoldMore from 'mdi-material-ui/UnfoldMoreHorizontal';
-import UnfoldLess from 'mdi-material-ui/UnfoldLessHorizontal';
-import { TextField } from '../controls';
+import { Search, X, Columns3, ChevronsUpDown, ChevronsDownUp } from 'lucide-react';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Checkbox } from '../ui/checkbox';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
+import { cn } from '../lib/utils';
 
 export interface TableToolbarProps<TableData> {
-  /**
-   * When `true`, a search input is rendered.
-   */
   isSearchEnabled?: boolean;
-
-  /**
-   * Current value of the global filter / search query.
-   */
   globalFilter: string;
-
-  /**
-   * Callback fired when the search query changes.
-   */
   onGlobalFilterChange: (value: string) => void;
-
-  /**
-   * When `true`, a "Columns" button is rendered that opens a column visibility dropdown.
-   */
   isColumnFilterEnabled?: boolean;
-
-  /**
-   * All columns from the table instance, used to build the visibility menu.
-   */
   columns: Array<Column<TableData>>;
-  /**
-   * The width of the toolbar, used to determine when to switch to a more compact layout.
-   */
   width: number | string;
-
-  /**
-   * Max height for the column filter menu.
-   */
   columnFilterMenuMaxHeight?: number | string;
-
-  /**
-   * When `true`, an "Expand All" / "Collapse All" toggle button is rendered.
-   */
   isExpandAllEnabled?: boolean;
-
-  /**
-   * Whether all rows are currently expanded.
-   */
   isAllExpanded?: boolean;
-
-  /**
-   * Callback to toggle expand/collapse all rows.
-   */
   onExpandAllChange?: (event: unknown) => void;
 }
 
@@ -84,8 +51,6 @@ export function TableToolbar<TableData>({
   isAllExpanded,
   onExpandAllChange,
 }: TableToolbarProps<TableData>): ReactElement | null {
-  const [colMenuAnchor, setColMenuAnchor] = useState<null | HTMLElement>(null);
-  const colMenuOpen = Boolean(colMenuAnchor);
   const [searchResetKey, setSearchResetKey] = useState(0);
 
   const handleSearchClear = useCallback(() => {
@@ -98,94 +63,98 @@ export function TableToolbar<TableData>({
   }
 
   return (
-    <Stack
-      direction="row"
-      gap={1}
-      alignItems="center"
-      justifyContent="flex-end"
-      width={width}
-      padding="0.5rem"
-      sx={{ backgroundColor: (theme) => theme.palette.background.default }}
+    <div
+      className="flex flex-row gap-2 items-center justify-end bg-background p-2"
+      style={{ width }}
     >
       {isSearchEnabled && (
-        <TextField
-          key={searchResetKey}
-          placeholder="Search..."
-          value={globalFilter}
-          onChange={onGlobalFilterChange}
-          variant="standard"
-          slotProps={{
-            htmlInput: { 'aria-label': 'search table' },
-            input: {
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Magnify fontSize="small" />
-                </InputAdornment>
-              ),
-              endAdornment: globalFilter !== '' && (
-                <InputAdornment position="end">
-                  <IconButton onClick={handleSearchClear}>
-                    <Close fontSize="small" />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            },
-          }}
-          sx={{ flexGrow: 1 }}
-        />
+        <div className="relative flex-grow">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+          <Input
+            key={searchResetKey}
+            placeholder="Search..."
+            value={globalFilter}
+            onChange={(e) => onGlobalFilterChange(e.target.value)}
+            aria-label="search table"
+            className="pl-8 h-8 text-sm"
+          />
+          {globalFilter !== '' && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleSearchClear}
+              className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6"
+              aria-label="Clear search"
+            >
+              <X className="h-3.5 w-3.5" />
+            </Button>
+          )}
+        </div>
       )}
+
       {isExpandAllEnabled && (
-        <Tooltip title={isAllExpanded ? 'Collapse all' : 'Expand all'}>
-          <IconButton
-            onClick={onExpandAllChange}
-            color="info"
-            aria-label={isAllExpanded ? 'collapse all rows' : 'expand all rows'}
-          >
-            {isAllExpanded ? <UnfoldLess /> : <UnfoldMore />}
-          </IconButton>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onExpandAllChange as React.MouseEventHandler}
+              aria-label={isAllExpanded ? 'collapse all rows' : 'expand all rows'}
+              className="text-info h-8 w-8"
+            >
+              {isAllExpanded ? (
+                <ChevronsDownUp className="h-4 w-4" />
+              ) : (
+                <ChevronsUpDown className="h-4 w-4" />
+              )}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>{isAllExpanded ? 'Collapse all' : 'Expand all'}</TooltipContent>
         </Tooltip>
       )}
+
       {isColumnFilterEnabled && (
-        <>
-          <IconButton
-            onClick={(e) => setColMenuAnchor(e.currentTarget)}
-            aria-haspopup="listbox"
-            aria-expanded={colMenuOpen}
-            color="info"
-          >
-            <ViewColumn />
-          </IconButton>
-          <Menu
-            anchorEl={colMenuAnchor}
-            open={colMenuOpen}
-            onClose={() => setColMenuAnchor(null)}
-            slotProps={{ list: { dense: true } }}
-            sx={{ maxHeight: columnFilterMenuMaxHeight }}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-haspopup="listbox"
+              className="text-info h-8 w-8"
+              aria-label="Toggle column visibility"
+            >
+              <Columns3 className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            className={cn('min-w-[160px]')}
+            style={{ maxHeight: columnFilterMenuMaxHeight, overflowY: 'auto' }}
           >
             {columns.map((column) => {
               const header = column.columnDef.header;
               const label = typeof header === 'string' ? header : column.id;
               return (
-                <MenuItem
+                <DropdownMenuItem
                   key={column.id}
                   disabled={!column.getCanHide()}
                   onClick={column.getCanHide() ? column.getToggleVisibilityHandler() : undefined}
-                  dense
+                  className="flex items-center gap-2 text-sm py-1.5 cursor-pointer"
                 >
                   <Checkbox
                     checked={column.getIsVisible()}
                     disabled={!column.getCanHide()}
-                    size="small"
-                    disableRipple
-                    sx={{ p: 0, mr: 1 }}
+                    className="h-4 w-4 p-0"
+                    aria-label={`Toggle ${label} column`}
+                    onCheckedChange={column.getCanHide() ? column.getToggleVisibilityHandler() : undefined}
                   />
-                  <ListItemText primary={label} />
-                </MenuItem>
+                  <span>{label}</span>
+                </DropdownMenuItem>
               );
             })}
-          </Menu>
-        </>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
-    </Stack>
+    </div>
   );
 }

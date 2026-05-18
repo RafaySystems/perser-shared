@@ -12,29 +12,19 @@
 // limitations under the License.
 
 import {
-  Box,
   Button,
   Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  Select,
-  Stack,
   Switch,
-  SwitchProps,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Label,
+  RadioGroup,
+  RadioGroupItem,
   TextField,
-  Typography,
-} from '@mui/material';
-import { SelectChangeEvent } from '@mui/material/Select';
+} from '@perses-dev/components';
 import {
   DragAndDropElement,
   DragButton,
@@ -46,26 +36,28 @@ import {
   OptionsEditorGroup,
   useDragAndDropMonitor,
 } from '@perses-dev/components';
-import AlertIcon from 'mdi-material-ui/Alert';
-import CheckIcon from 'mdi-material-ui/Check';
-import ChevronDown from 'mdi-material-ui/ChevronDown';
-import ChevronRight from 'mdi-material-ui/ChevronRight';
-import CloseIcon from 'mdi-material-ui/Close';
-import SettingsIcon from 'mdi-material-ui/Cog';
-import DeleteIcon from 'mdi-material-ui/DeleteOutline';
-import DownloadIcon from 'mdi-material-ui/Download';
-import InfoIcon from 'mdi-material-ui/InformationOutline';
-import LinkIcon from 'mdi-material-ui/Link';
-import MagnifyScan from 'mdi-material-ui/MagnifyScan';
-import PauseIcon from 'mdi-material-ui/Pause';
-import PlayIcon from 'mdi-material-ui/Play';
-import PlusIcon from 'mdi-material-ui/Plus';
-import RefreshIcon from 'mdi-material-ui/Refresh';
-import RobotOutline from 'mdi-material-ui/RobotOutline';
-import SendIcon from 'mdi-material-ui/Send';
-import StopIcon from 'mdi-material-ui/Stop';
-import SyncIcon from 'mdi-material-ui/Sync';
-import UploadIcon from 'mdi-material-ui/Upload';
+import {
+  AlertTriangle as AlertIcon,
+  Check as CheckIcon,
+  ChevronDown,
+  ChevronRight,
+  X as CloseIcon,
+  Settings as SettingsIcon,
+  Trash2 as DeleteIcon,
+  Download as DownloadIcon,
+  Info as InfoIcon,
+  Link as LinkIcon,
+  ScanSearch as MagnifyScan,
+  Pause as PauseIcon,
+  Play as PlayIcon,
+  Plus as PlusIcon,
+  RefreshCw as RefreshIcon,
+  Bot as RobotOutline,
+  Send as SendIcon,
+  Square as StopIcon,
+  RefreshCcw as SyncIcon,
+  Upload as UploadIcon,
+} from 'lucide-react';
 import { ReactElement, useCallback, useMemo, useState } from 'react';
 
 export type ActionIcon =
@@ -225,9 +217,9 @@ function InterpolationHelper({ batchMode }: InterpolationHelperProps): ReactElem
   }
 
   return (
-    <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
+    <p className="text-xs text-muted-foreground mb-1 block">
       {content}
-    </Typography>
+    </p>
   );
 }
 
@@ -245,11 +237,9 @@ function EventActionEditor({
   const hasBodyTemplate = (eventAction.bodyTemplate ?? '').trim().length > 0;
 
   const handleIncludesTemplateChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const nextContentType = event.target.value as 'custom' | 'none';
-
+    (value: string) => {
+      const nextContentType = value as 'custom' | 'none';
       const bodyTemplate = nextContentType === 'custom' ? JSON.stringify({}) : undefined;
-
       onChange(index, { ...eventAction, bodyTemplate: bodyTemplate });
     },
     [index, onChange, eventAction]
@@ -274,16 +264,18 @@ function EventActionEditor({
 
   return (
     <DragAndDropElement data={eventAction as unknown as Record<string, unknown>}>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" gap={4}>
-        <Stack direction="row" gap={1}>
-          <IconButton
+      <div className="flex flex-row items-center justify-between gap-4">
+        <div className="flex flex-row gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6"
             data-testid={`event-action-toggle#${eventAction.name}`}
-            size="small"
             onClick={() => setIsCollapsed(!isCollapsed)}
           >
-            {isCollapsed ? <ChevronRight /> : <ChevronDown />}
-          </IconButton>
-          <Typography variant="overline" component="h4" sx={{ textTransform: 'none' }}>
+            {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </Button>
+          <span className="text-xs uppercase tracking-wide font-medium self-center">
             EVENT ACTION:{' '}
             {eventAction.name ? (
               <span>
@@ -292,109 +284,126 @@ function EventActionEditor({
             ) : (
               <strong>{eventAction.name}</strong>
             )}
-          </Typography>
-        </Stack>
+          </span>
+        </div>
 
-        <Stack direction="row" gap={1}>
+        <div className="flex flex-row gap-1">
           <InfoTooltip description="Remove action settings" placement="top">
-            <IconButton
-              size="small"
-              sx={{ marginLeft: 'auto' }}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-6 w-6 ml-auto"
               onClick={() => onRemove(index)}
               key="delete-action-button"
             >
-              <DeleteIcon />
-            </IconButton>
+              <DeleteIcon className="h-4 w-4" />
+            </Button>
           </InfoTooltip>
           <InfoTooltip description="Reorder action settings" placement="top">
             <DragButton
               onMoveUp={onMoveUp}
               onMoveDown={onMoveDown}
               menuSx={{
-                '.MuiPaper-root': { backgroundColor: (theme) => theme.palette.background.lighter },
+                '.MuiPaper-root': { backgroundColor: (theme: { palette: { background: { lighter: string } } }) => theme.palette.background.lighter },
               }}
               key="reorder-action-button"
             />
           </InfoTooltip>
-        </Stack>
-      </Stack>
+        </div>
+      </div>
 
       {!isCollapsed && (
-        <Stack spacing={2}>
+        <div className="flex flex-col gap-4">
           <OptionsEditorControl
             label="Enabled"
             control={
               <Switch
                 checked={eventAction?.enabled ?? false}
-                onChange={(e) => onChange(index, { ...eventAction, enabled: e.target.checked })}
+                onCheckedChange={(checked) => onChange(index, { ...eventAction, enabled: checked })}
               />
             }
           />
 
-          <Stack direction="row" spacing={2}>
+          <div className="flex flex-row gap-4">
             <TextField
               label="Action Name"
-              size="small"
               value={eventAction.name}
-              onChange={(e) => onChange(index, { ...eventAction, name: e.target.value })}
-              sx={{ flexGrow: 1 }}
+              onChange={(val) => onChange(index, { ...eventAction, name: val })}
+              className="flex-1"
             />
 
-            <FormControl size="small" sx={{ minWidth: 120 }}>
-              <InputLabel>Icon</InputLabel>
+            <div className="flex flex-col gap-1.5 min-w-[120px]">
+              <Label>Icon</Label>
               <Select
                 value={eventAction.icon || ''}
-                label="Icon"
-                onChange={(e) => onChange(index, { ...eventAction, icon: (e.target.value as ActionIcon) || undefined })}
+                onValueChange={(val) => onChange(index, { ...eventAction, icon: (val as ActionIcon) || undefined })}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {ACTION_ICONS.map((iconOption) => (
-                  <MenuItem key={iconOption.value} value={iconOption.value}>
-                    <Stack direction="row" alignItems="center" spacing={1}>
-                      {iconOption.icon}
-                      <span>{iconOption.label}</span>
-                    </Stack>
-                  </MenuItem>
-                ))}
+                <SelectTrigger>
+                  <SelectValue placeholder="None" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">
+                    <em>None</em>
+                  </SelectItem>
+                  {ACTION_ICONS.map((iconOption) => (
+                    <SelectItem key={iconOption.value} value={iconOption.value}>
+                      <div className="flex flex-row items-center gap-1">
+                        {iconOption.icon}
+                        <span>{iconOption.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
-            </FormControl>
-          </Stack>
+            </div>
+          </div>
 
-          <Stack direction="row" spacing={2}>
+          <div className="flex flex-row gap-4">
             <TextField
               label="Event Name"
-              size="small"
               value={eventAction.eventName}
-              onChange={(e) => onChange(index, { ...eventAction, eventName: e.target.value })}
+              onChange={(val) => onChange(index, { ...eventAction, eventName: val })}
               helperText="Name of the CustomEvent to dispatch (e.g., 'selection-action')"
               fullWidth
             />
 
-            <FormControl size="small" sx={{ flexGrow: 1, minWidth: 280 }}>
-              <InputLabel>Batch Mode</InputLabel>
+            <div className="flex flex-col gap-1.5 flex-1 min-w-[280px]">
+              <Label>Batch Mode</Label>
               <Select
                 value={eventAction.batchMode ?? 'individual'}
-                label="Batch Mode"
-                onChange={(e) => onChange(index, { ...eventAction, batchMode: e.target.value as BatchMode })}
+                onValueChange={(val) => onChange(index, { ...eventAction, batchMode: val as BatchMode })}
               >
-                {BATCH_MODES.map((mode) => (
-                  <MenuItem key={mode.value} value={mode.value}>
-                    {mode.label}
-                  </MenuItem>
-                ))}
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {BATCH_MODES.map((mode) => (
+                    <SelectItem key={mode.value} value={mode.value}>
+                      {mode.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
-            </FormControl>
-          </Stack>
+            </div>
+          </div>
 
-          <FormControl component="fieldset" size="small">
-            <FormLabel component="legend">Template</FormLabel>
-            <RadioGroup row value={hasBodyTemplate ? 'custom' : 'none'} onChange={handleIncludesTemplateChange}>
-              <FormControlLabel value="none" control={<Radio size="small" />} label="None" />
-              <FormControlLabel value="custom" control={<Radio size="small" />} label="JSON template" />
+          <div className="flex flex-col gap-1">
+            <Label>Template</Label>
+            <RadioGroup
+              className="flex flex-row gap-4"
+              value={hasBodyTemplate ? 'custom' : 'none'}
+              onValueChange={handleIncludesTemplateChange}
+            >
+              <div className="flex items-center gap-2">
+                <RadioGroupItem value="none" id="event-template-none" />
+                <Label htmlFor="event-template-none">None</Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <RadioGroupItem value="custom" id="event-template-custom" />
+                <Label htmlFor="event-template-custom">JSON template</Label>
+              </div>
             </RadioGroup>
-          </FormControl>
+          </div>
 
           {hasBodyTemplate && (
             <>
@@ -410,15 +419,12 @@ function EventActionEditor({
 
           <TextField
             label="Confirmation Message (optional)"
-            size="small"
             value={eventAction.confirmMessage || ''}
-            onChange={(e) => onChange(index, { ...eventAction, confirmMessage: e.target.value || undefined })}
+            onChange={(val) => onChange(index, { ...eventAction, confirmMessage: val || undefined })}
             helperText="If set, shows a confirmation dialog before executing the action"
             fullWidth
-            multiline
-            rows={2}
           />
-        </Stack>
+        </div>
       )}
     </DragAndDropElement>
   );
@@ -450,43 +456,43 @@ function WebhookActionEditor({
   );
 
   const handleTextTemplateChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      onChange(index, { ...webhookAction, bodyTemplate: event.target.value || undefined });
+    (val: string) => {
+      onChange(index, { ...webhookAction, bodyTemplate: val || undefined });
     },
     [index, onChange, webhookAction]
   );
 
   const handleContentTypeChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const nextContentType = event.target.value as ContentType;
-      if (nextContentType === contentTypeValue) {
+    (nextContentType: string) => {
+      const ct = nextContentType as ContentType;
+      if (ct === contentTypeValue) {
         return;
       }
 
       if (hasBodyTemplate) {
-        setPendingChange({ kind: 'contentType', value: nextContentType });
+        setPendingChange({ kind: 'contentType', value: ct });
         return;
       }
 
-      onChange(index, { ...webhookAction, contentType: nextContentType });
+      onChange(index, { ...webhookAction, contentType: ct });
     },
     [contentTypeValue, hasBodyTemplate, index, onChange, webhookAction]
   );
 
   const handleMethodChange = useCallback(
-    (event: SelectChangeEvent<HttpMethod>) => {
-      const nextMethod = event.target.value as HttpMethod;
-      if (nextMethod === webhookAction.method) {
+    (nextMethod: string) => {
+      const method = nextMethod as HttpMethod;
+      if (method === webhookAction.method) {
         return;
       }
 
-      const nextSupportsBody = BODY_METHODS.includes(nextMethod);
+      const nextSupportsBody = BODY_METHODS.includes(method);
       if (!nextSupportsBody && hasBodyTemplate) {
-        setPendingChange({ kind: 'method', value: nextMethod });
+        setPendingChange({ kind: 'method', value: method });
         return;
       }
 
-      onChange(index, { ...webhookAction, method: nextMethod });
+      onChange(index, { ...webhookAction, method });
     },
     [hasBodyTemplate, index, onChange, webhookAction]
   );
@@ -521,145 +527,161 @@ function WebhookActionEditor({
 
   return (
     <DragAndDropElement data={webhookAction as unknown as Record<string, unknown>}>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" gap={4}>
-        <Stack direction="row" gap={1}>
-          <IconButton
+      <div className="flex flex-row items-center justify-between gap-4">
+        <div className="flex flex-row gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6"
             data-testid={`column-toggle#${webhookAction.name}`}
-            size="small"
             onClick={() => setIsCollapsed(!isCollapsed)}
           >
-            {isCollapsed ? <ChevronRight /> : <ChevronDown />}
-          </IconButton>
-          <Typography variant="overline" component="h4" sx={{ textTransform: 'none' }}>
+            {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </Button>
+          <span className="text-xs uppercase tracking-wide font-medium self-center">
             WEBHOOK ACTION: <strong>{webhookAction.name}</strong>
-          </Typography>
-        </Stack>
+          </span>
+        </div>
 
-        <Stack direction="row" gap={1}>
+        <div className="flex flex-row gap-1">
           <InfoTooltip description="Remove action settings" placement="top">
-            <IconButton
-              size="small"
-              sx={{ marginLeft: 'auto' }}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-6 w-6 ml-auto"
               onClick={() => onRemove(index)}
               key="delete-action-button"
             >
-              <DeleteIcon />
-            </IconButton>
+              <DeleteIcon className="h-4 w-4" />
+            </Button>
           </InfoTooltip>
           <InfoTooltip description="Reorder action settings" placement="top">
             <DragButton
               onMoveUp={onMoveUp}
               onMoveDown={onMoveDown}
               menuSx={{
-                '.MuiPaper-root': { backgroundColor: (theme) => theme.palette.background.lighter },
+                '.MuiPaper-root': { backgroundColor: (theme: { palette: { background: { lighter: string } } }) => theme.palette.background.lighter },
               }}
               key="reorder-action-button"
             />
           </InfoTooltip>
-        </Stack>
-      </Stack>
+        </div>
+      </div>
 
       {!isCollapsed && (
-        <Stack spacing={2}>
+        <div className="flex flex-col gap-4">
           <OptionsEditorControl
             label="Enabled"
             control={
               <Switch
                 checked={action?.enabled ?? false}
-                onChange={(e) => onChange(index, { ...webhookAction, enabled: e.target.checked })}
+                onCheckedChange={(checked) => onChange(index, { ...webhookAction, enabled: checked })}
               />
             }
           />
 
-          <Stack direction="row" spacing={2}>
+          <div className="flex flex-row gap-4">
             <TextField
               label="Action Name"
-              size="small"
               value={webhookAction.name}
-              onChange={(e) => onChange(index, { ...webhookAction, name: e.target.value })}
-              sx={{ flexGrow: 1 }}
+              onChange={(val) => onChange(index, { ...webhookAction, name: val })}
+              className="flex-1"
             />
 
-            <FormControl size="small" sx={{ minWidth: 120 }}>
-              <InputLabel>Icon</InputLabel>
+            <div className="flex flex-col gap-1.5 min-w-[120px]">
+              <Label>Icon</Label>
               <Select
                 value={webhookAction.icon || ''}
-                label="Icon"
-                onChange={(e) =>
-                  onChange(index, { ...webhookAction, icon: (e.target.value as ActionIcon) || undefined })
+                onValueChange={(val) =>
+                  onChange(index, { ...webhookAction, icon: (val as ActionIcon) || undefined })
                 }
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {ACTION_ICONS.map((iconOption) => (
-                  <MenuItem key={iconOption.value} value={iconOption.value}>
-                    <Stack direction="row" alignItems="center" spacing={1}>
-                      {iconOption.icon}
-                      <span>{iconOption.label}</span>
-                    </Stack>
-                  </MenuItem>
-                ))}
+                <SelectTrigger>
+                  <SelectValue placeholder="None" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">
+                    <em>None</em>
+                  </SelectItem>
+                  {ACTION_ICONS.map((iconOption) => (
+                    <SelectItem key={iconOption.value} value={iconOption.value}>
+                      <div className="flex flex-row items-center gap-1">
+                        {iconOption.icon}
+                        <span>{iconOption.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
-            </FormControl>
-          </Stack>
+            </div>
+          </div>
 
           <TextField
             label="URL"
-            size="small"
             value={webhookAction.url}
-            onChange={(e) => onChange(index, { ...webhookAction, url: e.target.value })}
+            onChange={(val) => onChange(index, { ...webhookAction, url: val })}
             helperText={URL_HELPER_TEXT}
             fullWidth
           />
 
-          <Stack direction="row" spacing={2}>
-            <FormControl size="small" sx={{ minWidth: 120 }}>
-              <InputLabel>Method</InputLabel>
-              <Select value={webhookAction.method} label="Method" onChange={handleMethodChange}>
-                {HTTP_METHODS.map((method) => (
-                  <MenuItem key={method} value={method}>
-                    {method}
-                  </MenuItem>
-                ))}
+          <div className="flex flex-row gap-4">
+            <div className="flex flex-col gap-1.5 min-w-[120px]">
+              <Label>Method</Label>
+              <Select value={webhookAction.method} onValueChange={handleMethodChange}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {HTTP_METHODS.map((method) => (
+                    <SelectItem key={method} value={method}>
+                      {method}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
-            </FormControl>
+            </div>
 
-            <FormControl size="small" sx={{ flexGrow: 1 }}>
-              <InputLabel>Batch Mode</InputLabel>
+            <div className="flex flex-col gap-1.5 flex-1">
+              <Label>Batch Mode</Label>
               <Select
                 value={webhookAction.batchMode}
-                label="Batch Mode"
-                onChange={(e) => onChange(index, { ...webhookAction, batchMode: e.target.value as BatchMode })}
+                onValueChange={(val) => onChange(index, { ...webhookAction, batchMode: val as BatchMode })}
               >
-                {BATCH_MODES.map((mode) => (
-                  <MenuItem key={mode.value} value={mode.value}>
-                    {mode.label}
-                  </MenuItem>
-                ))}
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {BATCH_MODES.map((mode) => (
+                    <SelectItem key={mode.value} value={mode.value}>
+                      {mode.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
-            </FormControl>
-          </Stack>
+            </div>
+          </div>
 
-          <FormControl component="fieldset" size="small">
-            <FormLabel component="legend">Content Type</FormLabel>
-            <RadioGroup row value={contentTypeValue} onChange={handleContentTypeChange}>
+          <div className="flex flex-col gap-1">
+            <Label>Content Type</Label>
+            <RadioGroup
+              className="flex flex-row gap-4"
+              value={contentTypeValue}
+              onValueChange={handleContentTypeChange}
+            >
               {CONTENT_TYPES.map((option) => (
-                <FormControlLabel
-                  key={option.value}
-                  value={option.value}
-                  control={<Radio size="small" />}
-                  label={option.label}
-                />
+                <div key={option.value} className="flex items-center gap-2">
+                  <RadioGroupItem value={option.value} id={`content-type-${option.value}-${index}`} />
+                  <Label htmlFor={`content-type-${option.value}-${index}`}>{option.label}</Label>
+                </div>
               ))}
             </RadioGroup>
-          </FormControl>
+          </div>
 
           {supportsBody && contentTypeValue !== 'none' && (
-            <Box>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+            <div>
+              <p className="text-sm text-muted-foreground mb-1">
                 {contentTypeValue === 'json' ? 'Body Template (JSON)' : 'Body Template (Text)'}
-              </Typography>
+              </p>
               <InterpolationHelper batchMode={webhookAction.batchMode} />
               {contentTypeValue === 'json' ? (
                 <JSONEditor
@@ -673,37 +695,28 @@ function WebhookActionEditor({
                   value={webhookAction.bodyTemplate || ''}
                   onChange={handleTextTemplateChange}
                   fullWidth
-                  multiline
-                  rows={5}
                 />
               )}
-            </Box>
+            </div>
           )}
 
           <TextField
             label="Confirmation Message (optional)"
-            size="small"
             value={webhookAction.confirmMessage || ''}
-            onChange={(e) => onChange(index, { ...webhookAction, confirmMessage: e.target.value || undefined })}
+            onChange={(val) => onChange(index, { ...webhookAction, confirmMessage: val || undefined })}
             helperText="If set, shows a confirmation dialog before executing the action"
             fullWidth
-            multiline
-            rows={2}
           />
-        </Stack>
+        </div>
       )}
 
-      <Dialog open={Boolean(pendingChange)} onClose={handleConfirmClose} aria-labelledby="selection-body-clear-title">
-        <DialogTitle id="selection-body-clear-title">Remove Body Template?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{BODY_CLEAR_CONFIRM_MESSAGE}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleConfirmClose}>Cancel</Button>
-          <Button onClick={handleConfirmApply} variant="contained" color="primary">
-            Continue
-          </Button>
-        </DialogActions>
+      <Dialog open={Boolean(pendingChange)} onClose={handleConfirmClose}>
+        <Dialog.Header>Remove Body Template?</Dialog.Header>
+        <Dialog.Content>{BODY_CLEAR_CONFIRM_MESSAGE}</Dialog.Content>
+        <Dialog.Actions>
+          <Dialog.PrimaryButton onClick={handleConfirmApply}>Continue</Dialog.PrimaryButton>
+          <Dialog.SecondaryButton onClick={handleConfirmClose}>Cancel</Dialog.SecondaryButton>
+        </Dialog.Actions>
       </Dialog>
     </DragAndDropElement>
   );
@@ -720,19 +733,19 @@ export function ItemSelectionActionsEditor({
     [actionOptions]
   );
 
-  const handleEnableActionsChange: SwitchProps['onChange'] = (_: unknown, checked: boolean) => {
+  const handleEnableActionsChange = (checked: boolean) => {
     onChangeActions({ ...actions, enabled: checked ? true : undefined });
   };
 
-  const handleEnableSelectionChange: SwitchProps['onChange'] = (_: unknown, checked: boolean) => {
+  const handleEnableSelectionChange = (checked: boolean) => {
     onChangeSelection({ ...selectionOptions, enabled: checked ? true : undefined });
   };
 
-  const handleDisplayInHeaderChange: SwitchProps['onChange'] = (_: unknown, checked: boolean) => {
+  const handleDisplayInHeaderChange = (checked: boolean) => {
     onChangeActions({ ...actions, displayInHeader: checked ? true : undefined });
   };
 
-  const handleDisplayWithItemChange: SwitchProps['onChange'] = (_: unknown, checked: boolean) => {
+  const handleDisplayWithItemChange = (checked: boolean) => {
     onChangeActions({ ...actions, displayWithItem: checked ? true : undefined });
   };
 
@@ -770,38 +783,38 @@ export function ItemSelectionActionsEditor({
   });
 
   return (
-    <Stack spacing={1}>
+    <div className="flex flex-col gap-1">
       <OptionsEditorControl
         label="Enable Item Selection"
         description="Allow selecting items"
-        control={<Switch checked={selectionOptions?.enabled ?? false} onChange={handleEnableSelectionChange} />}
+        control={<Switch checked={selectionOptions?.enabled ?? false} onCheckedChange={handleEnableSelectionChange} />}
       />
       <OptionsEditorControl
         label="Enable Item Actions"
         description="Allow executing actions on selected items"
-        control={<Switch checked={actionOptions?.enabled ?? false} onChange={handleEnableActionsChange} />}
+        control={<Switch checked={actionOptions?.enabled ?? false} onCheckedChange={handleEnableActionsChange} />}
       />
       <OptionsEditorControl
         label="Display Actions in Panel Header"
         description="Show action buttons in the panel header when items are selected"
-        control={<Switch checked={actionOptions?.displayInHeader ?? false} onChange={handleDisplayInHeaderChange} />}
+        control={<Switch checked={actionOptions?.displayInHeader ?? false} onCheckedChange={handleDisplayInHeaderChange} />}
       />
       <OptionsEditorControl
         label="Display Actions with Each Item"
         description="Show action buttons alongside each item when selected"
-        control={<Switch checked={actionOptions?.displayWithItem ?? false} onChange={handleDisplayWithItemChange} />}
+        control={<Switch checked={actionOptions?.displayWithItem ?? false} onCheckedChange={handleDisplayWithItemChange} />}
       />
       <OptionsEditorGroup title="Actions">
-        <Stack spacing={3}>
+        <div className="flex flex-col gap-6">
           {!actions.actionsList || actions.actionsList.length === 0 ? (
-            <Typography variant="body2" color="text.secondary" fontStyle="italic">
+            <p className="text-sm text-muted-foreground italic">
               No actions defined. Add an action to enable triggering events or webhooks on selected data.
-            </Typography>
+            </p>
           ) : (
-            <Stack spacing={1} border="none">
+            <div className="flex flex-col gap-1">
               {actions.actionsList &&
                 actions.actionsList.map((action, index) => (
-                  <Box key={index} borderBottom={1} borderColor={(theme) => theme.palette.divider} pb={1}>
+                  <div key={index} className="border-b border-border pb-1">
                     {action.type === 'event' ? (
                       <EventActionEditor
                         action={action}
@@ -829,21 +842,23 @@ export function ItemSelectionActionsEditor({
                         }
                       />
                     )}
-                  </Box>
+                  </div>
                 ))}
-            </Stack>
+            </div>
           )}
 
-          <Stack direction="row" spacing={1}>
-            <Button variant="contained" startIcon={<PlusIcon />} onClick={handleAddEventAction}>
+          <div className="flex flex-row gap-1">
+            <Button variant="default" className="flex items-center gap-1" onClick={handleAddEventAction}>
+              <PlusIcon className="h-4 w-4" />
               Add Event Action
             </Button>
-            <Button variant="contained" startIcon={<PlusIcon />} onClick={handleAddWebhookAction}>
+            <Button variant="default" className="flex items-center gap-1" onClick={handleAddWebhookAction}>
+              <PlusIcon className="h-4 w-4" />
               Add Webhook Action
             </Button>
-          </Stack>
-        </Stack>
+          </div>
+        </div>
       </OptionsEditorGroup>
-    </Stack>
+    </div>
   );
 }

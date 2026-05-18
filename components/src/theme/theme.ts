@@ -11,99 +11,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { createTheme, PaletteMode, ThemeOptions, Theme } from '@mui/material';
-import { MuiAlert } from './component-overrides/alert';
-import { MuiPaper } from './component-overrides/paper';
-import { getPaletteOptions } from './palette';
-import { typography } from './typography';
+export type PaletteMode = 'light' | 'dark';
 
-const getModalBackgroundStyle = ({
-  theme,
-}: {
-  theme: Omit<Theme, 'components'>;
-}): { backgroundImage?: string; backgroundColor?: string } => {
-  const backgroundStyle =
-    theme.palette.mode === 'light'
-      ? {}
-      : {
-          backgroundImage: 'unset',
-          backgroundColor: theme.palette.designSystem.grey[800],
-        };
-  return {
-    ...backgroundStyle,
-  };
-};
-
-/**
- * Gets theme used by all components for the provided mode. For more details, see:
- *   - Base colors, typography, sizing - go/chrono-ui-theme
- *   - Material UI defaults: https://material-ui.com/customization/default-theme/
- *   - Material UI variables: https://material-ui.com/customization/theming/#theme-configuration-variables
- *   - Material UI global overrides and default props: https://material-ui.com/customization/globals/#css
- *
- * Need to reinstantiate the theme everytime to support switching between light and dark themes
- * https://github.com/mui-org/material-ui/issues/18831
- *
- * Enable disableBodyOverride to prevent the theme from applying color scheme to the body element.
- */
-export function getTheme(
-  mode: PaletteMode,
-  options: Parameters<typeof createTheme>[0] = {},
-  disableBodyOverride: boolean = false
-): Theme {
-  return createTheme({
-    palette: getPaletteOptions(mode),
-    typography,
-    mixins: {},
-    components: getComponents(mode, disableBodyOverride),
-    ...options,
-  });
+export interface PersesTheme {
+  mode: PaletteMode;
 }
 
-// Overrides for component default prop values and styles go here
-function getComponents(mode: PaletteMode, disableBodyOverride: boolean): ThemeOptions['components'] {
-  const components: ThemeOptions['components'] = {
-    MuiAlert,
-    MuiFormControl: {
-      defaultProps: {
-        size: 'small',
-      },
-    },
-    MuiPaper,
-    MuiTextField: {
-      defaultProps: {
-        size: 'small',
-      },
-    },
-    MuiDrawer: {
-      styleOverrides: {
-        paper: getModalBackgroundStyle,
-      },
-    },
-    MuiDialog: {
-      styleOverrides: {
-        paper: getModalBackgroundStyle,
-      },
-    },
-    MuiPopover: {
-      styleOverrides: {
-        paper: getModalBackgroundStyle,
-      },
-    },
-  };
-
-  if (disableBodyOverride) {
-    return components;
-  }
-
-  return {
-    MuiCssBaseline: {
-      styleOverrides: {
-        body: {
-          colorScheme: mode,
-        },
-      },
-    },
-    ...components,
-  };
+/**
+ * Returns a minimal theme descriptor. All actual colours are resolved through
+ * CSS custom-properties defined in globals.css — call this only when you need
+ * the current mode string (e.g. for third-party libraries like ECharts).
+ */
+export function getTheme(mode: PaletteMode): PersesTheme {
+  return { mode };
 }

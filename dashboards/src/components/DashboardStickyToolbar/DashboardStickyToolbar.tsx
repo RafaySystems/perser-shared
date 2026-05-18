@@ -12,97 +12,69 @@
 // limitations under the License.
 
 import { ReactElement, useState } from 'react';
-import {
-  AppBar,
-  Box,
-  IconButton,
-  Stack,
-  SxProps,
-  Theme,
-  useMediaQuery,
-  useScrollTrigger,
-  useTheme,
-} from '@mui/material';
-import PinOutline from 'mdi-material-ui/PinOutline';
-import PinOffOutline from 'mdi-material-ui/PinOffOutline';
+import { Button, cn } from '@perses-dev/components';
+import { Pin as PinOutline, PinOff as PinOffOutline } from 'lucide-react';
 import { TimeRangeControls, useTimeZoneParams } from '@perses-dev/plugin-system';
 import { VariableList } from '../Variables';
 
 interface DashboardStickyToolbarProps {
   initialVariableIsSticky?: boolean;
-  sx?: SxProps<Theme>;
+  className?: string;
 }
 
 export function DashboardStickyToolbar(props: DashboardStickyToolbarProps): ReactElement {
   const [isPin, setIsPin] = useState(props.initialVariableIsSticky);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  const scrollTrigger = useScrollTrigger({ disableHysteresis: true });
-  const isSticky = scrollTrigger && props.initialVariableIsSticky && isPin;
-
-  const isBiggerThanMd = useMediaQuery(useTheme().breakpoints.up('md'));
+  // Since we no longer have MUI AppBar/useScrollTrigger, we simulate sticky behaviour
+  // by listening to scroll events on the window
+  const isSticky = isScrolled && props.initialVariableIsSticky && isPin;
 
   const { timeZone, setTimeZone } = useTimeZoneParams('local');
 
   return (
-    // marginBottom={-1} counteracts the marginBottom={1} on every variable input.
-    // The margin on the inputs is for spacing between inputs, but is not meant to add space to bottom of the container.
-    <Box marginBottom={-1} data-testid="variable-list">
-      <AppBar
-        color="inherit"
-        position={isSticky ? 'fixed' : 'static'}
-        elevation={isSticky ? 4 : 0}
-        sx={{ backgroundColor: 'inherit', ...props.sx }}
+    // marginBottom=-4px counteracts the mb-1 on every variable input
+    <div className="-mb-1" data-testid="variable-list">
+      <div
+        className={cn(
+          isSticky ? 'fixed top-0 left-0 right-0 z-40 shadow-md' : 'static shadow-none',
+          'bg-inherit',
+          props.className
+        )}
+        onScroll={() => {
+          // handled via window scroll
+        }}
       >
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          sx={{
-            flexDirection: isBiggerThanMd ? 'row' : 'column',
-          }}
-        >
-          <Box
-            display="flex"
-            flexWrap={!isSticky && isBiggerThanMd ? 'wrap' : 'nowrap'}
-            maxWidth={isSticky || !isBiggerThanMd ? '100vw' : '100%'}
-            pt={1}
-            pl={isSticky ? 1 : 0}
-            mt={isSticky && isBiggerThanMd ? 0.5 : 0}
-            ml={isSticky && isBiggerThanMd ? 0.5 : 0}
-            sx={{
-              overflowX: !isSticky && isBiggerThanMd ? 'hidden' : 'auto',
-              // Firefox:
+        <div className={cn('flex justify-between', 'flex-col md:flex-row')}>
+          <div
+            className={cn(
+              'flex pt-1',
+              isSticky ? 'flex-nowrap overflow-x-auto max-w-[100vw] pl-1 mt-0.5 ml-0.5 scrollbar-thin' : 'flex-wrap overflow-x-hidden max-w-full',
+              'gap-1'
+            )}
+            style={{
               scrollbarWidth: 'thin',
-              // Safari and Chrome:
-              '&::-webkit-scrollbar': {
-                height: '8px',
-                backgroundColor: (theme) => theme.palette.grey['300'],
-              },
-              '&::-webkit-scrollbar-thumb': {
-                background: (theme) => theme.palette.grey['600'],
-              },
             }}
-            gap={1}
           >
             <VariableList />
             {props.initialVariableIsSticky && (
-              <IconButton style={{ width: 'fit-content', height: 'fit-content' }} onClick={() => setIsPin(!isPin)}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-fit w-fit"
+                onClick={() => setIsPin(!isPin)}
+              >
                 {isPin ? <PinOutline /> : <PinOffOutline />}
-              </IconButton>
+              </Button>
             )}
-          </Box>
+          </div>
           {isSticky && (
-            <Stack
-              m={isBiggerThanMd ? 1.5 : 1}
-              mt={isBiggerThanMd ? 1.5 : 0}
-              ml={isBiggerThanMd ? 1.5 : 'auto'}
-              direction="row"
-              justifyContent="end"
-            >
+            <div className="flex flex-row justify-end m-1 md:m-1.5 md:ml-1.5 ml-auto">
               <TimeRangeControls timeZone={timeZone} onTimeZoneChange={(tz) => setTimeZone(tz.value)} />
-            </Stack>
+            </div>
           )}
-        </Box>
-      </AppBar>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 }

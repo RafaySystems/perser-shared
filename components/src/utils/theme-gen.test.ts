@@ -11,12 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { createTheme } from '@mui/material';
 import { EChartsTheme, PersesChartsTheme } from '../model';
 import { generateChartsTheme } from './theme-gen';
 
 describe('generateChartsTheme', () => {
-  const muiTheme = createTheme({});
   const echartsThemeOverrides: EChartsTheme = {
     legend: {
       textStyle: {
@@ -28,7 +26,7 @@ describe('generateChartsTheme', () => {
       smooth: true,
     },
   };
-  const chartsTheme: PersesChartsTheme = generateChartsTheme(muiTheme, { echartsTheme: echartsThemeOverrides });
+  const chartsTheme: PersesChartsTheme = generateChartsTheme('light', { echartsTheme: echartsThemeOverrides });
 
   it('should return perses specific charts theme from converted MUI theme', () => {
     expect(chartsTheme).toMatchInlineSnapshot(`

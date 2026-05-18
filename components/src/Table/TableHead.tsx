@@ -11,11 +11,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { TableHead as MuiTableHead, TableHeadProps as MuiTableHeadProps } from '@mui/material';
 import { forwardRef } from 'react';
+import { cn } from '../lib/utils';
 
-type TableHeadProps = MuiTableHeadProps;
+type TableHeadProps = React.HTMLAttributes<HTMLTableSectionElement>;
 
-export const TableHead = forwardRef<HTMLTableSectionElement, TableHeadProps>(function TableHead(props, ref) {
-  return <MuiTableHead {...props} ref={ref} />;
+export const TableHead = forwardRef<HTMLTableSectionElement, TableHeadProps>(function TableHead(
+  { className, ...props },
+  ref
+) {
+  return <thead ref={ref} className={cn('[&_tr]:border-b', className)} {...props} />;
 });

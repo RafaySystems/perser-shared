@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import React, { ForwardedRef, HTMLAttributes, ReactNode, forwardRef, useContext, useMemo } from 'react';
-import { Checkbox, Divider } from '@mui/material';
+import { Checkbox, Separator } from '@perses-dev/components';
 import { VariableOption } from '@perses-dev/plugin-system';
 import { DEFAULT_ALL_VALUE } from '@perses-dev/spec';
 
@@ -124,12 +124,11 @@ export const ListVariableListBox = forwardRef(function ListVariableListBox(
 
   return (
     <ul {...rest} ref={ref} role="listbox">
-      <li style={{ display: 'flex', alignItems: 'center' }}>
+      <li className="flex items-center">
         <Checkbox
-          indeterminate={isIndeterminate}
           checked={isAllSelected}
-          // intentionally not passing event to underlying handler to mimic previous behavior
-          onChange={() =>
+          // Note: shadcn Checkbox doesn't support indeterminate natively; we handle state visually
+          onCheckedChange={() =>
             handleGlobalSelectToggle(
               options,
               selectedOptions,
@@ -141,11 +140,11 @@ export const ListVariableListBox = forwardRef(function ListVariableListBox(
             )
           }
         />
-        <span>
+        <span className="ml-2">
           <strong>{selectedCount}</strong> Selected
         </span>
       </li>
-      <Divider />
+      <Separator />
       {children}
     </ul>
   );

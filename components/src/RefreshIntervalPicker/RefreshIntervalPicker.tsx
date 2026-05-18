@@ -11,10 +11,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, FormControl, MenuItem, Select } from '@mui/material';
 import { DurationString } from '@perses-dev/spec';
 import { ReactElement, useMemo } from 'react';
 import { TimeOption } from '../model';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
 
 interface RefreshIntervalPickerProps {
   timeOptions: TimeOption[];
@@ -29,35 +35,31 @@ export function RefreshIntervalPicker(props: RefreshIntervalPickerProps): ReactE
   // If the dashboard refresh interval is not provided in timeOptions, it will create a specific option for the select
   const customInterval = useMemo(() => {
     if (value && !timeOptions.some((option) => option.value.pastDuration === value)) {
-      return <MenuItem value={value}>{value}</MenuItem>;
+      return <SelectItem value={value}>{value}</SelectItem>;
     }
   }, [timeOptions, value]);
 
   return (
-    <FormControl>
-      <Box>
-        <Select
-          id="refreshInterval"
-          value={value}
-          onChange={(event) => {
-            const duration = event.target.value as DurationString;
-            onChange(duration);
-          }}
-          inputProps={{
-            'aria-label': `Select refresh interval. Currently set to ${value}`,
-          }}
-          sx={{
-            '.MuiSelect-select': height ? { lineHeight: height, paddingY: 0 } : {},
-          }}
-        >
-          {timeOptions.map((item, idx) => (
-            <MenuItem key={idx} value={item.value.pastDuration}>
-              {item.display}
-            </MenuItem>
-          ))}
-          {customInterval}
-        </Select>
-      </Box>
-    </FormControl>
+    <Select
+      value={value}
+      onValueChange={(val) => {
+        onChange(val as DurationString);
+      }}
+    >
+      <SelectTrigger
+        aria-label={`Select refresh interval. Currently set to ${value}`}
+        style={height ? { lineHeight: height, paddingTop: 0, paddingBottom: 0 } : undefined}
+      >
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {timeOptions.map((item, idx) => (
+          <SelectItem key={idx} value={item.value.pastDuration}>
+            {item.display}
+          </SelectItem>
+        ))}
+        {customInterval}
+      </SelectContent>
+    </Select>
   );
 }

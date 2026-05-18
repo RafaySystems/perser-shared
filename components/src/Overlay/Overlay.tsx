@@ -11,20 +11,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Skeleton, SkeletonOwnProps, Stack, Typography } from '@mui/material';
 import { ReactElement } from 'react';
+import { Skeleton } from '../ui/skeleton';
 
 interface TextOverlayProps {
   message: string;
 }
 
-export function TextOverlay(props: TextOverlayProps): ReactElement {
-  const { message } = props;
-
+export function TextOverlay({ message }: TextOverlayProps): ReactElement {
   return (
-    <Stack sx={{ height: '100%', alignItems: 'center', justifyContent: 'center' }}>
-      <Typography>{message}</Typography>
-    </Stack>
+    <div className="flex h-full items-center justify-center">
+      <p className="text-sm text-muted-foreground">{message}</p>
+    </div>
   );
 }
 
@@ -32,22 +30,14 @@ interface NoDataOverlayProps {
   resource: string;
 }
 
-export function NoDataOverlay(props: NoDataOverlayProps): ReactElement {
-  const { resource } = props;
-
+export function NoDataOverlay({ resource }: NoDataOverlayProps): ReactElement {
   return <TextOverlay message={`No ${resource}`} />;
 }
 
-interface LoadingOverlayProps {
-  variant?: SkeletonOwnProps['variant'];
-}
-
-export function LoadingOverlay(props: LoadingOverlayProps): ReactElement {
-  const { variant = 'rounded' } = props;
-
+export function LoadingOverlay(): ReactElement {
   return (
-    <Stack sx={{ height: '100%', alignItems: 'center', justifyContent: 'center', px: 1 }}>
-      <Skeleton variant={variant} width="100%" height="30%" aria-label="Loading..." />
-    </Stack>
+    <div className="flex h-full items-center justify-center px-1">
+      <Skeleton className="h-[30%] w-full rounded-md" aria-label="Loading..." />
+    </div>
   );
 }

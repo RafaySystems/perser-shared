@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Theme } from '@mui/material';
 import {
   CursorCoordinates,
   CursorData,
@@ -22,9 +21,6 @@ import {
   TOOLTIP_PADDING,
 } from './tooltip-model';
 
-/**
- * Determine position of tooltip depending on chart dimensions and the number of focused series
- */
 export function assembleTransform(
   mousePos: CursorData['coords'],
   pinnedPos: CursorCoordinates | null,
@@ -32,63 +28,39 @@ export function assembleTransform(
   tooltipWidth: number,
   containerElement?: Element | null
 ): string | undefined {
-  if (mousePos === null) {
-    return undefined;
-  }
+  if (mousePos === null) return undefined;
 
   const cursorPaddingX = 32;
   const cursorPaddingY = 16;
 
-  if (pinnedPos !== null) {
-    mousePos = pinnedPos;
-  }
-
+  if (pinnedPos !== null) mousePos = pinnedPos;
   if (mousePos.plotCanvas.x === undefined) return undefined;
 
-  let x = mousePos.page.x + cursorPaddingX; // Default to right side of the cursor
+  let x = mousePos.page.x + cursorPaddingX;
   let y = mousePos.page.y + cursorPaddingY;
 
-  // If containerElement is defined, adjust coordinates relative to the container
   if (containerElement) {
     const containerRect = containerElement.getBoundingClientRect();
     x = x - containerRect.left + containerElement.scrollLeft;
     y = y - containerRect.top + containerElement.scrollTop;
-
-    // Ensure tooltip does not go out of the container's bottom
     const containerBottom = containerRect.top + containerElement.scrollHeight;
     if (y + tooltipHeight > containerBottom) {
       y = Math.max(containerBottom - tooltipHeight - cursorPaddingY, TOOLTIP_PADDING / 2);
     }
   } else {
-    // Ensure tooltip does not go out of the screen on the bottom
     if (y + tooltipHeight > window.innerHeight + window.scrollY) {
       y = Math.max(window.innerHeight + window.scrollY - tooltipHeight - cursorPaddingY, TOOLTIP_PADDING / 2);
     }
   }
 
-  // Ensure tooltip does not go out of the screen on the right
-  if (x + tooltipWidth > window.innerWidth) {
-    x = mousePos.page.x - tooltipWidth - cursorPaddingX; // Move to the left of the cursor
-  }
-
-  // Ensure tooltip does not go out of the screen on the left
-  if (x < cursorPaddingX) {
-    x = cursorPaddingX;
-  }
-
-  // Ensure tooltip does not go out of the screen on the top
-  if (y < TOOLTIP_PADDING / 2) {
-    y = TOOLTIP_PADDING / 2;
-  }
+  if (x + tooltipWidth > window.innerWidth) x = mousePos.page.x - tooltipWidth - cursorPaddingX;
+  if (x < cursorPaddingX) x = cursorPaddingX;
+  if (y < TOOLTIP_PADDING / 2) y = TOOLTIP_PADDING / 2;
 
   return `translate3d(${x}px, ${y}px, 0)`;
 }
 
-/**
- * Helper for tooltip positioning styles
- */
 export function getTooltipStyles(
-  theme: Theme,
   pinnedPos: CursorCoordinates | null,
   maxHeight?: number
 ): Record<string, unknown> {
@@ -101,18 +73,14 @@ export function getTooltipStyles(
     position: 'absolute',
     top: 0,
     left: 0,
-    backgroundColor: theme.palette.designSystem?.grey[800] ?? TOOLTIP_BG_COLOR_FALLBACK,
+    backgroundColor: TOOLTIP_BG_COLOR_FALLBACK,
     borderRadius: '6px',
     color: '#fff',
     fontSize: '11px',
     visibility: 'visible',
     opacity: 1,
     transition: 'all 0.1s ease-out',
-    // Ensure pinned tooltip shows behind edit panel drawer and sticky header
-    zIndex: pinnedPos !== null ? 'auto' : theme.zIndex.tooltip,
+    zIndex: pinnedPos !== null ? 'auto' : 1500,
     overflow: 'hidden',
-    '&:hover': {
-      overflowY: 'auto',
-    },
   };
 }

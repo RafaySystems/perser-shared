@@ -11,5 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export * from './Table';
+// Exported as DataTable to avoid collision with shadcn's Table primitive
+export { Table as DataTable } from './Table';
 export * from './model/table-model';

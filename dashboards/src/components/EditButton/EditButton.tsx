@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button } from '@mui/material';
-import PencilIcon from 'mdi-material-ui/PencilOutline';
+import { Pencil as PencilIcon } from 'lucide-react';
+import { Button, ButtonProps } from '@perses-dev/components';
 import { ReactElement } from 'react';
 
 export interface EditButtonProps {
@@ -25,17 +25,19 @@ export interface EditButtonProps {
    * Handler that puts the dashboard into editing mode.
    */
   onClick: () => void;
+
+  variant?: ButtonProps['variant'];
+  color?: string;
 }
 
-export const EditButton = ({ label = 'Edit', onClick }: EditButtonProps): ReactElement => {
+export const EditButton = ({ label = 'Edit', onClick, variant = 'outline' }: EditButtonProps): ReactElement => {
   return (
     <Button
       onClick={onClick}
-      startIcon={<PencilIcon />}
-      variant="outlined"
-      color="secondary"
-      sx={{ whiteSpace: 'nowrap', minWidth: 'auto' }}
+      variant={variant}
+      className="whitespace-nowrap min-w-0"
     >
+      <PencilIcon className="mr-0.5" />
       {label}
     </Button>
   );

@@ -12,15 +12,22 @@
 // limitations under the License.
 
 import { ReactElement, useCallback, useEffect, useState } from 'react';
-import { Box, Button, Grid, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { PanelDefinition, PanelEditorValues } from '@perses-dev/spec';
 import {
+  Button,
   DiscardChangesConfirmationDialog,
   ErrorAlert,
   ErrorBoundary,
   Action,
   getTitleAction,
   getSubmitText,
+  Input,
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@perses-dev/components';
 import { PluginKindSelect, usePluginEditor, useValidationSchemas } from '@perses-dev/plugin-system';
 import { Controller, FormProvider, SubmitHandler, useForm, useWatch } from 'react-hook-form';
@@ -136,96 +143,105 @@ export function PanelEditorForm(props: PanelEditorFormProps): ReactElement {
   return (
     <FormProvider {...form}>
       <PanelEditorProvider>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            padding: (theme) => theme.spacing(1, 2),
-            borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
-          }}
-        >
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Typography variant="h2">{titleAction} Panel</Typography>
-            {panelKey && <Typography variant="subtitle1">(ID: {panelKey})</Typography>}
-          </Stack>
-          <Stack direction="row" spacing={1} marginLeft="auto">
-            <Button variant="contained" disabled={!form.formState.isValid} onClick={handleSubmit}>
+        <div className="flex items-center px-4 py-2 border-b">
+          <div className="flex flex-row gap-2 items-center">
+            <h2 className="text-base font-semibold">{titleAction} Panel</h2>
+            {panelKey && <span className="text-sm text-muted-foreground">(ID: {panelKey})</span>}
+          </div>
+          <div className="flex flex-row gap-2 ml-auto">
+            <Button variant="default" disabled={!form.formState.isValid} onClick={handleSubmit}>
               {submitText}
             </Button>
-            <Button color="secondary" variant="outlined" onClick={handleCancel}>
+            <Button variant="outline" onClick={handleCancel}>
               Cancel
             </Button>
-          </Stack>
-        </Box>
-        <Box id={panelEditorFormId} sx={{ flex: 1, overflowY: 'scroll', padding: (theme) => theme.spacing(2) }}>
-          <Grid container spacing={2}>
-            <Grid item xs={8}>
+          </div>
+        </div>
+        <div id={panelEditorFormId} className="flex-1 overflow-y-auto p-4">
+          <div className="grid grid-cols-12 gap-4">
+            <div className="col-span-8">
               <Controller
                 control={form.control}
                 name="panelDefinition.spec.display.name"
                 render={({ field, fieldState }) => (
-                  <TextField
-                    {...field}
-                    fullWidth
-                    label="Name"
-                    error={!!fieldState.error}
-                    helperText={fieldState.error?.message}
-                    value={watchedName ?? ''}
-                    onChange={(event) => {
-                      field.onChange(event);
-                      setName(event.target.value);
-                    }}
-                  />
+                  <div className="flex flex-col gap-1.5 w-full">
+                    <Label htmlFor="panel-name">Name</Label>
+                    <Input
+                      {...field}
+                      id="panel-name"
+                      className={fieldState.error ? 'border-destructive' : ''}
+                      value={watchedName ?? ''}
+                      onChange={(event) => {
+                        field.onChange(event);
+                        setName(event.target.value);
+                      }}
+                    />
+                    {fieldState.error && (
+                      <p className="text-xs text-destructive">{fieldState.error.message}</p>
+                    )}
+                  </div>
                 )}
               />
-            </Grid>
-            <Grid item xs={4}>
+            </div>
+            <div className="col-span-4">
               <Controller
                 control={form.control}
                 name="groupId"
                 render={({ field, fieldState }) => (
-                  <TextField
-                    select
-                    {...field}
-                    required
-                    fullWidth
-                    label="Group"
-                    error={!!fieldState.error}
-                    helperText={fieldState.error?.message}
-                    onChange={(event) => {
-                      field.onChange(event);
-                    }}
-                  >
-                    {panelGroups.map((panelGroup, index) => (
-                      <MenuItem key={panelGroup.id} value={panelGroup.id}>
-                        {panelGroup.title ?? `Group ${index + 1}`}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                  <div className="flex flex-col gap-1.5 w-full">
+                    <Label htmlFor="panel-group">
+                      Group <span className="text-destructive">*</span>
+                    </Label>
+                    <Select
+                      required
+                      value={field.value?.toString() ?? ''}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                      }}
+                    >
+                      <SelectTrigger id="panel-group" className={fieldState.error ? 'border-destructive' : ''}>
+                        <SelectValue placeholder="Select group" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {panelGroups.map((panelGroup, index) => (
+                          <SelectItem key={panelGroup.id} value={panelGroup.id?.toString() ?? ''}>
+                            {panelGroup.title ?? `Group ${index + 1}`}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {fieldState.error && (
+                      <p className="text-xs text-destructive">{fieldState.error.message}</p>
+                    )}
+                  </div>
                 )}
               />
-            </Grid>
-            <Grid item xs={8}>
+            </div>
+            <div className="col-span-8">
               <Controller
                 control={form.control}
                 name="panelDefinition.spec.display.description"
                 render={({ field, fieldState }) => (
-                  <TextField
-                    {...field}
-                    fullWidth
-                    label="Description"
-                    error={!!fieldState.error}
-                    helperText={fieldState.error?.message}
-                    value={watchedDescription ?? ''}
-                    onChange={(event) => {
-                      field.onChange(event);
-                      setDescription(event.target.value);
-                    }}
-                  />
+                  <div className="flex flex-col gap-1.5 w-full">
+                    <Label htmlFor="panel-description">Description</Label>
+                    <Input
+                      {...field}
+                      id="panel-description"
+                      className={fieldState.error ? 'border-destructive' : ''}
+                      value={watchedDescription ?? ''}
+                      onChange={(event) => {
+                        field.onChange(event);
+                        setDescription(event.target.value);
+                      }}
+                    />
+                    {fieldState.error && (
+                      <p className="text-xs text-destructive">{fieldState.error.message}</p>
+                    )}
+                  </div>
                 )}
               />
-            </Grid>
-            <Grid item xs={4}>
+            </div>
+            <div className="col-span-4">
               <Controller
                 control={form.control}
                 name="panelDefinition.spec.plugin.kind"
@@ -247,7 +263,7 @@ export function PanelEditorForm(props: PanelEditorFormProps): ReactElement {
                   />
                 )}
               />
-            </Grid>
+            </div>
 
             <ErrorBoundary FallbackComponent={ErrorAlert}>
               <PanelQueriesSharedControls
@@ -261,8 +277,8 @@ export function PanelEditorForm(props: PanelEditorFormProps): ReactElement {
                 onJSONChange={handlePanelDefinitionChange}
               />
             </ErrorBoundary>
-          </Grid>
-        </Box>
+          </div>
+        </div>
         <DiscardChangesConfirmationDialog
           description="You have unapplied changes in this panel. Are you sure you want to discard these changes? Changes cannot be recovered."
           isOpen={isDiscardDialogOpened}

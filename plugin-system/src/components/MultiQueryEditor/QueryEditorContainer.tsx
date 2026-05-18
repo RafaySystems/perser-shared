@@ -13,13 +13,9 @@
 
 import { produce } from 'immer';
 import { QueryDefinition, QueryPluginType } from '@perses-dev/spec';
-import { Stack, IconButton, Typography, BoxProps, Box, CircularProgress } from '@mui/material';
-import DeleteIcon from 'mdi-material-ui/DeleteOutline';
-import ChevronDown from 'mdi-material-ui/ChevronDown';
-import ChevronRight from 'mdi-material-ui/ChevronRight';
-import { forwardRef, ReactElement } from 'react';
-import AlertIcon from 'mdi-material-ui/Alert';
-import { InfoTooltip } from '@perses-dev/components';
+import { Trash2 as DeleteIcon, ChevronDown, ChevronRight, AlertTriangle as AlertIcon } from 'lucide-react';
+import { forwardRef, HTMLAttributes, ReactElement } from 'react';
+import { Button, Spinner, InfoTooltip } from '@perses-dev/components';
 import { QueryData } from '../../runtime';
 import { PluginEditor, PluginEditorProps, PluginEditorRef } from '../PluginEditor';
 
@@ -67,63 +63,45 @@ export const QueryEditorContainer = forwardRef<PluginEditorRef, QueryEditorConta
       onCollapseExpand,
     } = props;
     return (
-      <Stack key={index} spacing={1}>
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          borderBottom={1}
-          borderColor={(theme) => theme.palette.divider}
-        >
-          <Stack direction="row">
-            <IconButton size="small" onClick={() => onCollapseExpand(index)}>
-              {isCollapsed ? <ChevronRight /> : <ChevronDown />}
-            </IconButton>
-            <Typography variant="overline" component="h4">
+      <div key={index} className="flex flex-col gap-1">
+        <div className="flex flex-row items-center justify-between border-b border-border">
+          <div className="flex flex-row">
+            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => onCollapseExpand(index)}>
+              {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </Button>
+            <span className="text-xs font-medium uppercase tracking-wide leading-none self-center">
               Query #{index + 1}
-            </Typography>
-          </Stack>
-          <Stack direction="row" alignItems="center">
-            {queryResult?.isFetching && <CircularProgress aria-label="loading" size="1.125rem" />}
+            </span>
+          </div>
+          <div className="flex flex-row items-center">
+            {queryResult?.isFetching && <Spinner className="h-4 w-4" aria-label="loading" />}
             {queryResult?.error && (
               <InfoTooltip description={queryResult.error.message}>
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  sx={{
-                    color: (theme) => theme.palette.error.main,
-                  }}
-                >
-                  <IconButton
-                    aria-label="query error"
-                    size="small"
-                    sx={{
-                      color: (theme) => theme.palette.error.main,
-                    }}
-                  >
-                    <AlertIcon />
-                  </IconButton>
-                  <Typography
-                    sx={{
-                      maxWidth: 300,
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      '&:hover ::after': { content: '"Click to copy"' },
-                    }}
+                <div className="flex flex-row items-center text-destructive">
+                  <Button variant="ghost" size="icon" aria-label="query error" className="h-6 w-6 text-destructive">
+                    <AlertIcon className="h-4 w-4" />
+                  </Button>
+                  <span
+                    className="max-w-[300px] whitespace-nowrap overflow-hidden text-ellipsis text-sm"
                   >
                     {queryResult.error.message}
-                  </Typography>
-                </Stack>
+                  </span>
+                </div>
               </InfoTooltip>
             )}
             {onDelete && (
-              <IconButton aria-label="delete query" size="small" onClick={() => onDelete && onDelete(index)}>
-                <DeleteIcon />
-              </IconButton>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="delete query"
+                className="h-6 w-6"
+                onClick={() => onDelete && onDelete(index)}
+              >
+                <DeleteIcon className="h-4 w-4" />
+              </Button>
             )}
-          </Stack>
-        </Stack>
+          </div>
+        </div>
         {!isCollapsed && (
           <QueryEditor
             ref={ref}
@@ -134,17 +112,17 @@ export const QueryEditorContainer = forwardRef<PluginEditorRef, QueryEditorConta
             onQueryRun={() => onQueryRun(index, query)}
           />
         )}
-      </Stack>
+      </div>
     );
   }
 );
 
 QueryEditorContainer.displayName = 'QueryEditorContainer';
 
-// Props on MUI Box that we don't want people to pass because we're either redefining them or providing them in
+// Props on div that we don't want people to pass because we're either redefining them or providing them in
 // this component
-type OmittedMuiProps = 'children' | 'value' | 'onChange';
-interface QueryEditorProps extends Omit<BoxProps, OmittedMuiProps> {
+type OmittedProps = 'children' | 'value' | 'onChange';
+interface QueryEditorProps extends Omit<HTMLAttributes<HTMLDivElement>, OmittedProps> {
   queryTypes: QueryPluginType[];
   value: QueryDefinition;
   filteredQueryPlugins?: string[];
@@ -174,7 +152,7 @@ const QueryEditor = forwardRef<PluginEditorRef, QueryEditorProps>((props, ref): 
   };
 
   return (
-    <Box {...others}>
+    <div {...others}>
       <PluginEditor
         ref={ref}
         pluginTypes={queryTypes}
@@ -191,7 +169,7 @@ const QueryEditor = forwardRef<PluginEditorRef, QueryEditorProps>((props, ref): 
         onRunQuery={onQueryRun}
         onChange={handlePluginChange}
       />
-    </Box>
+    </div>
   );
 });
 

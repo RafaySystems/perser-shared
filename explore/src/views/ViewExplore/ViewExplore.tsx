@@ -11,14 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, BoxProps } from '@mui/material';
 import {
   TimeRangeProviderWithQueryParams,
   useInitialRefreshInterval,
   useInitialTimeRange,
 } from '@perses-dev/plugin-system';
 
-import { ErrorAlert, ErrorBoundary, combineSx } from '@perses-dev/components';
+import { ErrorAlert, ErrorBoundary } from '@perses-dev/components';
 import {
   DatasourceStoreProviderProps,
   VariableProviderProps,
@@ -27,10 +26,11 @@ import {
   DEFAULT_DASHBOARD_DURATION,
   DEFAULT_REFRESH_INTERVAL,
 } from '@perses-dev/dashboards';
-import React, { ReactElement } from 'react';
+import React, { HTMLAttributes, ReactElement } from 'react';
+import { cn } from '@perses-dev/components';
 import { ViewExploreApp } from './ViewExploreApp';
 
-export interface ViewExploreProps extends Omit<BoxProps, 'children'> {
+export interface ViewExploreProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   datasourceApi: DatasourceStoreProviderProps['datasourceApi'];
   projectName?: DatasourceStoreProviderProps['projectName'];
   externalVariableDefinitions?: VariableProviderProps['externalVariableDefinitions'];
@@ -38,7 +38,8 @@ export interface ViewExploreProps extends Omit<BoxProps, 'children'> {
 }
 
 export function ViewExplore(props: ViewExploreProps): ReactElement {
-  const { datasourceApi, projectName, externalVariableDefinitions, sx, exploreTitleComponent, ...others } = props;
+  const { datasourceApi, projectName, externalVariableDefinitions, className, exploreTitleComponent, ...others } =
+    props;
 
   const initialTimeRange = useInitialTimeRange(DEFAULT_DASHBOARD_DURATION);
   const initialRefreshInterval = useInitialRefreshInterval(DEFAULT_REFRESH_INTERVAL);
@@ -50,23 +51,11 @@ export function ViewExplore(props: ViewExploreProps): ReactElement {
         initialRefreshInterval={initialRefreshInterval}
       >
         <VariableProvider externalVariableDefinitions={externalVariableDefinitions}>
-          <Box
-            sx={combineSx(
-              {
-                display: 'flex',
-                width: '100%',
-                height: '100%',
-                position: 'relative',
-                overflow: 'hidden',
-              },
-              sx
-            )}
-            {...others}
-          >
+          <div className={cn('flex w-full h-full relative overflow-hidden', className)} {...others}>
             <ErrorBoundary FallbackComponent={ErrorAlert}>
               <ViewExploreApp exploreTitleComponent={exploreTitleComponent} />
             </ErrorBoundary>
-          </Box>
+          </div>
         </VariableProvider>
       </TimeRangeProviderWithQueryParams>
     </DatasourceStoreProvider>

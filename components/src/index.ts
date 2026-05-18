@@ -11,6 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// shadcn/ui primitives & utilities
+export * from './ui';
+export * from './lib/utils';
+
 export * from './AlignSelector';
 export * from './ColorPicker';
 export * from './ContentWithLegend';

@@ -11,11 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { CardHeader, CardHeaderProps, Stack, Typography, Tooltip } from '@mui/material';
-import { combineSx } from '@perses-dev/components';
+import { Tooltip, TooltipContent, TooltipTrigger, cn } from '@perses-dev/components';
 import { Link } from '@perses-dev/spec';
 import { ItemAction, QueryData, useAllVariableValues, useReplaceVariablesInString } from '@perses-dev/plugin-system';
-import { ReactElement, ReactNode, useRef } from 'react';
+import { HTMLAttributes, ReactElement, ReactNode, useRef } from 'react';
 import { HEADER_ACTIONS_CONTAINER_NAME } from '../../constants';
 import { PanelActions, PanelActionsProps } from './PanelActions';
 import { PanelOptions } from './Panel';
@@ -23,7 +22,7 @@ import { useSelectionItemActions } from './useSelectionItemActions';
 
 type OmittedProps = 'children' | 'action' | 'title' | 'disableTypography';
 
-export interface PanelHeaderProps extends Omit<CardHeaderProps, OmittedProps> {
+export interface PanelHeaderProps extends Omit<HTMLAttributes<HTMLElement>, OmittedProps> {
   id: string;
   title?: string;
   description?: string;
@@ -47,7 +46,7 @@ export function PanelHeader({
   queryResults,
   readHandlers,
   editHandlers,
-  sx,
+  className,
   extra,
   pluginActions,
   itemActionsListConfig,
@@ -77,77 +76,57 @@ export function PanelHeader({
   return (
     <>
       {title ? (
-        <CardHeader
+        <header
           id={id}
-          component="header"
           aria-labelledby={titleElementId}
           aria-describedby={descriptionTooltipId}
-          disableTypography
-          title={
-            <Stack direction="row" alignItems="center" height="var(--panel-header-height, 30px)">
-              <Tooltip title={title} disableHoverListener={!isEllipsisActive}>
-                <Typography
-                  id={titleElementId}
-                  variant="subtitle1"
-                  ref={textRef}
-                  sx={{
-                    // `minHeight` guarantees that the header has the correct height
-                    // when there is no title (i.e. in the preview)
-                    lineHeight: '24px',
-                    minHeight: '26px',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                  }}
-                >
-                  {title}
-                </Typography>
-              </Tooltip>
-              <PanelActions
-                title={title}
-                description={description}
-                descriptionTooltipId={descriptionTooltipId}
-                links={links}
-                readHandlers={readHandlers}
-                editHandlers={editHandlers}
-                viewQueriesHandler={viewQueriesHandler}
-                extra={extra}
-                queryResults={queryResults}
-                pluginActions={pluginActions}
-                itemActions={actionButtons}
-                showIcons={showIcons}
-              />
-            </Stack>
-          }
-          sx={combineSx(
-            (theme) => ({
-              containerType: 'inline-size',
-              containerName: HEADER_ACTIONS_CONTAINER_NAME,
-              padding: theme.spacing(1),
-              borderBottom: `solid 1px ${theme.palette.divider}`,
-              '.MuiCardHeader-content': {
-                overflow: 'hidden',
-              },
-            }),
-            sx
+          className={cn(
+            '[container-type:inline-size]',
+            `[container-name:${HEADER_ACTIONS_CONTAINER_NAME}]`,
+            'p-1 border-b border-border overflow-hidden',
+            className
           )}
           {...rest}
-        />
+        >
+          <div className="flex flex-row items-center h-[var(--panel-header-height,30px)]">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div
+                  id={titleElementId}
+                  ref={textRef}
+                  className="text-sm font-medium leading-6 min-h-[26px] whitespace-nowrap overflow-hidden text-ellipsis"
+                  title={isEllipsisActive ? title : undefined}
+                >
+                  {title}
+                </div>
+              </TooltipTrigger>
+              {isEllipsisActive && <TooltipContent>{title}</TooltipContent>}
+            </Tooltip>
+            <PanelActions
+              title={title}
+              description={description}
+              descriptionTooltipId={descriptionTooltipId}
+              links={links}
+              readHandlers={readHandlers}
+              editHandlers={editHandlers}
+              viewQueriesHandler={viewQueriesHandler}
+              extra={extra}
+              queryResults={queryResults}
+              pluginActions={pluginActions}
+              itemActions={actionButtons}
+              showIcons={showIcons}
+            />
+          </div>
+        </header>
       ) : (
-        <Stack
+        <header
           id={id}
-          component="header"
           aria-describedby={descriptionTooltipId}
-          sx={combineSx(
-            {
-              position: 'absolute',
-              right: 0,
-              top: 0,
-              zIndex: 5,
-              containerType: 'inline-size',
-              containerName: HEADER_ACTIONS_CONTAINER_NAME,
-            },
-            sx
+          className={cn(
+            'absolute right-0 top-0 z-[5]',
+            '[container-type:inline-size]',
+            `[container-name:${HEADER_ACTIONS_CONTAINER_NAME}]`,
+            className
           )}
           {...rest}
         >
@@ -165,7 +144,7 @@ export function PanelHeader({
             itemActions={actionButtons}
             showIcons={showIcons}
           />
-        </Stack>
+        </header>
       )}
       {confirmDialog}
     </>

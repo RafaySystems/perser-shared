@@ -11,10 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { PaletteMode, PaletteOptions } from '@mui/material';
+import { PaletteMode } from '../../theme/theme';
+
 import { blue, grey, white } from './colors';
 
-export const background = (mode: PaletteMode): PaletteOptions['background'] => {
+export const background = (mode: PaletteMode): Record<string, string> => {
   const navigation = blue[150];
   const overlay = 'rgba(21, 23, 33, 0.75)'; // grey[900] with opacity 75%
   return mode === 'light'

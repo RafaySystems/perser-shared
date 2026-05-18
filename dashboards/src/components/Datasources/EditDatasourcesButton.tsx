@@ -12,12 +12,11 @@
 // limitations under the License.
 
 import { ReactElement, useState } from 'react';
-import { Button } from '@mui/material';
-import PencilIcon from 'mdi-material-ui/PencilOutline';
-import { Drawer, InfoTooltip } from '@perses-dev/components';
+import { Pencil as PencilIcon } from 'lucide-react';
+import { Button, Drawer, InfoTooltip } from '@perses-dev/components';
 import { DatasourceSpec } from '@perses-dev/spec';
 import { useDatasourceStore } from '@perses-dev/plugin-system';
-import { TOOLTIP_TEXT, editButtonStyle } from '../../constants';
+import { TOOLTIP_TEXT } from '../../constants';
 import { useDashboard } from '../../context';
 import { DatasourceEditor } from './DatasourceEditor';
 
@@ -75,13 +74,12 @@ export function EditDatasourcesButton(): ReactElement {
     <>
       <InfoTooltip description={TOOLTIP_TEXT.editDatasources}>
         <Button
-          startIcon={<PencilIcon />}
           onClick={openDatasourceEditor}
           aria-label={TOOLTIP_TEXT.editDatasources}
-          variant="text"
-          color="primary"
-          sx={editButtonStyle}
+          variant="ghost"
+          className="whitespace-nowrap min-w-0"
         >
+          <PencilIcon className="mr-0.5" />
           Datasources
         </Button>
       </InfoTooltip>

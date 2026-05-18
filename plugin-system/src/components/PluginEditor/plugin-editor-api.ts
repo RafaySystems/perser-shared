@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { BoxProps } from '@mui/material';
+import { HTMLAttributes } from 'react';
 import { UnknownSpec } from '@perses-dev/spec';
 import { useState, useRef, useEffect } from 'react';
 import { produce } from 'immer';
@@ -31,11 +31,11 @@ export interface PluginEditorValue {
   spec: UnknownSpec;
 }
 
-// Props on MUI Box that we don't want people to pass because we're either redefining them or providing them in
+// Props on div that we don't want people to pass because we're either redefining them or providing them in
 // this component
-type OmittedMuiProps = 'children' | 'value' | 'onChange';
+type OmittedProps = 'children' | 'value' | 'onChange';
 
-export interface PluginEditorProps extends Omit<BoxProps, OmittedMuiProps> {
+export interface PluginEditorProps extends Omit<HTMLAttributes<HTMLDivElement>, OmittedProps> {
   pluginTypes: PluginType[];
   pluginKindLabel: string;
   value: PluginEditorValue;
@@ -44,6 +44,7 @@ export interface PluginEditorProps extends Omit<BoxProps, OmittedMuiProps> {
   filteredQueryPlugins?: string[];
   onChange: (next: PluginEditorValue) => void;
   onRunQuery?: () => void;
+  width?: string;
 }
 
 export interface PluginEditorRef {

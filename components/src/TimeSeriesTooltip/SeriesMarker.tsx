@@ -11,30 +11,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, BoxProps } from '@mui/material';
 import { ReactElement } from 'react';
-import { combineSx } from '../utils';
+import { cn } from '../lib/utils';
 
-interface SeriesMarkerProps extends BoxProps<'div'> {
+interface SeriesMarkerProps extends React.HTMLAttributes<HTMLDivElement> {
   markerColor: string;
 }
 
-export function SeriesMarker(props: SeriesMarkerProps): ReactElement {
-  const { markerColor, sx } = props;
+export function SeriesMarker({ markerColor, className, ...props }: SeriesMarkerProps): ReactElement {
   return (
-    <Box
-      sx={combineSx(
-        {
-          display: 'inline-block',
-          width: '11px',
-          height: '11px',
-          borderRadius: '2px',
-          marginRight: 1,
-          verticalAlign: 'top',
-        },
-        sx
-      )}
+    <div
+      {...props}
+      className={cn('inline-block w-[11px] h-[11px] rounded-sm mr-2 align-top shrink-0', className)}
       style={{ backgroundColor: markerColor }}
-    ></Box>
+    />
   );
 }

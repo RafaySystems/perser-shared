@@ -11,10 +11,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { IconButton, Link as LinkComponent, Menu, MenuItem, Theme, Chip, capitalize, Stack } from '@mui/material';
-import LaunchIcon from 'mdi-material-ui/Launch';
+import {
+  Badge,
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@perses-dev/components';
+import { ExternalLink as LaunchIcon } from 'lucide-react';
 import { Link } from '@perses-dev/spec';
-import { MouseEvent, ReactElement, useState } from 'react';
+import { ReactElement } from 'react';
 import { InfoTooltip } from '@perses-dev/components';
 import { useReplaceVariablesInString } from '@perses-dev/plugin-system';
 
@@ -26,16 +33,6 @@ interface LinksProps {
 }
 
 export function LinksDisplay({ links, variant }: LinksProps): ReactElement | null {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const isMenuOpened = Boolean(anchorEl);
-  const handleOpenMenu = (event: MouseEvent<HTMLButtonElement>): void => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = (): void => {
-    setAnchorEl(null);
-  };
-
   if (links.length === 0) {
     return null;
   }
@@ -45,66 +42,55 @@ export function LinksDisplay({ links, variant }: LinksProps): ReactElement | nul
     return <LinkButton link={links[0]} />;
   }
 
-  // Dashboard variant: 1-3 links show as chips
-  // Max character limit for the name and url to prevent overflow
-  // in the dashboard title area, but if either the name or url is too long,
-  // we will fall back to showing the links in a dropdown menu
+  // Dashboard variant: 1-3 links show as chips/badges
   if (variant === 'dashboard' && links.length <= 3) {
     const canRenderAsChips = links.every((link) => {
       if (link.name) {
         return link.name.length < 30;
       }
-
       if (link.url) {
         return link.url.length < 70;
       }
-
       return false;
     });
 
     if (canRenderAsChips) {
       return (
-        <Stack direction="row" spacing={1}>
+        <div className="flex flex-row gap-1">
           {links.map((link: Link) => (
             <LinkChip key={link.url} link={link} />
           ))}
-        </Stack>
+        </div>
       );
     }
   }
 
   // Default: show dropdown menu for multiple links
   return (
-    <>
-      <InfoTooltip description={`${links.length} links`} enterDelay={100}>
-        <IconButton
-          aria-label={`${capitalize(variant)}-links`}
-          id={`${variant}-links-button`}
-          size="small"
-          onClick={handleOpenMenu}
-          sx={(theme) => ({ borderRadius: theme.shape.borderRadius, padding: '4px' })}
-        >
-          <LaunchIcon
-            aria-describedby="links-icon"
-            fontSize="inherit"
-            sx={{ color: (theme: Theme) => theme.palette.text.secondary }}
-          />
-        </IconButton>
-      </InfoTooltip>
-
-      <Menu
-        anchorEl={anchorEl}
-        open={isMenuOpened}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': `${variant}-links-button`,
-        }}
-      >
-        {links.map((link: Link) => (
-          <LinkMenuItem key={link.url} link={link} />
-        ))}
-      </Menu>
-    </>
+    <InfoTooltip description={`${links.length} links`} enterDelay={100}>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={`${variant}-links`}
+            id={`${variant}-links-button`}
+            className="rounded p-1 h-auto w-auto"
+          >
+            <LaunchIcon
+              aria-describedby="links-icon"
+              fontSize="inherit"
+              className="text-muted-foreground"
+            />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          {links.map((link: Link) => (
+            <LinkMenuItemInner key={link.url} link={link} />
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </InfoTooltip>
   );
 }
 
@@ -113,16 +99,12 @@ function LinkChip({ link }: { link: Link }): ReactElement {
 
   return (
     <InfoTooltip description={tooltip ?? url} enterDelay={100}>
-      <Chip
-        label={name ?? url}
-        component="a"
-        href={url}
-        target={targetBlank ? '_blank' : '_self'}
-        clickable
-        size="medium"
-        icon={<LaunchIcon color="inherit" fontSize="small" />}
-        sx={(theme) => ({ height: theme.spacing(3) })}
-      />
+      <a href={url} target={targetBlank ? '_blank' : '_self'} rel="noopener noreferrer">
+        <Badge variant="outline" className="h-6 cursor-pointer hover:bg-accent gap-1">
+          <LaunchIcon fontSize="inherit" />
+          {name ?? url}
+        </Badge>
+      </a>
     </InfoTooltip>
   );
 }
@@ -132,27 +114,29 @@ function LinkButton({ link }: { link: Link }): ReactElement {
 
   return (
     <InfoTooltip description={tooltip ?? url} enterDelay={100}>
-      <IconButton
+      <a
         aria-label={name ?? url}
-        size="small"
         href={url}
         target={targetBlank ? '_blank' : '_self'}
-        sx={(theme) => ({ borderRadius: theme.shape.borderRadius, padding: '4px' })}
+        rel="noopener noreferrer"
+        className="inline-flex items-center justify-center rounded p-1 hover:bg-accent transition-colors"
       >
-        <LaunchIcon fontSize="inherit" sx={{ color: (theme: Theme) => theme.palette.text.secondary }} />
-      </IconButton>
+        <LaunchIcon fontSize="inherit" className="text-muted-foreground" />
+      </a>
     </InfoTooltip>
   );
 }
 
-function LinkMenuItem({ link }: { link: Link }): ReactElement {
+function LinkMenuItemInner({ link }: { link: Link }): ReactElement {
   const { url, name, tooltip, targetBlank } = useLink(link);
 
   return (
     <InfoTooltip description={tooltip ?? url} enterDelay={100}>
-      <MenuItem component={LinkComponent} href={url} target={targetBlank ? '_blank' : '_self'}>
-        {name ?? url}
-      </MenuItem>
+      <DropdownMenuItem asChild>
+        <a href={url} target={targetBlank ? '_blank' : '_self'} rel="noopener noreferrer">
+          {name ?? url}
+        </a>
+      </DropdownMenuItem>
     </InfoTooltip>
   );
 }

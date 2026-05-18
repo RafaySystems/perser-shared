@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Switch, SwitchProps } from '@mui/material';
+import { Switch } from '@perses-dev/components';
 import { OptionsEditorControl, OptionsEditorGroup } from '@perses-dev/components';
 import { ReactElement } from 'react';
 
@@ -25,7 +25,7 @@ export interface SelectionOptionsEditorProps {
 }
 
 export function SelectionOptionsEditor({ value, onChange }: SelectionOptionsEditorProps): ReactElement {
-  const handleEnabledChange: SwitchProps['onChange'] = (_: unknown, checked: boolean) => {
+  const handleEnabledChange = (checked: boolean) => {
     onChange(checked ? { enabled: true } : undefined);
   };
 
@@ -34,7 +34,7 @@ export function SelectionOptionsEditor({ value, onChange }: SelectionOptionsEdit
       <OptionsEditorControl
         label="Enable Selection"
         description="Allow selecting items to enable actions on selected data"
-        control={<Switch checked={value?.enabled ?? false} onChange={handleEnabledChange} />}
+        control={<Switch checked={value?.enabled ?? false} onCheckedChange={handleEnabledChange} />}
       />
     </OptionsEditorGroup>
   );

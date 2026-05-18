@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Grid } from '@mui/material';
 import { ReactElement } from 'react';
 
 export type OptionsEditorGridProps = {
@@ -27,8 +26,8 @@ export type OptionsEditorGridProps = {
  */
 export const OptionsEditorGrid = ({ children }: OptionsEditorGridProps): ReactElement => {
   return (
-    <Grid container spacing={8}>
+    <div className="grid grid-cols-3 gap-8">
       {children}
-    </Grid>
+    </div>
   );
 };

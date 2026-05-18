@@ -12,12 +12,12 @@
 // limitations under the License.
 
 import { Fragment, HTMLAttributes, ReactElement } from 'react';
-import { Divider, IconButton, Stack, Typography } from '@mui/material';
 import { Controller, useFieldArray, Control } from 'react-hook-form';
-import PlusIcon from 'mdi-material-ui/Plus';
-import MinusIcon from 'mdi-material-ui/Minus';
+import { Plus as PlusIcon, Minus as MinusIcon } from 'lucide-react';
 import { PanelEditorValues } from '@perses-dev/spec';
 import { LinkEditorForm } from './LinkEditorForm';
+import { Button } from '../ui/button';
+import { Separator } from '../ui/separator';
 
 export interface LinksEditorProps extends HTMLAttributes<HTMLDivElement> {
   control: Control<PanelEditorValues>;
@@ -30,31 +30,36 @@ export function LinksEditor({ control, ...props }: LinksEditorProps): ReactEleme
   });
 
   return (
-    <Stack {...props} gap={3}>
+    <div className="flex flex-col gap-6" {...props}>
       {fields && fields.length > 0 ? (
         fields.map((field, index) => (
           <Fragment key={field.id}>
-            <Stack direction="row" gap={1} alignItems="center">
+            <div className="flex flex-row gap-2 items-center">
               <LinkControl control={control} index={index} />
-              <IconButton style={{ width: 'fit-content', height: 'fit-content' }} onClick={() => remove(index)}>
+              <Button
+                variant="ghost"
+                size="icon"
+                style={{ width: 'fit-content', height: 'fit-content' }}
+                onClick={() => remove(index)}
+              >
                 <MinusIcon />
-              </IconButton>
-            </Stack>
-            <Divider />
+              </Button>
+            </div>
+            <Separator />
           </Fragment>
         ))
       ) : (
-        <Typography variant="subtitle1" mb={2} fontStyle="italic">
-          No links defined
-        </Typography>
+        <p className="text-sm italic mb-4">No links defined</p>
       )}
-      <IconButton
+      <Button
+        variant="ghost"
+        size="icon"
         style={{ width: 'fit-content', height: 'fit-content' }}
         onClick={() => append({ url: '', name: '', tooltip: '', renderVariables: false, targetBlank: false })}
       >
         <PlusIcon />
-      </IconButton>
-    </Stack>
+      </Button>
+    </div>
   );
 }
 

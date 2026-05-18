@@ -11,16 +11,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, BoxProps } from '@mui/material';
 import { BuiltinVariableDefinition } from '@perses-dev/spec';
-import { ErrorBoundary, ErrorAlert, combineSx } from '@perses-dev/components';
+import { ErrorBoundary, ErrorAlert, combineSx, cn } from '@perses-dev/components';
 import {
   TimeRangeProviderWithQueryParams,
   useInitialRefreshInterval,
   useInitialTimeRange,
   usePluginBuiltinVariableDefinitions,
 } from '@perses-dev/plugin-system';
-import { ReactElement, useMemo } from 'react';
+import { HTMLAttributes, ReactElement, useMemo } from 'react';
 import { DEFAULT_DASHBOARD_DURATION, DEFAULT_REFRESH_INTERVAL } from '../../constants';
 import {
   DatasourceStoreProviderProps,
@@ -31,7 +30,7 @@ import {
 import { DashboardProviderWithQueryParams } from '../../context/DashboardProvider/DashboardProviderWithQueryParams';
 import { DashboardApp, DashboardAppProps } from './DashboardApp';
 
-export interface ViewDashboardProps extends Omit<BoxProps, 'children'>, DashboardAppProps {
+export interface ViewDashboardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'>, DashboardAppProps {
   datasourceApi: DatasourceStoreProviderProps['datasourceApi'];
   externalVariableDefinitions?: VariableProviderProps['externalVariableDefinitions'];
   isEditing?: boolean;
@@ -58,7 +57,7 @@ export function ViewDashboard(props: ViewDashboardProps): ReactElement {
     dashboardTitleComponent,
     onSave,
     onDiscard,
-    sx,
+    className,
     ...others
   } = props;
   const { spec } = dashboardResource;
@@ -120,17 +119,8 @@ export function ViewDashboard(props: ViewDashboardProps): ReactElement {
             externalVariableDefinitions={externalVariableDefinitions}
             builtinVariableDefinitions={builtinVariables}
           >
-            <Box
-              sx={combineSx(
-                {
-                  display: 'flex',
-                  width: '100%',
-                  height: '100%',
-                  position: 'relative',
-                  overflow: 'hidden',
-                },
-                sx
-              )}
+            <div
+              className={cn('flex w-full h-full relative overflow-hidden', className)}
               {...others}
             >
               <ErrorBoundary FallbackComponent={ErrorAlert}>
@@ -149,7 +139,7 @@ export function ViewDashboard(props: ViewDashboardProps): ReactElement {
                   onDiscard={onDiscard}
                 />
               </ErrorBoundary>
-            </Box>
+            </div>
           </VariableProviderWithQueryParams>
         </TimeRangeProviderWithQueryParams>
       </DashboardProviderWithQueryParams>

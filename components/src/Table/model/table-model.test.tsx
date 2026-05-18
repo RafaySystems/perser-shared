@@ -11,10 +11,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { createTheme } from '@mui/material';
 import { TableColumnConfig, getTableCellLayout, persesColumnsToTanstackColumns } from './table-model';
 
-const mockMuiTheme = createTheme({});
+const mockMuiTheme = {
+  spacing: (n: number) => `${n * 8}px`,
+  typography: {
+    body1: { lineHeight: '1.5', fontSize: '14px' },
+    body2: { lineHeight: '1.43', fontSize: '12px' },
+  },
+};
 
 describe('getTableCellLayout', () => {
   describe.each(['compact', 'standard'] as const)('gets layout for %s density', (density) => {

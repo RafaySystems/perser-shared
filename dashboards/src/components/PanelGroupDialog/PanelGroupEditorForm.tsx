@@ -12,7 +12,15 @@
 // limitations under the License.
 
 import { FormEventHandler, ReactElement, useState } from 'react';
-import { FormControl, TextField, MenuItem, Typography } from '@mui/material';
+import {
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@perses-dev/components';
+import { TextField } from '@perses-dev/components';
 import { PanelGroupEditorValues } from '../../context';
 
 export interface PanelGroupEditorFormProps {
@@ -35,49 +43,56 @@ export function PanelGroupEditorForm(props: PanelGroupEditorFormProps): ReactEle
 
   return (
     <form id={panelGroupEditorFormId} onSubmit={handleSubmit}>
-      <FormControl fullWidth margin="normal">
-        <TextField
-          required
-          label="Name"
-          variant="outlined"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          data-testid="panel-group-editor-name"
-        />
-      </FormControl>
-      <FormControl fullWidth margin="normal">
-        <TextField
-          select
-          required
-          label="Collapse State"
-          size="small"
-          value={isCollapsed ? 'Closed' : 'Open'}
-          onChange={(e) => setIsCollapsed(e.target.value === 'Closed')}
-        >
-          <MenuItem value="Open">Open</MenuItem>
-          <MenuItem value="Closed">Closed</MenuItem>
-        </TextField>
-        <FormControl fullWidth margin="normal">
+      <div className="flex flex-col gap-4 my-3">
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="panel-group-name">Name *</Label>
           <TextField
-            select
-            label="Repeat Variable"
-            variant="outlined"
-            value={repeatVariable ?? ''}
-            onChange={(e) => setRepeatVariable(e.target.value === '' ? undefined : e.target.value)}
+            id="panel-group-name"
+            required
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            data-testid="panel-group-editor-name"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="panel-group-collapse">Collapse State *</Label>
+          <Select
+            value={isCollapsed ? 'Closed' : 'Open'}
+            onValueChange={(v) => setIsCollapsed(v === 'Closed')}
           >
-            <MenuItem value="">
-              <Typography sx={{ fontStyle: 'italic' }}>None</Typography>
-            </MenuItem>
-            {variables
-              ?.sort((a, b) => a.localeCompare(b))
-              .map((variable) => (
-                <MenuItem key={variable} value={variable}>
-                  {variable}
-                </MenuItem>
-              ))}
-          </TextField>
-        </FormControl>
-      </FormControl>
+            <SelectTrigger id="panel-group-collapse">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Open">Open</SelectItem>
+              <SelectItem value="Closed">Closed</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="panel-group-repeat">Repeat Variable</Label>
+          <Select
+            value={repeatVariable ?? ''}
+            onValueChange={(v) => setRepeatVariable(v === '' ? undefined : v)}
+          >
+            <SelectTrigger id="panel-group-repeat">
+              <SelectValue placeholder="None" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">
+                <em>None</em>
+              </SelectItem>
+              {variables
+                ?.sort((a, b) => a.localeCompare(b))
+                .map((variable) => (
+                  <SelectItem key={variable} value={variable}>
+                    {variable}
+                  </SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
     </form>
   );
 }

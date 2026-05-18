@@ -15,7 +15,7 @@ import { ReactElement, useState } from 'react';
 import CodeMirror, { ReactCodeMirrorProps } from '@uiw/react-codemirror';
 import { json, jsonParseLinter } from '@codemirror/lang-json';
 import { linter, lintGutter } from '@codemirror/lint';
-import { useTheme } from '@mui/material';
+import { usePaletteMode } from './theme/ThemeProvider';
 
 type JSONEditorProps<T> = Omit<ReactCodeMirrorProps, 'onBlur' | 'theme' | 'extensions' | 'onChange' | 'value'> & {
   value: T;
@@ -24,8 +24,8 @@ type JSONEditorProps<T> = Omit<ReactCodeMirrorProps, 'onBlur' | 'theme' | 'exten
 };
 
 export function JSONEditor<T>(props: JSONEditorProps<T>): ReactElement {
-  const theme = useTheme();
-  const isDarkMode = theme.palette.mode === 'dark';
+  const mode = usePaletteMode();
+  const isDarkMode = mode === 'dark';
 
   const [value, setValue] = useState(() => JSON.stringify(props.value, null, 2));
   const [lastProcessedValue, setLastProcessedValue] = useState<string>(value);
@@ -33,7 +33,7 @@ export function JSONEditor<T>(props: JSONEditorProps<T>): ReactElement {
   return (
     <CodeMirror
       {...props}
-      style={{ border: `1px solid ${theme.palette.divider}` }}
+      className="border border-border rounded-md overflow-hidden"
       theme={isDarkMode ? 'dark' : 'light'}
       extensions={[json(), linter(jsonParseLinter()), lintGutter()]}
       value={value}

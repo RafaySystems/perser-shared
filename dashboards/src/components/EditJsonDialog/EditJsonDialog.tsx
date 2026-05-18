@@ -12,8 +12,7 @@
 // limitations under the License.
 
 import { FormEvent, ReactElement, useState } from 'react';
-import { Alert, FormControl } from '@mui/material';
-import { Dialog, JSONEditor } from '@perses-dev/components';
+import { Alert, AlertDescription, Dialog, JSONEditor } from '@perses-dev/components';
 import { useDatasourceStore, useTimeRange } from '@perses-dev/plugin-system';
 import { useEditJsonDialog, useDashboard } from '../../context';
 
@@ -66,16 +65,18 @@ const EditJsonDialogForm = (props: EditJsonDialogProps): ReactElement => {
     <Dialog.Form onSubmit={handleApply}>
       <Dialog.Content sx={{ width: '100%' }}>
         {disableMetadataEdition && !isReadonly && (
-          <Alert sx={{ marginBottom: (theme) => theme.spacing(1) }} severity="warning">
-            Metadata cannot be modified or saved.
+          <Alert variant="warning" className="mb-2">
+            <AlertDescription>Metadata cannot be modified or saved.</AlertDescription>
           </Alert>
         )}
         {draftDashboard.kind === 'EphemeralDashboard' && (
-          <Alert sx={{ marginBottom: 1 }} severity="warning">
-            Time-to-live cannot be modified or saved from here. Go to the project view to modify it.
+          <Alert variant="warning" className="mb-1">
+            <AlertDescription>
+              Time-to-live cannot be modified or saved from here. Go to the project view to modify it.
+            </AlertDescription>
           </Alert>
         )}
-        <FormControl fullWidth>
+        <div className="w-full">
           <JSONEditor
             minHeight="300px"
             maxHeight="70vh"
@@ -83,7 +84,7 @@ const EditJsonDialogForm = (props: EditJsonDialogProps): ReactElement => {
             onChange={(value: string) => completeDraftDashboard(value)}
             readOnly={isReadonly}
           />
-        </FormControl>
+        </div>
       </Dialog.Content>
       {!isReadonly && (
         <Dialog.Actions>

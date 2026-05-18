@@ -15,36 +15,9 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PanelDefinition } from '@perses-dev/spec';
 import { DataQueriesProvider, TimeRangeProviderBasic, useDataQueriesContext } from '@perses-dev/plugin-system';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { renderWithContext } from '../../test';
 import { VariableProvider } from '../../context';
 import { Panel, PanelProps } from './Panel';
-
-const testTheme = createTheme({
-  components: {
-    MuiButtonBase: {
-      defaultProps: {
-        disableRipple: true,
-        disableTouchRipple: true,
-      },
-    },
-    MuiButton: {
-      defaultProps: {
-        disableRipple: true,
-        disableTouchRipple: true,
-      },
-    },
-    MuiIconButton: {
-      defaultProps: {
-        disableRipple: true,
-        disableTouchRipple: true,
-      },
-    },
-  },
-  transitions: {
-    create: () => 'none',
-  },
-});
 
 jest.mock('@perses-dev/components', () => ({
   ...jest.requireActual('@perses-dev/components'),
@@ -55,12 +28,6 @@ jest.mock('@perses-dev/components', () => ({
     </>
   ),
 }));
-
-jest.mock('@mui/material/CircularProgress', () => {
-  return function MockCircularProgress(props: { 'aria-label'?: string }): JSX.Element {
-    return <div aria-label={props['aria-label'] || 'loading'} />;
-  };
-});
 
 jest.mock('@perses-dev/plugin-system', () => {
   return {
@@ -119,25 +86,23 @@ describe('Panel', () => {
     definition ??= createTestPanel();
 
     renderWithContext(
-      <ThemeProvider theme={testTheme}>
-        <TimeRangeProviderBasic initialTimeRange={{ pastDuration: '1h' }}>
-          <VariableProvider
-            initialVariableDefinitions={[
-              {
-                kind: 'TextVariable',
-                spec: {
-                  name: 'foo',
-                  value: 'bar ',
-                },
+      <TimeRangeProviderBasic initialTimeRange={{ pastDuration: '1h' }}>
+        <VariableProvider
+          initialVariableDefinitions={[
+            {
+              kind: 'TextVariable',
+              spec: {
+                name: 'foo',
+                value: 'bar ',
               },
-            ]}
-          >
-            <DataQueriesProvider definitions={[]}>
-              <Panel definition={definition} editHandlers={editHandlers} panelOptions={panelOptions} />
-            </DataQueriesProvider>
-          </VariableProvider>
-        </TimeRangeProviderBasic>
-      </ThemeProvider>
+            },
+          ]}
+        >
+          <DataQueriesProvider definitions={[]}>
+            <Panel definition={definition} editHandlers={editHandlers} panelOptions={panelOptions} />
+          </DataQueriesProvider>
+        </VariableProvider>
+      </TimeRangeProviderBasic>
     );
 
     // Wait for async effects (plugin actions loading) to complete

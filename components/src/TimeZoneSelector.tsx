@@ -11,16 +11,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ReactElement, ReactNode, useMemo } from 'react';
-import { Select, MenuItem, SelectProps, SelectChangeEvent } from '@mui/material';
+import { ReactElement, useMemo } from 'react';
 import { TimeZoneOption, getTimeZoneOptions } from './model/timeZoneOption';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select';
+import { cn } from './lib/utils';
 
-export interface TimeZoneSelectorProps extends Omit<SelectProps, 'onChange' | 'variant' | 'value'> {
+export interface TimeZoneSelectorProps {
   value: string;
   onChange?: (timeZoneOption: TimeZoneOption) => void;
   timeZoneOptions?: TimeZoneOption[];
   variant?: 'standard' | 'compact';
   heightPx?: string | number;
+  className?: string;
+  disabled?: boolean;
 }
 
 /**
@@ -33,7 +42,8 @@ export function TimeZoneSelector({
   timeZoneOptions,
   variant = 'standard',
   heightPx,
-  ...selectProps
+  className,
+  disabled,
 }: TimeZoneSelectorProps): ReactElement {
   const options = useMemo(() => timeZoneOptions ?? getTimeZoneOptions(), [timeZoneOptions]);
 
@@ -46,30 +56,25 @@ export function TimeZoneSelector({
     }
   };
 
-  const sxStyles = useMemo(
-    () => ({
-      minWidth: variant === 'compact' ? '80px' : '150px',
-      ...(height && { lineHeight: height, paddingY: 0 }),
-      ...selectProps.sx,
-    }),
-    [variant, height, selectProps.sx]
-  );
-
   return (
-    <Select
-      {...selectProps}
-      value={value}
-      onChange={(event: SelectChangeEvent<unknown>, _child: ReactNode) => {
-        handleChange(event.target.value as string);
-      }}
-      sx={sxStyles}
-      size={variant === 'compact' ? 'small' : 'medium'}
-    >
-      {options.map((option: TimeZoneOption) => (
-        <MenuItem key={option.value} value={option.value}>
-          {option.display}
-        </MenuItem>
-      ))}
+    <Select value={value} onValueChange={handleChange} disabled={disabled}>
+      <SelectTrigger
+        className={cn(
+          variant === 'compact' ? 'min-w-[80px]' : 'min-w-[150px]',
+          variant === 'compact' ? 'h-8 text-xs' : 'h-9',
+          className
+        )}
+        style={height ? { lineHeight: height, paddingTop: 0, paddingBottom: 0 } : undefined}
+      >
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((option: TimeZoneOption) => (
+          <SelectItem key={option.value} value={option.value}>
+            {option.display}
+          </SelectItem>
+        ))}
+      </SelectContent>
     </Select>
   );
 }

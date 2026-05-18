@@ -11,11 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ReactElement, useState, MouseEvent } from 'react';
-import { styled, IconButton, Popover } from '@mui/material';
-import CircleIcon from 'mdi-material-ui/Circle';
+import { ReactElement, useState, forwardRef } from 'react';
+import { Circle as CircleIcon } from 'lucide-react';
 import { useChartsTheme } from '../context';
 import { ColorPicker } from './ColorPicker';
+import { Button } from '../ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { cn } from '../lib/utils';
 
 export interface OptionsColorPickerProps {
   label: string;
@@ -25,15 +27,10 @@ export interface OptionsColorPickerProps {
 }
 
 export function OptionsColorPicker({ label, color, onColorChange, onClear }: OptionsColorPickerProps): ReactElement {
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const isOpen = Boolean(anchorEl);
-
-  const openColorPicker = (event: MouseEvent<HTMLButtonElement>): void => {
-    setAnchorEl(event.currentTarget);
-  };
+  const [open, setOpen] = useState(false);
 
   const closeColorPicker = (): void => {
-    setAnchorEl(null);
+    setOpen(false);
   };
 
   const {
@@ -41,43 +38,29 @@ export function OptionsColorPicker({ label, color, onColorChange, onClear }: Opt
   } = useChartsTheme();
 
   return (
-    <>
-      <ColorIconButton
-        size="small"
-        aria-label={`change ${label} color`}
-        isSelected={isOpen}
-        iconColor={color}
-        onClick={openColorPicker}
-      >
-        <CircleIcon />
-      </ColorIconButton>
-      <Popover
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={`change ${label} color`}
+          className={cn('h-8 w-8', open && 'ring-2 ring-offset-1')}
+          style={{
+            color,
+            backgroundColor: open ? `${color}3F` : undefined,
+          }}
+        >
+          <CircleIcon />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent
         data-testid="options color picker"
-        open={isOpen}
-        anchorEl={anchorEl}
-        onClose={closeColorPicker}
-        slotProps={{ paper: { sx: { padding: (theme) => theme.spacing(2) } } }}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
+        className="p-4 w-auto"
+        align="end"
+        side="top"
       >
         <ColorPicker color={color} palette={[defaultColor, ...palette]} onChange={onColorChange} onClear={onClear} />
-      </Popover>
-    </>
+      </PopoverContent>
+    </Popover>
   );
 }
-
-const ColorIconButton = styled(IconButton, {
-  shouldForwardProp: (props) => props !== 'isSelected' && props !== 'iconColor',
-})<{
-  iconColor?: string;
-  isSelected?: boolean;
-}>(({ iconColor, isSelected }) => ({
-  backgroundColor: isSelected && iconColor ? `${iconColor}3F` : 'undefined', // 3F represents 25% opacity
-  color: iconColor,
-}));

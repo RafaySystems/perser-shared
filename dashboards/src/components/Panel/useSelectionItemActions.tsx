@@ -11,8 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, CircularProgress } from '@mui/material';
-import { Dialog, InfoTooltip, useItemActions, useSelection } from '@perses-dev/components';
+import { Dialog, InfoTooltip, Spinner, useItemActions, useSelection } from '@perses-dev/components';
 import { ACTION_ICONS, executeAction, ItemAction, VariableStateMap } from '@perses-dev/plugin-system';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { HeaderIconButton } from './HeaderIconButton';
@@ -116,13 +115,13 @@ export function useSelectionItemActions<Id extends string | number = string>({
             aria-label={action.name}
           >
             {isLoading ? (
-              <CircularProgress size={14} />
+              <Spinner className="h-3.5 w-3.5" />
             ) : iconConfig ? (
               iconConfig.icon
             ) : (
-              <Box component="span" sx={{ fontSize: '0.75rem', px: 0.5 }}>
+              <span className="text-xs px-0.5">
                 {action.name}
-              </Box>
+              </span>
             )}
           </HeaderIconButton>
         </InfoTooltip>
@@ -158,13 +157,13 @@ export function useSelectionItemActions<Id extends string | number = string>({
               aria-label={action.name}
             >
               {isLoading ? (
-                <CircularProgress size={14} />
+                <Spinner className="h-3.5 w-3.5" />
               ) : iconConfig ? (
                 iconConfig.icon
               ) : (
-                <Box component="span" sx={{ fontSize: '0.75rem', px: 0.5 }}>
+                <span className="text-xs px-0.5">
                   {action.name}
-                </Box>
+                </span>
               )}
             </HeaderIconButton>
           </InfoTooltip>

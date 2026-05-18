@@ -11,22 +11,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { TextFieldProps as MuiTextFieldProps, TextField as MuiTextField } from '@mui/material';
 import { ChangeEvent, ForwardedRef, forwardRef, useCallback, useMemo, useState } from 'react';
 import debounce from 'lodash/debounce';
+import { Input, InputProps } from '../ui/input';
+import { Label } from '../ui/label';
+import { cn } from '../lib/utils';
 
-type TextFieldProps = Omit<MuiTextFieldProps, 'onChange'> & { debounceMs?: number; onChange?: (value: string) => void };
+export interface TextFieldProps extends Omit<InputProps, 'onChange'> {
+  label?: string;
+  helperText?: string;
+  error?: boolean;
+  debounceMs?: number;
+  onChange?: (value: string) => void;
+  fullWidth?: boolean;
+}
 
 export const TextField = forwardRef(function (
-  { debounceMs = 250, value, onChange, ...props }: TextFieldProps,
-  ref: ForwardedRef<HTMLDivElement>
+  { debounceMs = 250, value, onChange, label, helperText, error, fullWidth, className, id, ...props }: TextFieldProps,
+  ref: ForwardedRef<HTMLInputElement>
 ) {
   const [currentValue, setCurrentValue] = useState(value);
-
-  function handleChange(event: ChangeEvent<HTMLInputElement>): void {
-    setCurrentValue(event.target.value);
-    debounceFn(event.target.value);
-  }
 
   const handleDebounceFn = useCallback(
     (inputValue: string) => {
@@ -37,6 +41,26 @@ export const TextField = forwardRef(function (
 
   const debounceFn = useMemo(() => debounce(handleDebounceFn, debounceMs), [debounceMs, handleDebounceFn]);
 
-  return <MuiTextField ref={ref} value={currentValue} onChange={handleChange} {...props} />;
+  function handleChange(event: ChangeEvent<HTMLInputElement>): void {
+    setCurrentValue(event.target.value);
+    debounceFn(event.target.value);
+  }
+
+  return (
+    <div className={cn('flex flex-col gap-1.5', fullWidth && 'w-full', className)}>
+      {label && <Label htmlFor={id}>{label}</Label>}
+      <Input
+        ref={ref}
+        id={id}
+        value={currentValue}
+        onChange={handleChange}
+        className={cn(error && 'border-destructive focus-visible:ring-destructive', fullWidth && 'w-full')}
+        {...props}
+      />
+      {helperText && (
+        <p className={cn('text-xs', error ? 'text-destructive' : 'text-muted-foreground')}>{helperText}</p>
+      )}
+    </div>
+  );
 });
 TextField.displayName = 'TextField';

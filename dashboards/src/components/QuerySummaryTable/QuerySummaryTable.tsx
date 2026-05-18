@@ -12,18 +12,14 @@
 // limitations under the License.
 
 import {
-  Box,
   Button,
-  Paper,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
+  TableHeader,
   TableRow,
-  Typography,
-  Stack,
-} from '@mui/material';
+} from '@perses-dev/components';
 import { useQueryClient } from '@tanstack/react-query';
 import { TimeSeriesQueryDefinition, UnknownSpec } from '@perses-dev/spec';
 import { useActiveTimeSeriesQueries, useDatasourceClient, useTimeRange } from '@perses-dev/plugin-system';
@@ -72,28 +68,20 @@ export function QuerySummaryTable(props: QuerySummaryTableProps): ReactElement |
   });
 
   return (
-    <Stack
-      spacing={1}
-      mb={2}
-      sx={{
-        maxWidth: TABLE_MAX_WIDTH,
-      }}
-    >
-      <Box sx={{ p: 1 }}>
-        <Typography variant="h2" mb={1}>
-          Query Summary
-        </Typography>
-        <TableContainer component={Paper}>
-          <Table size="small" aria-label="query summary table">
-            <TableHead>
+    <div className="flex flex-col gap-2 mb-4" style={{ maxWidth: TABLE_MAX_WIDTH }}>
+      <div className="p-2">
+        <h2 className="text-base font-semibold mb-2">Query Summary</h2>
+        <div className="rounded-md border">
+          <Table aria-label="query summary table">
+            <TableHeader>
               <TableRow>
-                <TableCell>Queries Loading</TableCell>
-                <TableCell>Recent Time Series Queries</TableCell>
-                {showTotalQueries && <TableCell>Total Queries</TableCell>}
-                <TableCell>Start Time</TableCell>
-                <TableCell>End Time</TableCell>
+                <TableHead>Queries Loading</TableHead>
+                <TableHead>Recent Time Series Queries</TableHead>
+                {showTotalQueries && <TableHead>Total Queries</TableHead>}
+                <TableHead>Start Time</TableHead>
+                <TableHead>End Time</TableHead>
               </TableRow>
-            </TableHead>
+            </TableHeader>
             <TableBody>
               <TableRow>
                 <TableCell>{activeQueries.length}</TableCell>
@@ -104,22 +92,20 @@ export function QuerySummaryTable(props: QuerySummaryTableProps): ReactElement |
               </TableRow>
             </TableBody>
           </Table>
-        </TableContainer>
-      </Box>
+        </div>
+      </div>
 
       {warnings.length > 0 && (
-        <Box sx={{ p: 1, m: 0 }}>
-          <Typography variant="h3" mb={1}>
-            Warnings
-          </Typography>
-          <TableContainer component={Paper} sx={{ mb: 2 }}>
-            <Table size="small" aria-label="query warnings table">
-              <TableHead>
+        <div className="p-2">
+          <h3 className="text-sm font-semibold mb-2">Warnings</h3>
+          <div className="rounded-md border mb-4">
+            <Table aria-label="query warnings table">
+              <TableHeader>
                 <TableRow>
-                  <TableCell>Query</TableCell>
-                  <TableCell>Summary</TableCell>
+                  <TableHead>Query</TableHead>
+                  <TableHead>Summary</TableHead>
                 </TableRow>
-              </TableHead>
+              </TableHeader>
               <TableBody>
                 {warnings.map((details, idx) => {
                   return (
@@ -131,12 +117,12 @@ export function QuerySummaryTable(props: QuerySummaryTableProps): ReactElement |
                 })}
               </TableBody>
             </Table>
-          </TableContainer>
-          <Button disabled variant="outlined">
+          </div>
+          <Button disabled variant="outline">
             TODO: Action Button
           </Button>
-        </Box>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 }

@@ -11,9 +11,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ClickAwayListener, Menu, MenuItem, MenuList } from '@mui/material';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@perses-dev/components';
 import { ToolbarIconButton } from '@perses-dev/components';
-import DownloadIcon from 'mdi-material-ui/DownloadOutline';
+import { Download as DownloadIcon } from 'lucide-react';
 import React, { ReactElement, useRef } from 'react';
 import { useDashboard } from '../../context';
 import { serializeDashboard } from './serializeDashboard';
@@ -22,14 +27,8 @@ import { serializeDashboard } from './serializeDashboard';
 export function DownloadButton(): ReactElement {
   const { dashboard } = useDashboard();
   const hiddenLinkRef = useRef<HTMLAnchorElement>(null);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleItemClick = (format: 'json' | 'yaml', shape?: 'cr-v1alpha1' | 'cr-v1alpha2') => (): void => {
-    setAnchorEl(null);
 
+  const handleItemClick = (format: 'json' | 'yaml', shape?: 'cr-v1alpha1' | 'cr-v1alpha2') => (): void => {
     const { contentType, content } = serializeDashboard(dashboard, format, shape);
 
     if (!hiddenLinkRef || !hiddenLinkRef.current) return;
@@ -45,37 +44,22 @@ export function DownloadButton(): ReactElement {
 
   return (
     <>
-      <ToolbarIconButton
-        id="download-dashboard-button"
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-      >
-        <DownloadIcon />
-      </ToolbarIconButton>
-
-      <Menu
-        id="download-dashboard-formats"
-        anchorEl={anchorEl}
-        open={open}
-        hideBackdrop={true}
-        onClose={() => setAnchorEl(null)}
-        MenuListProps={{
-          'aria-labelledby': 'download-dashboard-button',
-        }}
-      >
-        <div>
-          <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
-            <MenuList>
-              <MenuItem onClick={handleItemClick('json')}>JSON</MenuItem>
-              <MenuItem onClick={handleItemClick('yaml')}>YAML</MenuItem>
-              <MenuItem onClick={handleItemClick('yaml', 'cr-v1alpha2')}>YAML (CR v1alpha2)</MenuItem>
-              <MenuItem onClick={handleItemClick('yaml', 'cr-v1alpha1')}>YAML (CR v1alpha1)</MenuItem>
-            </MenuList>
-          </ClickAwayListener>
-        </div>
-      </Menu>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <ToolbarIconButton
+            id="download-dashboard-button"
+            aria-haspopup="true"
+          >
+            <DownloadIcon />
+          </ToolbarIconButton>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem onClick={handleItemClick('json')}>JSON</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleItemClick('yaml')}>YAML</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleItemClick('yaml', 'cr-v1alpha2')}>YAML (CR v1alpha2)</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleItemClick('yaml', 'cr-v1alpha1')}>YAML (CR v1alpha1)</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       {/* Hidden link to download the dashboard as a JSON or YAML file */}
       {/* eslint-disable jsx-a11y/anchor-has-content */}

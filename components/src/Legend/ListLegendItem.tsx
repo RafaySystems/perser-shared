@@ -12,8 +12,7 @@
 // limitations under the License.
 
 import { forwardRef, memo, MouseEvent, MouseEventHandler, ReactElement, useState } from 'react';
-import { Box, ListItemText, ListItemProps, ListItemButton } from '@mui/material';
-import { combineSx } from '../utils';
+import { cn } from '../lib/utils';
 import { LegendColorBadge } from './LegendColorBadge';
 import { LegendItem } from './legend-model';
 
@@ -29,7 +28,7 @@ export type LegendItemEventOpts = {
   index: number;
 };
 
-export interface ListLegendItemProps extends Omit<ListItemProps<'div'>, 'onClick' | 'onMouseOver' | 'onMouseOut'> {
+export interface ListLegendItemProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick' | 'onMouseOver' | 'onMouseOut'> {
   item: LegendItem;
 
   index: number;
@@ -55,7 +54,7 @@ export interface ListLegendItemProps extends Omit<ListItemProps<'div'>, 'onClick
 }
 
 const ListLegendItemBase = forwardRef<HTMLDivElement, ListLegendItemProps>(function ListLegendItem(
-  { item, sx, truncateLabel, onClick, isVisuallySelected, onMouseOver, onMouseOut, index, ...others },
+  { item, className, truncateLabel, onClick, isVisuallySelected, onMouseOver, onMouseOut, index, ...others },
   ref
 ): ReactElement {
   const [noWrap, setNoWrap] = useState(truncateLabel);
@@ -78,33 +77,30 @@ const ListLegendItemBase = forwardRef<HTMLDivElement, ListLegendItemProps>(funct
   };
 
   return (
-    <ListItemButton
+    <div
       {...others}
       role="listitem"
-      sx={combineSx(
-        {
-          padding: 0,
-          cursor: 'pointer',
-        },
-        sx
+      className={cn(
+        'flex items-center p-0 cursor-pointer text-sm',
+        isVisuallySelected && 'bg-accent',
+        className
       )}
-      dense={true}
       onClick={handleClick}
       onMouseOver={(e: MouseEvent) => onMouseOver?.(e, { id: item.id, index })}
       onMouseOut={(e: MouseEvent) => onMouseOut?.(e, { id: item.id, index })}
-      selected={isVisuallySelected}
       ref={ref}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <div className="flex items-center">
         <LegendColorBadge color={item.color} />
-      </Box>
-      <ListItemText
-        primary={item.label}
-        primaryTypographyProps={{ noWrap: noWrap }}
+      </div>
+      <span
+        className={cn('flex-1 min-w-0', noWrap ? 'truncate' : 'break-words')}
         onMouseOver={handleTextMouseOver}
         onMouseOut={handleTextMouseOut}
-      ></ListItemText>
-    </ListItemButton>
+      >
+        {item.label}
+      </span>
+    </div>
   );
 });
 

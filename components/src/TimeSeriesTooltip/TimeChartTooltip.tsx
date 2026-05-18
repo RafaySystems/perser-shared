@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { memo, MutableRefObject, useRef, useState } from 'react';
-import { Box, Portal, Stack } from '@mui/material';
+import { createPortal } from 'react-dom';
 import { ECharts as EChartsInstance } from 'echarts/core';
 import { TimeSeries } from '@perses-dev/spec';
 import useResizeObserver from 'use-resize-observer';
@@ -22,6 +22,7 @@ import { assembleTransform, getTooltipStyles } from './utils';
 import { getNearbySeriesData } from './nearby-series';
 import { TooltipHeader } from './TooltipHeader';
 import { TooltipContent } from './TooltipContent';
+import { TOOLTIP_BG_COLOR_FALLBACK } from './tooltip-model';
 
 export interface TimeChartTooltipProps {
   chartRef: MutableRefObject<EChartsInstance | undefined>;
@@ -93,28 +94,46 @@ export const TimeChartTooltip = memo(function TimeChartTooltip({
 
   const totalSeries = data.length;
 
-  return (
-    <Portal container={containerElement}>
-      <Box
-        ref={tooltipRef}
-        sx={(theme) => getTooltipStyles(theme, pinnedPos, maxHeight)}
-        style={{
-          transform: transform.current,
-        }}
-      >
-        <Stack spacing={0.5}>
-          <TooltipHeader
-            nearbySeries={nearbySeries}
-            totalSeries={totalSeries}
-            enablePinning={enablePinning}
-            isTooltipPinned={isTooltipPinned}
-            showAllSeries={showAllSeries}
-            onShowAllClick={(checked) => setShowAllSeries(checked)}
-            onUnpinClick={onUnpinClick}
-          />
-          <TooltipContent series={nearbySeries} wrapLabels={wrapLabels} />
-        </Stack>
-      </Box>
-    </Portal>
+  const tooltipStyles = getTooltipStyles(null as any, pinnedPos, maxHeight);
+
+  const tooltipNode = (
+    <div
+      ref={tooltipRef}
+      style={{
+        minWidth: tooltipStyles.minWidth as number | string,
+        maxWidth: tooltipStyles.maxWidth as number | string,
+        maxHeight: tooltipStyles.maxHeight as number | string,
+        padding: 0,
+        position: 'absolute' as const,
+        top: 0,
+        left: 0,
+        backgroundColor: TOOLTIP_BG_COLOR_FALLBACK,
+        borderRadius: '6px',
+        color: '#fff',
+        fontSize: '11px',
+        visibility: 'visible' as const,
+        opacity: 1,
+        transition: 'all 0.1s ease-out',
+        zIndex: pinnedPos !== null ? 'auto' : 1500,
+        overflow: 'hidden',
+        transform: transform.current,
+      }}
+    >
+      <div className="flex flex-col gap-0.5">
+        <TooltipHeader
+          nearbySeries={nearbySeries}
+          totalSeries={totalSeries}
+          enablePinning={enablePinning}
+          isTooltipPinned={isTooltipPinned}
+          showAllSeries={showAllSeries}
+          onShowAllClick={(checked) => setShowAllSeries(checked)}
+          onUnpinClick={onUnpinClick}
+        />
+        <TooltipContent series={nearbySeries} wrapLabels={wrapLabels} />
+      </div>
+    </div>
   );
+
+  const container = containerElement instanceof HTMLElement ? containerElement : document.body;
+  return createPortal(tooltipNode, container);
 });
