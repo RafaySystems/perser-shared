@@ -31,21 +31,37 @@ export interface PrometheusHttpClient {
   ) => Promise<{ data: string[] }>;
 }
 
+function buildRequestUrl(
+  basePath: string,
+  apiPath: string,
+  search: Record<string, string | string[]>
+): string {
+  const base = basePath.replace(/\/$/, '');
+  const path = apiPath.startsWith('/') ? apiPath : `/${apiPath}`;
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(search)) {
+    if (Array.isArray(value)) {
+      for (const v of value) {
+        params.append(key, v);
+      }
+    } else {
+      params.set(key, value);
+    }
+  }
+  const qs = params.toString();
+  return qs ? `${base}${path}?${qs}` : `${base}${path}`;
+}
+
 export function createPrometheusClient(proxyUrl: string): PrometheusHttpClient {
   const base = proxyUrl.replace(/\/$/, '');
 
-  async function getJson<T>(path: string, search: Record<string, string | string[]>, signal?: AbortSignal): Promise<T> {
-    const url = new URL(`${base}${path}`);
-    for (const [key, value] of Object.entries(search)) {
-      if (Array.isArray(value)) {
-        for (const v of value) {
-          url.searchParams.append(key, v);
-        }
-      } else {
-        url.searchParams.set(key, value);
-      }
-    }
-    const res = await fetch(url.toString(), { signal });
+  async function getJson<T>(
+    apiPath: string,
+    search: Record<string, string | string[]>,
+    signal?: AbortSignal
+  ): Promise<T> {
+    const url = buildRequestUrl(base, apiPath, search);
+    const res = await fetch(url, { signal });
     const body = (await res.json()) as T & { message?: string };
     if (!res.ok) {
       throw new Error((body as { message?: string }).message ?? res.statusText);
@@ -55,18 +71,26 @@ export function createPrometheusClient(proxyUrl: string): PrometheusHttpClient {
 
   return {
     rangeQuery: (params, opts) =>
-      getJson<PromQueryResponse>('/api/v1/query_range', {
-        query: params.query,
-        start: String(params.start),
-        end: String(params.end),
-        step: String(params.step),
-      }, opts?.signal),
+      getJson<PromQueryResponse>(
+        '/api/v1/query_range',
+        {
+          query: params.query,
+          start: String(params.start),
+          end: String(params.end),
+          step: String(params.step),
+        },
+        opts?.signal
+      ),
 
     instantQuery: (params, opts) =>
-      getJson<PromQueryResponse>('/api/v1/query', {
-        query: params.query,
-        time: String(params.time),
-      }, opts?.signal),
+      getJson<PromQueryResponse>(
+        '/api/v1/query',
+        {
+          query: params.query,
+          time: String(params.time),
+        },
+        opts?.signal
+      ),
 
     labelValues: (params, opts) => {
       const search: Record<string, string | string[]> = {};
