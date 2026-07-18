@@ -33,9 +33,23 @@ jobs:
     env:
       NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       PACKAGES: "client components plugin-system dashboards explore"
+      RELEASE_BRANCH: "shadecdn"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Enforce release branch ancestry
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin "${RELEASE_BRANCH}" --depth=1
+          if ! git merge-base --is-ancestor "${GITHUB_SHA}" "origin/${RELEASE_BRANCH}"; then
+            echo "Ref ${GITHUB_SHA} is not on origin/${RELEASE_BRANCH}. Publishing is restricted to ${RELEASE_BRANCH}."
+            exit 1
+          fi
+          echo "Release ref is on ${RELEASE_BRANCH}. Continuing."
 
       - name: Setup Node
         uses: actions/setup-node@v4

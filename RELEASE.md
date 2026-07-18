@@ -17,6 +17,8 @@ Further actions will then be triggered on GitHub side (see release stage in the 
 This repository also includes a dedicated workflow to publish npm workspaces to GitHub Packages:
 `.github/workflows/publish-github-packages.yml`.
 
+> Publishing is restricted to refs that are on branch `shadecdn`.
+
 ### Trigger options
 
 1. **Tag-based automatic publish**
@@ -58,7 +60,7 @@ Update workspace `name` fields and cross-workspace dependencies to your own scop
 
 ### A) Publish by tag (recommended)
 
-1. Ensure versions are already bumped in all workspaces and merged to your default branch.
+1. Ensure versions are already bumped in all workspaces and merged to `shadecdn`.
 2. Create and push a release tag from your local clone:
    - `git tag v0.54.0-rc.1`
    - `git push origin v0.54.0-rc.1`
@@ -73,13 +75,14 @@ Update workspace `name` fields and cross-workspace dependencies to your own scop
 
 1. Open **Actions** -> **publish-github-packages**.
 2. Click **Run workflow**.
-3. Fill inputs:
+3. Select branch: `shadecdn`.
+4. Fill inputs:
    - `version`: e.g. `0.54.0-rc.1`
    - `npm_scope` (optional): e.g. `@rafaysystems-perses` (defaults to repository owner)
    - `dist_tag` (optional): e.g. `next` or `latest`
    - `dry_run`: `true` first for validation, then `false` for real publish
-4. Click **Run workflow** and monitor logs.
-5. Re-run with `dry_run=false` after a successful dry run.
+5. Click **Run workflow** and monitor logs.
+6. Re-run with `dry_run=false` after a successful dry run.
 
 ### C) Verify consumer install
 
