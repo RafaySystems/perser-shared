@@ -13,7 +13,7 @@
 
 import { useCallback, useState } from 'react';
 import { isRelativeTimeRange } from '@perses-dev/spec';
-import { useTimeRange, useTimeZoneParams } from '@perses-dev/plugin-system';
+import { useTimeRange, useTimeZoneParams } from '@rafaysystems-perses/plugin-system';
 import { useVariableDefinitionActions } from '../VariableProvider/VariableProvider';
 import { useDashboard } from '../useDashboard';
 import { OnSaveDashboard } from './common';

@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { VariableDefinition } from '@perses-dev/spec';
-import { VariableStoreStateMap } from '@perses-dev/plugin-system';
+import { VariableStoreStateMap } from '@rafaysystems-perses/plugin-system';
 import { ExternalVariableDefinition } from '../../model/VariableDefinition';
 import { checkSavedDefaultVariableStatus, mergeVariableDefinitions } from './utils';
 

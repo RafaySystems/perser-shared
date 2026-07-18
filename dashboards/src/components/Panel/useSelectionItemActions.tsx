@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, CircularProgress } from '@mui/material';
-import { Dialog, InfoTooltip, useItemActions, useSelection } from '@perses-dev/components';
-import { ACTION_ICONS, executeAction, ItemAction, VariableStateMap } from '@perses-dev/plugin-system';
+import { Box, CircularProgress } from '@rafaysystems-perses/components/compat/mui';
+import { Dialog, InfoTooltip, useItemActions, useSelection } from '@rafaysystems-perses/components';
+import { ACTION_ICONS, executeAction, ItemAction, VariableStateMap } from '@rafaysystems-perses/plugin-system';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { HeaderIconButton } from './HeaderIconButton';
 
@@ -109,7 +109,7 @@ export function useSelectionItemActions<Id extends string | number = string>({
           <HeaderIconButton
             size="small"
             disabled={isLoading || areButtonsDisabled}
-            onClick={(e) => {
+            onClick={(e: any) => {
               e.stopPropagation();
               handleActionClick(action);
             }}
@@ -151,7 +151,7 @@ export function useSelectionItemActions<Id extends string | number = string>({
             <HeaderIconButton
               size="small"
               disabled={isLoading || areButtonsDisabled}
-              onClick={(e) => {
+              onClick={(e: any) => {
                 e.stopPropagation();
                 handleActionClick(action, item);
               }}

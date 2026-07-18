@@ -11,20 +11,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Resource } from '@perses-dev/client';
+import { Resource } from '@rafaysystems-perses/client';
 
 export function getResourceDisplayName<T extends Resource>(resource: T): string {
+  const r = resource as any;
   // Variables
-  if (resource.spec?.spec?.display?.name) {
-    return resource.spec.spec.display.name;
+  if (r.spec?.spec?.display?.name) {
+    return r.spec.spec.display.name;
   }
 
   // Other resources with display
-  if (resource.spec?.display?.name) {
-    return resource.spec.display.name;
+  if (r.spec?.display?.name) {
+    return r.spec.display.name;
   }
 
-  return resource.metadata.name;
+  return r.metadata.name;
 }
 
 /**
@@ -32,15 +33,16 @@ export function getResourceDisplayName<T extends Resource>(resource: T): string 
  * Else, only return the resource name
  */
 export function getResourceExtendedDisplayName<T extends Resource>(resource: T): string {
+  const r = resource as any;
   // Variables
-  if (resource.spec?.spec?.display?.name) {
-    return `${resource.spec.spec.display.name} (ID: ${resource.metadata.name})`;
+  if (r.spec?.spec?.display?.name) {
+    return `${r.spec.spec.display.name} (ID: ${r.metadata.name})`;
   }
 
   // Other resources with display
-  if (resource.spec?.display?.name) {
-    return `${resource.spec.display.name} (ID: ${resource.metadata.name})`;
+  if (r.spec?.display?.name) {
+    return `${r.spec.display.name} (ID: ${r.metadata.name})`;
   }
 
-  return resource.metadata.name;
+  return r.metadata.name;
 }

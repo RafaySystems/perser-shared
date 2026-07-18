@@ -18,7 +18,7 @@ import {
   TableCellProps as MuiTableCellProps,
   styled,
   useTheme,
-} from '@mui/material';
+} from '@rafaysystems-perses/components/compat/mui';
 import { ReactElement, useEffect, useMemo, useRef } from 'react';
 import { hasDataFieldPatterns, replaceDataFields } from '../utils/data-field-interpolation';
 import { DataLink, TableCellAlignment, TableDensity, getTableCellLayout } from './model/table-model';

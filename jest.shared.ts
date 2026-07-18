@@ -13,8 +13,11 @@
 
 import type { Config } from '@jest/types';
 import { readFileSync } from 'fs';
-import { resolve } from 'path';
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const swcrcPath = resolve(__dirname, './.cjs.swcrc');
 const swcrc = JSON.parse(readFileSync(swcrcPath, 'utf-8'));
 
@@ -29,7 +32,7 @@ const config: Config.InitialOptions = {
     '^use-resize-observer$': 'use-resize-observer/polyfilled',
 
     // Tell Jest where other Perses packages live since it doesn't know about project references
-    '^@perses-dev/(client|components|dashboards|explore|plugin-system)(.*)$': '<rootDir>/../$1/src',
+    '^@perses-dev/(client|components|dashboards|explore|plugin-system)(.*)$': '<rootDir>/../$1/src$2',
 
     // Configure Jest to handle stylesheets
     '\\.(css|less)$': '<rootDir>/../stylesMock.js',

@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, MenuItem, Popover, Select, IconButton, TextField, Stack } from '@mui/material';
-import Calendar from 'mdi-material-ui/Calendar';
-import EarthIcon from 'mdi-material-ui/Earth';
+import { Box, MenuItem, Popover, Select, IconButton, TextField, Stack } from '@rafaysystems-perses/components/compat/mui';
+import { Calendar } from '@rafaysystems-perses/components/compat/icons';
+import { EarthIcon } from '@rafaysystems-perses/components/compat/icons';
 import { TimeRangeValue, isRelativeTimeRange, AbsoluteTimeRange, toAbsoluteTimeRange } from '@perses-dev/spec';
 import { ReactElement, useMemo, useRef, useState } from 'react';
 import { useTimeZone } from '../context';

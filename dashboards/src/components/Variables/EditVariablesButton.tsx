@@ -12,17 +12,19 @@
 // limitations under the License.
 
 import { ReactElement, useState } from 'react';
-import { Button, ButtonProps } from '@mui/material';
-import PencilIcon from 'mdi-material-ui/PencilOutline';
-import { Drawer, InfoTooltip } from '@perses-dev/components';
+import { Button, ButtonProps } from '@rafaysystems-perses/components/compat/mui';
+
+import { Drawer, InfoTooltip } from '@rafaysystems-perses/components';
 import { BuiltinVariableDefinition, VariableDefinition } from '@perses-dev/spec';
-import { useBuiltinVariableDefinitions } from '@perses-dev/plugin-system';
+import { useBuiltinVariableDefinitions } from '@rafaysystems-perses/plugin-system';
 import { ExternalVariableDefinition } from '../../model/VariableDefinition';
 import { TOOLTIP_TEXT, editButtonStyle } from '../../constants';
 import { useExternalVariableDefinitions, useVariableDefinitionActions, useVariableDefinitions } from '../../context';
 import { VariableEditor } from './VariableEditor';
+import { PencilOutline as PencilIcon } from '@rafaysystems-perses/components/compat/icons';
 
-export interface EditVariablesButtonProps extends Pick<ButtonProps, 'fullWidth'> {
+export interface EditVariablesButtonProps {
+  fullWidth?: ButtonProps['fullWidth'];
   /**
    * The variant to use to display the button.
    */

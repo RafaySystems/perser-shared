@@ -12,11 +12,11 @@
 // limitations under the License.
 
 import { ReactElement, ReactNode, useMemo, useState } from 'react';
-import { Box } from '@mui/material';
-import { ChartsProvider, ErrorAlert, ErrorBoundary, useChartsTheme } from '@perses-dev/components';
-import { useDatasourceStore } from '@perses-dev/plugin-system';
+import { Box } from '@rafaysystems-perses/components/compat/mui';
+import { ChartsProvider, ErrorAlert, ErrorBoundary, useChartsTheme } from '@rafaysystems-perses/components';
+import { useDatasourceStore } from '@rafaysystems-perses/plugin-system';
 import { DashboardSpec } from '@perses-dev/spec';
-import { DashboardResource } from '@perses-dev/client';
+import { DashboardResource } from '@rafaysystems-perses/client';
 import {
   PanelDrawer,
   Dashboard,

@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { BoxProps } from '@mui/material';
+import { BoxProps } from '@rafaysystems-perses/components/compat/mui';
 import { UnknownSpec } from '@perses-dev/spec';
 import { useState, useRef, useEffect } from 'react';
 import { produce } from 'immer';

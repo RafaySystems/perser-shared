@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, FormControl, MenuItem, Select } from '@mui/material';
+import { Box, FormControl, MenuItem, Select } from '@rafaysystems-perses/components/compat/mui';
 import { DurationString } from '@perses-dev/spec';
 import { ReactElement, useMemo } from 'react';
 import { TimeOption } from '../model';

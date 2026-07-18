@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { MenuItem, TextField, TextFieldProps } from '@mui/material';
+import { MenuItem, TextField, TextFieldProps } from '@rafaysystems-perses/components/compat/mui';
 import { forwardRef, ReactElement, useCallback, useMemo } from 'react';
 import { PluginType } from '../../model';
 import { useListPluginMetadata } from '../../runtime';
@@ -31,7 +31,7 @@ export interface PluginKindSelectProps extends Omit<TextFieldProps, 'value' | 'o
  * The value of the select is the kind of the plugin, but you can also listen to the `onPluginTypeChange` event to know
  * when the user changes the plugin type (it fires at start for the default value.)
  */
-export const PluginKindSelect = forwardRef((props: PluginKindSelectProps, ref): ReactElement => {
+export const PluginKindSelect = forwardRef<any, PluginKindSelectProps>((props, ref): ReactElement => {
   const { pluginTypes, value: propValue, onChange, filteredQueryPlugins, ...others } = props;
   const { data, isLoading } = useListPluginMetadata(pluginTypes);
 

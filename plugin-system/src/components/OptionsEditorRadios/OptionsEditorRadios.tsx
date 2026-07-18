@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { FormControl, FormControlLabel, Radio, RadioGroup, RadioGroupProps, Box } from '@mui/material';
+import { FormControl, FormControlLabel, Radio, RadioGroup, RadioGroupProps, Box } from '@rafaysystems-perses/components/compat/mui';
 import { ReactElement, ReactNode, useState } from 'react';
 import { OptionsEditorTabPanel } from '../OptionsEditorTabPanel';
 
@@ -34,7 +34,7 @@ export const OptionsEditorRadios = (props: OptionsEditorRadiosProps): ReactEleme
   const { tabs, defaultTab, onModeChange, isReadonly } = props;
   const [activeTab, setActiveTab] = useState(defaultTab);
 
-  const handleChange: RadioGroupProps['onChange'] = (_, value) => {
+  const handleChange: RadioGroupProps['onChange'] = (_: any, value: any) => {
     const v = parseInt(value);
     setActiveTab(v);
     onModeChange(v);
@@ -42,7 +42,7 @@ export const OptionsEditorRadios = (props: OptionsEditorRadiosProps): ReactEleme
 
   return (
     <>
-      <Box sx={{ borderBottom: 1, borderColor: (theme) => theme.palette.divider }}>
+      <Box sx={{ borderBottom: 1, borderColor: (theme: any) => theme.palette.divider }}>
         <FormControl>
           <RadioGroup
             row

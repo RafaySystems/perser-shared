@@ -12,9 +12,9 @@
 // limitations under the License.
 
 import { FormEvent, ReactElement, useState } from 'react';
-import { Alert, FormControl } from '@mui/material';
-import { Dialog, JSONEditor } from '@perses-dev/components';
-import { useDatasourceStore, useTimeRange } from '@perses-dev/plugin-system';
+import { Alert, FormControl } from '@rafaysystems-perses/components/compat/mui';
+import { Dialog, JSONEditor } from '@rafaysystems-perses/components';
+import { useDatasourceStore, useTimeRange } from '@rafaysystems-perses/plugin-system';
 import { useEditJsonDialog, useDashboard } from '../../context';
 
 export interface EditJsonDialogProps {
@@ -66,7 +66,7 @@ const EditJsonDialogForm = (props: EditJsonDialogProps): ReactElement => {
     <Dialog.Form onSubmit={handleApply}>
       <Dialog.Content sx={{ width: '100%' }}>
         {disableMetadataEdition && !isReadonly && (
-          <Alert sx={{ marginBottom: (theme) => theme.spacing(1) }} severity="warning">
+          <Alert sx={{ marginBottom: (theme: any) => theme.spacing(1) }} severity="warning">
             Metadata cannot be modified or saved.
           </Alert>
         )}

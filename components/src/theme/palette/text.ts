@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { PaletteOptions, PaletteMode } from '@mui/material';
+import { PaletteOptions, PaletteMode } from '@rafaysystems-perses/components/compat/mui';
 import { grey, white, blue } from './colors';
 
 export const text = (mode: PaletteMode): PaletteOptions['text'] => {

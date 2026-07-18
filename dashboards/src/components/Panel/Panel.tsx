@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Card, CardContent, CardProps } from '@mui/material';
+import { Card, CardContent, CardProps } from '@rafaysystems-perses/components/compat/mui';
 import {
   ErrorAlert,
   ErrorBoundary,
@@ -19,9 +19,9 @@ import {
   SelectionProvider,
   combineSx,
   useId,
-} from '@perses-dev/components';
+} from '@rafaysystems-perses/components';
 import { PanelDefinition } from '@perses-dev/spec';
-import { ActionOptions, useDataQueriesContext, usePluginRegistry } from '@perses-dev/plugin-system';
+import { ActionOptions, useDataQueriesContext, usePluginRegistry } from '@rafaysystems-perses/plugin-system';
 import { ReactNode, memo, useEffect, useMemo, useState } from 'react';
 import useResizeObserver from 'use-resize-observer';
 import { PanelGroupItemId } from '../../model';
@@ -168,11 +168,11 @@ export const Panel = memo(function Panel(props: PanelProps) {
     loadPluginActions();
   }, [definition.spec.plugin.kind, panelPropsForActions, getPlugin]);
 
-  const handleMouseEnter: CardProps['onMouseEnter'] = (e) => {
+  const handleMouseEnter: CardProps['onMouseEnter'] = (e: any) => {
     onMouseEnter?.(e);
   };
 
-  const handleMouseLeave: CardProps['onMouseLeave'] = (e) => {
+  const handleMouseLeave: CardProps['onMouseLeave'] = (e: any) => {
     onMouseLeave?.(e);
   };
 

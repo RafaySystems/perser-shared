@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { memo, ReactElement } from 'react';
-import { Box, BoxProps } from '@mui/material';
+import { Box, BoxProps } from '@rafaysystems-perses/components/compat/mui';
 import { combineSx } from '../utils';
 
 export interface LegendColorBadgeProps extends BoxProps<'div'> {

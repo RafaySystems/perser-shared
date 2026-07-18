@@ -11,15 +11,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, BoxProps } from '@mui/material';
+import { Box, BoxProps } from '@rafaysystems-perses/components/compat/mui';
 import { BuiltinVariableDefinition } from '@perses-dev/spec';
-import { ErrorBoundary, ErrorAlert, combineSx } from '@perses-dev/components';
+import { ErrorBoundary, ErrorAlert, combineSx } from '@rafaysystems-perses/components';
 import {
   TimeRangeProviderWithQueryParams,
   useInitialRefreshInterval,
   useInitialTimeRange,
   usePluginBuiltinVariableDefinitions,
-} from '@perses-dev/plugin-system';
+} from '@rafaysystems-perses/plugin-system';
 import { ReactElement, useMemo } from 'react';
 import { DEFAULT_DASHBOARD_DURATION, DEFAULT_REFRESH_INTERVAL } from '../../constants';
 import {

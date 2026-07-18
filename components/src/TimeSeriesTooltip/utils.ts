@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Theme } from '@mui/material';
+import { Theme } from '@rafaysystems-perses/components/compat/mui';
 import { ECharts as EChartsInstance } from 'echarts/core';
 import { BarSeriesOption, LineSeriesOption } from 'echarts/charts';
 import { TimeChartSeriesMapping } from '../model';

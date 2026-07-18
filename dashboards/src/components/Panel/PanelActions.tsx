@@ -11,23 +11,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Stack, Box, CircularProgress, styled, Popper, ClickAwayListener } from '@mui/material';
+import { Stack, Box, CircularProgress, styled, Popper, ClickAwayListener } from '@rafaysystems-perses/components/compat/mui';
 import { isValidElement, PropsWithChildren, ReactElement, ReactNode, useMemo, useState, MouseEvent } from 'react';
-import { InfoTooltip } from '@perses-dev/components';
-import { QueryData } from '@perses-dev/plugin-system';
-import DatabaseSearch from 'mdi-material-ui/DatabaseSearch';
-import ArrowCollapseIcon from 'mdi-material-ui/ArrowCollapse';
-import ArrowExpandIcon from 'mdi-material-ui/ArrowExpand';
-import PencilIcon from 'mdi-material-ui/PencilOutline';
-import DeleteIcon from 'mdi-material-ui/DeleteOutline';
-import DragIcon from 'mdi-material-ui/DragVertical';
-import ContentCopyIcon from 'mdi-material-ui/ContentCopy';
-import MenuIcon from 'mdi-material-ui/Menu';
-import AlertIcon from 'mdi-material-ui/Alert';
-import AlertCircleIcon from 'mdi-material-ui/AlertCircle';
-import InformationOutlineIcon from 'mdi-material-ui/InformationOutline';
-import LightningBoltIcon from 'mdi-material-ui/LightningBolt';
+import { InfoTooltip } from '@rafaysystems-perses/components';
+import { QueryData } from '@rafaysystems-perses/plugin-system';
+
+
+
+
+
+
+
+
+
+
+
+
 import { Link, Notice } from '@perses-dev/spec';
+import { DatabaseSearch, ArrowCollapse as ArrowCollapseIcon, ArrowExpand as ArrowExpandIcon, PencilOutline as PencilIcon, DeleteOutline as DeleteIcon, DragVertical as DragIcon, ContentCopy as ContentCopyIcon, Menu as MenuIcon, Alert as AlertIcon, AlertCircle as AlertCircleIcon, InformationOutline as InformationOutlineIcon, LightningBolt as LightningBoltIcon } from '@rafaysystems-perses/components/compat/icons';
 import {
   ARIA_LABEL_TEXT,
   HEADER_ACTIONS_CONTAINER_NAME,
@@ -100,7 +101,7 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
               aria-describedby="info-tooltip"
               aria-hidden={false}
               fontSize="inherit"
-              sx={{ color: (theme) => theme.palette.text.secondary }}
+              sx={{ color: (theme: any) => theme.palette.text.secondary }}
             />
           </HeaderIconButton>
         </InfoTooltip>
@@ -131,7 +132,7 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
             <AlertIcon
               fontSize="inherit"
               sx={{
-                color: (theme) => theme.palette.error.main,
+                color: (theme: any) => theme.palette.error.main,
               }}
             />
           </HeaderIconButton>
@@ -242,7 +243,7 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
   const moveAction = useMemo((): ReactNode | undefined => {
     if (editActions && !readHandlers?.isPanelViewed) {
       return (
-        <Box sx={{ background: (theme) => theme.palette.background.default }}>
+        <Box sx={{ background: (theme: any) => theme.palette.background.default }}>
           <InfoTooltip description={TOOLTIP_TEXT.movePanel}>
             <HeaderIconButton aria-label={ARIA_LABEL_TEXT.movePanel(title)} size="small">
               <DragIcon className="drag-handle" sx={{ cursor: 'grab' }} fontSize="inherit" />
@@ -264,7 +265,7 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
     <>
       {/* small panel width: move all icons except move/grab to overflow menu */}
       <ConditionalBox
-        sx={(theme) => ({
+        sx={(theme: any) => ({
           [theme.containerQueries(HEADER_ACTIONS_CONTAINER_NAME).between(0, HEADER_SMALL_WIDTH)]: { display: 'flex' },
         })}
       >
@@ -281,7 +282,7 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
 
       {/* medium panel width: move edit icons to overflow menu */}
       <ConditionalBox
-        sx={(theme) => ({
+        sx={(theme: any) => ({
           [theme.containerQueries(HEADER_ACTIONS_CONTAINER_NAME).between(HEADER_SMALL_WIDTH, HEADER_MEDIUM_WIDTH)]: {
             display: 'flex',
           },
@@ -304,7 +305,7 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
 
       {/* large panel width: show all icons in panel header */}
       <ConditionalBox
-        sx={(theme) => ({
+        sx={(theme: any) => ({
           // flip the logic here; if the browser (or jsdom) does not support container queries, always show all icons
           display: 'flex',
           [theme.containerQueries(HEADER_ACTIONS_CONTAINER_NAME).down(HEADER_MEDIUM_WIDTH)]: { display: 'none' },
@@ -379,7 +380,7 @@ const OverflowMenu: React.FC<
   const id = open ? 'actions-menu' : undefined;
 
   return (
-    <Box sx={{ background: (theme) => theme.palette.background.default }}>
+    <Box sx={{ background: (theme: any) => theme.palette.background.default }}>
       <HeaderIconButton
         className="show-actions"
         aria-describedby={id}
@@ -403,9 +404,9 @@ const OverflowMenu: React.FC<
           },
         ]}
         sx={{
-          backgroundColor: (theme) => theme.palette.background.paper,
+          backgroundColor: (theme: any) => theme.palette.background.paper,
           borderRadius: 1,
-          boxShadow: (theme) => theme.shadows[4],
+          boxShadow: (theme: any) => theme.shadows[4],
         }}
       >
         <ClickAwayListener onClickAway={handleClose}>

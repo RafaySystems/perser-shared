@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { act, renderHook, waitFor } from '@testing-library/react';
-import { DashboardResource } from '@perses-dev/client';
+import { DashboardResource } from '@rafaysystems-perses/client';
 import { useDashboardShortcuts } from './useDashboardShortcuts';
 
 const mockInfoSnackbar = jest.fn();
@@ -47,7 +47,7 @@ const mockDashboard: DashboardResource = {
   },
 };
 
-jest.mock('@perses-dev/components', () => ({
+jest.mock('@rafaysystems-perses/components', () => ({
   useSnackbar: (): {
     infoSnackbar: typeof mockInfoSnackbar;
     warningSnackbar: typeof mockWarningSnackbar;
@@ -62,7 +62,7 @@ jest.mock('@perses-dev/components', () => ({
 const mockSetTimeRange = jest.fn();
 const mockRefresh = jest.fn();
 
-jest.mock('@perses-dev/plugin-system', () => ({
+jest.mock('@rafaysystems-perses/plugin-system', () => ({
   useTimeRange: (): {
     timeRange: { pastDuration: string };
     setTimeRange: jest.Mock;

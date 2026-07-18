@@ -24,9 +24,9 @@ import {
   IconButton,
   Stack,
   Typography,
-} from '@mui/material';
-import { getDateAndTime, InfoTooltip, useTimeZone } from '@perses-dev/components';
-import AlertIcon from 'mdi-material-ui/Alert';
+} from '@rafaysystems-perses/components/compat/mui';
+import { getDateAndTime, InfoTooltip, useTimeZone } from '@rafaysystems-perses/components';
+import { Alert as AlertIcon } from '@rafaysystems-perses/components/compat/icons';
 import { useAnnotationData } from '../../../runtime';
 
 interface AnnotationPreviewCardProps extends CardProps {
@@ -103,7 +103,7 @@ export function AnnotationPreview({ spec, ...props }: AnnotationPreviewProps): R
             <AlertIcon
               fontSize="inherit"
               sx={{
-                color: (theme) => theme.palette.error.main,
+                color: (theme: any) => theme.palette.error.main,
               }}
             />
           </IconButton>

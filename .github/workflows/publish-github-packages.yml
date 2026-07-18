@@ -1,0 +1,179 @@
+name: publish-github-packages
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (for example: 0.54.0-rc.1)'
+        required: false
+        type: string
+      npm_scope:
+        description: 'NPM scope to publish (for example: @your-org). Defaults to repository owner.'
+        required: false
+        type: string
+      dist_tag:
+        description: 'Optional npm dist-tag override (for example: latest, next)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Run publish in dry-run mode'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PACKAGES: "client components plugin-system dashboards explore"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          registry-url: https://npm.pkg.github.com
+          scope: '@${{ github.repository_owner }}'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Resolve version and dist-tag
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          else
+            VERSION="${{ github.event.inputs.version }}"
+          fi
+
+          if [[ -z "${VERSION}" ]]; then
+            echo "version is required for workflow_dispatch"
+            exit 1
+          fi
+
+          if [[ -n "${{ github.event.inputs.dist_tag }}" ]]; then
+            DIST_TAG="${{ github.event.inputs.dist_tag }}"
+          else
+            if [[ "${VERSION}" == *-* ]]; then
+              DIST_TAG="next"
+            else
+              DIST_TAG="latest"
+            fi
+          fi
+
+          if [[ "${{ github.event.inputs.dry_run || 'false' }}" == "true" ]]; then
+            DRY_RUN="true"
+          else
+            DRY_RUN="false"
+          fi
+
+          if [[ -n "${{ github.event.inputs.npm_scope }}" ]]; then
+            RAW_SCOPE="${{ github.event.inputs.npm_scope }}"
+          else
+            RAW_SCOPE="${{ github.repository_owner }}"
+          fi
+
+          RAW_SCOPE="${RAW_SCOPE#@}"
+          SCOPE="@${RAW_SCOPE,,}"
+
+          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
+          echo "DIST_TAG=${DIST_TAG}" >> "$GITHUB_ENV"
+          echo "DRY_RUN=${DRY_RUN}" >> "$GITHUB_ENV"
+          echo "PACKAGE_SCOPE=${SCOPE}" >> "$GITHUB_ENV"
+
+      - name: Verify workspace versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+
+          const expected = process.env.VERSION;
+          const workspaces = ['client', 'components', 'plugin-system', 'dashboards', 'explore'];
+          const mismatches = [];
+
+          for (const ws of workspaces) {
+            const pkgPath = path.join(process.cwd(), ws, 'package.json');
+            const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+            if (pkg.version !== expected) {
+              mismatches.push(`${ws}: expected ${expected}, found ${pkg.version}`);
+            }
+          }
+
+          if (mismatches.length > 0) {
+            console.error('Version mismatch detected:\n' + mismatches.join('\n'));
+            process.exit(1);
+          }
+          console.log('All workspace versions match', expected);
+          NODE
+
+      - name: Verify package scope matches fork scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+
+          const expectedScope = process.env.PACKAGE_SCOPE;
+          const workspaces = ['client', 'components', 'plugin-system', 'dashboards', 'explore'];
+          const mismatches = [];
+
+          for (const ws of workspaces) {
+            const pkgPath = path.join(process.cwd(), ws, 'package.json');
+            const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+            const name = pkg.name || '';
+            const scope = name.startsWith('@') ? `@${name.slice(1).split('/')[0]}` : '';
+            if (scope !== expectedScope) {
+              mismatches.push(`${ws}: package name "${name}" does not match expected scope "${expectedScope}"`);
+            }
+          }
+
+          if (mismatches.length > 0) {
+            console.error('Package scope mismatch detected:\n' + mismatches.join('\n'));
+            console.error('\nUpdate workspace package names/dependencies to your fork scope before publishing.');
+            process.exit(1);
+          }
+          console.log('All workspace package scopes match', expectedScope);
+          NODE
+
+      - name: Build publishable workspaces
+        run: |
+          npm run -w client build
+          npm run -w components build
+          npm run -w plugin-system build
+          npm run -w dashboards build
+          npm run -w explore build
+
+      - name: Publish workspaces to GitHub Packages
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          publish_workspace () {
+            local workspace="$1"
+            local cmd=(npm publish -w "$workspace" --access restricted --tag "$DIST_TAG" --registry "https://npm.pkg.github.com")
+            if [[ "$DRY_RUN" == "true" ]]; then
+              cmd+=(--dry-run)
+            fi
+            echo "Publishing $workspace with tag $DIST_TAG"
+            "${cmd[@]}"
+          }
+
+          for ws in $PACKAGES; do
+            publish_workspace "$ws"
+          done

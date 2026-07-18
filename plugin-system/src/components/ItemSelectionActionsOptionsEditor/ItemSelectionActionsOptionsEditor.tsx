@@ -33,8 +33,8 @@ import {
   SwitchProps,
   TextField,
   Typography,
-} from '@mui/material';
-import { SelectChangeEvent } from '@mui/material/Select';
+} from '@rafaysystems-perses/components/compat/mui';
+import { SelectChangeEvent } from '@rafaysystems-perses/components/compat/mui';
 import {
   DragAndDropElement,
   DragButton,
@@ -45,27 +45,29 @@ import {
   OptionsEditorControl,
   OptionsEditorGroup,
   useDragAndDropMonitor,
-} from '@perses-dev/components';
-import AlertIcon from 'mdi-material-ui/Alert';
-import CheckIcon from 'mdi-material-ui/Check';
-import ChevronDown from 'mdi-material-ui/ChevronDown';
-import ChevronRight from 'mdi-material-ui/ChevronRight';
-import CloseIcon from 'mdi-material-ui/Close';
-import SettingsIcon from 'mdi-material-ui/Cog';
-import DeleteIcon from 'mdi-material-ui/DeleteOutline';
-import DownloadIcon from 'mdi-material-ui/Download';
-import InfoIcon from 'mdi-material-ui/InformationOutline';
-import LinkIcon from 'mdi-material-ui/Link';
-import MagnifyScan from 'mdi-material-ui/MagnifyScan';
-import PauseIcon from 'mdi-material-ui/Pause';
-import PlayIcon from 'mdi-material-ui/Play';
-import PlusIcon from 'mdi-material-ui/Plus';
-import RefreshIcon from 'mdi-material-ui/Refresh';
-import RobotOutline from 'mdi-material-ui/RobotOutline';
-import SendIcon from 'mdi-material-ui/Send';
-import StopIcon from 'mdi-material-ui/Stop';
-import SyncIcon from 'mdi-material-ui/Sync';
-import UploadIcon from 'mdi-material-ui/Upload';
+} from '@rafaysystems-perses/components';
+import {
+  Alert as AlertIcon,
+  Check as CheckIcon,
+  ChevronDown,
+  ChevronRight,
+  Close as CloseIcon,
+  Cog as SettingsIcon,
+  DeleteOutline as DeleteIcon,
+  Download as DownloadIcon,
+  InformationOutline as InfoIcon,
+  Link as LinkIcon,
+  MagnifyScan,
+  Pause as PauseIcon,
+  Play as PlayIcon,
+  Plus as PlusIcon,
+  Refresh as RefreshIcon,
+  RobotOutline,
+  Send as SendIcon,
+  Stop as StopIcon,
+  Sync as SyncIcon,
+  Upload as UploadIcon,
+} from '@rafaysystems-perses/components/compat/icons';
 import { ReactElement, useCallback, useMemo, useState } from 'react';
 
 export type ActionIcon =
@@ -311,7 +313,7 @@ function EventActionEditor({
               onMoveUp={onMoveUp}
               onMoveDown={onMoveDown}
               menuSx={{
-                '.MuiPaper-root': { backgroundColor: (theme) => theme.palette.background.lighter },
+                '.MuiPaper-root': { backgroundColor: (theme: any) => theme.palette.background.lighter },
               }}
               key="reorder-action-button"
             />
@@ -326,7 +328,7 @@ function EventActionEditor({
             control={
               <Switch
                 checked={eventAction?.enabled ?? false}
-                onChange={(e) => onChange(index, { ...eventAction, enabled: e.target.checked })}
+                onChange={(e: any) => onChange(index, { ...eventAction, enabled: e.target.checked })}
               />
             }
           />
@@ -336,7 +338,7 @@ function EventActionEditor({
               label="Action Name"
               size="small"
               value={eventAction.name}
-              onChange={(e) => onChange(index, { ...eventAction, name: e.target.value })}
+              onChange={(e: any) => onChange(index, { ...eventAction, name: e.target.value })}
               sx={{ flexGrow: 1 }}
             />
 
@@ -345,7 +347,7 @@ function EventActionEditor({
               <Select
                 value={eventAction.icon || ''}
                 label="Icon"
-                onChange={(e) => onChange(index, { ...eventAction, icon: (e.target.value as ActionIcon) || undefined })}
+                onChange={(e: any) => onChange(index, { ...eventAction, icon: (e.target.value as ActionIcon) || undefined })}
               >
                 <MenuItem value="">
                   <em>None</em>
@@ -367,7 +369,7 @@ function EventActionEditor({
               label="Event Name"
               size="small"
               value={eventAction.eventName}
-              onChange={(e) => onChange(index, { ...eventAction, eventName: e.target.value })}
+              onChange={(e: any) => onChange(index, { ...eventAction, eventName: e.target.value })}
               helperText="Name of the CustomEvent to dispatch (e.g., 'selection-action')"
               fullWidth
             />
@@ -377,7 +379,7 @@ function EventActionEditor({
               <Select
                 value={eventAction.batchMode ?? 'individual'}
                 label="Batch Mode"
-                onChange={(e) => onChange(index, { ...eventAction, batchMode: e.target.value as BatchMode })}
+                onChange={(e: any) => onChange(index, { ...eventAction, batchMode: e.target.value as BatchMode })}
               >
                 {BATCH_MODES.map((mode) => (
                   <MenuItem key={mode.value} value={mode.value}>
@@ -412,7 +414,7 @@ function EventActionEditor({
             label="Confirmation Message (optional)"
             size="small"
             value={eventAction.confirmMessage || ''}
-            onChange={(e) => onChange(index, { ...eventAction, confirmMessage: e.target.value || undefined })}
+            onChange={(e: any) => onChange(index, { ...eventAction, confirmMessage: e.target.value || undefined })}
             helperText="If set, shows a confirmation dialog before executing the action"
             fullWidth
             multiline
@@ -551,7 +553,7 @@ function WebhookActionEditor({
               onMoveUp={onMoveUp}
               onMoveDown={onMoveDown}
               menuSx={{
-                '.MuiPaper-root': { backgroundColor: (theme) => theme.palette.background.lighter },
+                '.MuiPaper-root': { backgroundColor: (theme: any) => theme.palette.background.lighter },
               }}
               key="reorder-action-button"
             />
@@ -566,7 +568,7 @@ function WebhookActionEditor({
             control={
               <Switch
                 checked={action?.enabled ?? false}
-                onChange={(e) => onChange(index, { ...webhookAction, enabled: e.target.checked })}
+                onChange={(e: any) => onChange(index, { ...webhookAction, enabled: e.target.checked })}
               />
             }
           />
@@ -576,7 +578,7 @@ function WebhookActionEditor({
               label="Action Name"
               size="small"
               value={webhookAction.name}
-              onChange={(e) => onChange(index, { ...webhookAction, name: e.target.value })}
+              onChange={(e: any) => onChange(index, { ...webhookAction, name: e.target.value })}
               sx={{ flexGrow: 1 }}
             />
 
@@ -585,7 +587,7 @@ function WebhookActionEditor({
               <Select
                 value={webhookAction.icon || ''}
                 label="Icon"
-                onChange={(e) =>
+                onChange={(e: any) =>
                   onChange(index, { ...webhookAction, icon: (e.target.value as ActionIcon) || undefined })
                 }
               >
@@ -608,7 +610,7 @@ function WebhookActionEditor({
             label="URL"
             size="small"
             value={webhookAction.url}
-            onChange={(e) => onChange(index, { ...webhookAction, url: e.target.value })}
+            onChange={(e: any) => onChange(index, { ...webhookAction, url: e.target.value })}
             helperText={URL_HELPER_TEXT}
             fullWidth
           />
@@ -630,7 +632,7 @@ function WebhookActionEditor({
               <Select
                 value={webhookAction.batchMode}
                 label="Batch Mode"
-                onChange={(e) => onChange(index, { ...webhookAction, batchMode: e.target.value as BatchMode })}
+                onChange={(e: any) => onChange(index, { ...webhookAction, batchMode: e.target.value as BatchMode })}
               >
                 {BATCH_MODES.map((mode) => (
                   <MenuItem key={mode.value} value={mode.value}>
@@ -684,7 +686,7 @@ function WebhookActionEditor({
             label="Confirmation Message (optional)"
             size="small"
             value={webhookAction.confirmMessage || ''}
-            onChange={(e) => onChange(index, { ...webhookAction, confirmMessage: e.target.value || undefined })}
+            onChange={(e: any) => onChange(index, { ...webhookAction, confirmMessage: e.target.value || undefined })}
             helperText="If set, shows a confirmation dialog before executing the action"
             fullWidth
             multiline
@@ -801,7 +803,7 @@ export function ItemSelectionActionsEditor({
             <Stack spacing={1} border="none">
               {actions.actionsList &&
                 actions.actionsList.map((action, index) => (
-                  <Box key={index} borderBottom={1} borderColor={(theme) => theme.palette.divider} pb={1}>
+                  <Box key={index} borderBottom={1} borderColor={(theme: any) => theme.palette.divider} pb={1}>
                     {action.type === 'event' ? (
                       <EventActionEditor
                         action={action}

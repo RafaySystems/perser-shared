@@ -12,6 +12,7 @@
 // limitations under the License.
 
 import { ReactElement, useState } from 'react';
+import { PinOutline, PinOffOutline } from '@rafaysystems-perses/components/compat/icons';
 import {
   AppBar,
   Box,
@@ -22,10 +23,10 @@ import {
   useMediaQuery,
   useScrollTrigger,
   useTheme,
-} from '@mui/material';
-import PinOutline from 'mdi-material-ui/PinOutline';
-import PinOffOutline from 'mdi-material-ui/PinOffOutline';
-import { TimeRangeControls, useTimeZoneParams } from '@perses-dev/plugin-system';
+} from '@rafaysystems-perses/components/compat/mui';
+
+
+import { TimeRangeControls, useTimeZoneParams } from '@rafaysystems-perses/plugin-system';
 import { VariableList } from '../Variables';
 
 interface DashboardStickyToolbarProps {
@@ -75,10 +76,10 @@ export function DashboardStickyToolbar(props: DashboardStickyToolbarProps): Reac
               // Safari and Chrome:
               '&::-webkit-scrollbar': {
                 height: '8px',
-                backgroundColor: (theme) => theme.palette.grey['300'],
+                backgroundColor: (theme: any) => theme.palette.grey['300'],
               },
               '&::-webkit-scrollbar-thumb': {
-                background: (theme) => theme.palette.grey['600'],
+                background: (theme: any) => theme.palette.grey['600'],
               },
             }}
             gap={1}

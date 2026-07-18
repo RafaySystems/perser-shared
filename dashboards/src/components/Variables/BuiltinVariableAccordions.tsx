@@ -12,6 +12,7 @@
 // limitations under the License.
 
 import { BuiltinVariableDefinition } from '@perses-dev/spec';
+import { ChevronUp as ExpandMoreIcon } from '@rafaysystems-perses/components/compat/icons';
 import {
   Accordion,
   AccordionDetails,
@@ -23,9 +24,9 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@mui/material';
-import ExpandMoreIcon from 'mdi-material-ui/ChevronUp';
-import { InfoTooltip } from '@perses-dev/components';
+} from '@rafaysystems-perses/components/compat/mui';
+
+import { InfoTooltip } from '@rafaysystems-perses/components';
 import { ReactElement, useMemo } from 'react';
 
 type BuiltinVariableAccordionsProps = {
@@ -63,7 +64,7 @@ export function BuiltinVariableAccordions({
       {sources.map((source) => (
         <Accordion
           key={source}
-          sx={(theme) => ({
+          sx={(theme: any) => ({
             '.MuiAccordionSummary-root': {
               backgroundColor: theme.palette.background.lighter,
             },

@@ -17,8 +17,7 @@ import { PersesColor } from './palette';
 export * from './theme';
 export * from './typography';
 
-//Use Typescript interface augmentation to extend the MUI type definition
-declare module '@mui/material/styles/createPalette' {
+declare module '@rafaysystems-perses/components/compat/mui' {
   interface TypeBackground {
     navigation: string;
     tooltip: string;
@@ -34,9 +33,7 @@ declare module '@mui/material/styles/createPalette' {
     link: string;
     linkHover: string;
   }
-}
 
-declare module '@mui/material/styles' {
   interface Palette {
     /**
      * The base colors from Perses design system. Use sparingly since

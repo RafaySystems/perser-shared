@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Theme } from '@mui/material';
+import { Theme } from '@rafaysystems-perses/components/compat/mui';
 import { Link } from '@perses-dev/spec';
 import {
   AccessorKeyColumnDef,

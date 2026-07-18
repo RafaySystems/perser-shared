@@ -11,14 +11,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Checkbox, IconButton, InputAdornment, ListItemText, Menu, MenuItem, Stack, Tooltip } from '@mui/material';
+import { Checkbox, IconButton, InputAdornment, ListItemText, Menu, MenuItem, Stack, Tooltip } from '@rafaysystems-perses/components/compat/mui';
 import { Column } from '@tanstack/react-table';
 import { ReactElement, useCallback, useState } from 'react';
-import Magnify from 'mdi-material-ui/Magnify';
-import Close from 'mdi-material-ui/Close';
-import ViewColumn from 'mdi-material-ui/ViewColumn';
-import UnfoldMore from 'mdi-material-ui/UnfoldMoreHorizontal';
-import UnfoldLess from 'mdi-material-ui/UnfoldLessHorizontal';
+import { Magnify } from '@rafaysystems-perses/components/compat/icons';
+import { Close } from '@rafaysystems-perses/components/compat/icons';
+import { ViewColumn } from '@rafaysystems-perses/components/compat/icons';
+import { UnfoldMore } from '@rafaysystems-perses/components/compat/icons';
+import { UnfoldLess } from '@rafaysystems-perses/components/compat/icons';
 import { TextField } from '../controls';
 
 export interface TableToolbarProps<TableData> {

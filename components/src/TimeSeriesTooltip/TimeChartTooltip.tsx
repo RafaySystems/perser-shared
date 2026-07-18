@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { memo, MutableRefObject, useCallback, useLayoutEffect, useRef, useState } from 'react';
-import { Box, Portal, Stack } from '@mui/material';
+import { Box, Portal, Stack } from '@rafaysystems-perses/components/compat/mui';
 import { ECharts as EChartsInstance } from 'echarts/core';
 import { TimeSeries } from '@perses-dev/spec';
 import useResizeObserver from 'use-resize-observer';

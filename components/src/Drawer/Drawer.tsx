@@ -11,19 +11,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Drawer as MuiDrawer, DrawerProps as MuiDrawerProps, useMediaQuery } from '@mui/material';
-import { ReactElement } from 'react';
+import { Drawer as MuiDrawer, DrawerProps as MuiDrawerProps, useMediaQuery } from '@rafaysystems-perses/components/compat/mui';
+import React, { ReactElement, ReactNode } from 'react';
 import { combineSx } from '../utils';
 
 export interface DrawerProps extends MuiDrawerProps {
+  children?: ReactNode;
   isOpen: boolean;
   onClose: () => void;
   anchor?: 'left' | 'right';
+  PaperProps?: any;
+  slotProps?: any;
 }
 
 const DRAWER_DEFAULT_WIDTH = 1080;
 
-export const Drawer = ({
+export const Drawer: React.FC<any> = ({
   anchor = 'right',
   isOpen,
   onClose,

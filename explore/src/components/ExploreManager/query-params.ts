@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { encodeQueryParams, JsonParam, StringParam, useQueryParams } from 'use-query-params';
-import { TimeRangeParam } from '@perses-dev/plugin-system';
+import { TimeRangeParam } from '@rafaysystems-perses/plugin-system';
 import { stringify } from 'qs';
 
 export const explorerQueryConfig = {

@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { RequestHeaders } from '@perses-dev/client';
+import { RequestHeaders } from '@rafaysystems-perses/client';
 import {
   replaceVariables,
   VariableStateMap,

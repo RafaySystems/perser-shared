@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { FormEventHandler, ReactElement, useState } from 'react';
-import { FormControl, TextField, MenuItem, Typography } from '@mui/material';
+import { FormControl, TextField, MenuItem, Typography } from '@rafaysystems-perses/components/compat/mui';
 import { PanelGroupEditorValues } from '../../context';
 
 export interface PanelGroupEditorFormProps {
@@ -41,7 +41,7 @@ export function PanelGroupEditorForm(props: PanelGroupEditorFormProps): ReactEle
           label="Name"
           variant="outlined"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e: any) => setTitle(e.target.value)}
           data-testid="panel-group-editor-name"
         />
       </FormControl>
@@ -52,7 +52,7 @@ export function PanelGroupEditorForm(props: PanelGroupEditorFormProps): ReactEle
           label="Collapse State"
           size="small"
           value={isCollapsed ? 'Closed' : 'Open'}
-          onChange={(e) => setIsCollapsed(e.target.value === 'Closed')}
+          onChange={(e: any) => setIsCollapsed(e.target.value === 'Closed')}
         >
           <MenuItem value="Open">Open</MenuItem>
           <MenuItem value="Closed">Closed</MenuItem>
@@ -63,7 +63,7 @@ export function PanelGroupEditorForm(props: PanelGroupEditorFormProps): ReactEle
             label="Repeat Variable"
             variant="outlined"
             value={repeatVariable ?? ''}
-            onChange={(e) => setRepeatVariable(e.target.value === '' ? undefined : e.target.value)}
+            onChange={(e: any) => setRepeatVariable(e.target.value === '' ? undefined : e.target.value)}
           >
             <MenuItem value="">
               <Typography sx={{ fontStyle: 'italic' }}>None</Typography>

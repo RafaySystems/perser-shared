@@ -11,12 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { IconButton, Link as LinkComponent, Menu, MenuItem, Theme, Chip, capitalize, Stack } from '@mui/material';
-import LaunchIcon from 'mdi-material-ui/Launch';
+import { IconButton, Link as LinkComponent, Menu, MenuItem, Theme, Chip, capitalize, Stack } from '@rafaysystems-perses/components/compat/mui';
+
 import { Link } from '@perses-dev/spec';
 import { MouseEvent, ReactElement, useState } from 'react';
-import { InfoTooltip } from '@perses-dev/components';
-import { useReplaceVariablesInString } from '@perses-dev/plugin-system';
+import { InfoTooltip } from '@rafaysystems-perses/components';
+import { useReplaceVariablesInString } from '@rafaysystems-perses/plugin-system';
+import { Launch as LaunchIcon } from '@rafaysystems-perses/components/compat/icons';
 
 type LinksVariant = 'dashboard' | 'panel';
 
@@ -82,7 +83,7 @@ export function LinksDisplay({ links, variant }: LinksProps): ReactElement | nul
           id={`${variant}-links-button`}
           size="small"
           onClick={handleOpenMenu}
-          sx={(theme) => ({ borderRadius: theme.shape.borderRadius, padding: '4px' })}
+          sx={(theme: any) => ({ borderRadius: theme.shape.borderRadius, padding: '4px' })}
         >
           <LaunchIcon
             aria-describedby="links-icon"
@@ -121,7 +122,7 @@ function LinkChip({ link }: { link: Link }): ReactElement {
         clickable
         size="medium"
         icon={<LaunchIcon color="inherit" fontSize="small" />}
-        sx={(theme) => ({ height: theme.spacing(3) })}
+        sx={(theme: any) => ({ height: theme.spacing(3) })}
       />
     </InfoTooltip>
   );
@@ -137,7 +138,7 @@ function LinkButton({ link }: { link: Link }): ReactElement {
         size="small"
         href={url}
         target={targetBlank ? '_blank' : '_self'}
-        sx={(theme) => ({ borderRadius: theme.shape.borderRadius, padding: '4px' })}
+        sx={(theme: any) => ({ borderRadius: theme.shape.borderRadius, padding: '4px' })}
       >
         <LaunchIcon fontSize="inherit" sx={{ color: (theme: Theme) => theme.palette.text.secondary }} />
       </IconButton>

@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { PanelEditorValues, PanelGroupId } from '@perses-dev/plugin-system';
+import { PanelEditorValues, PanelGroupId } from '@rafaysystems-perses/plugin-system';
 import { StateCreator } from 'zustand';
-import { Action } from '@perses-dev/client';
+import { Action } from '@rafaysystems-perses/client';
 import { generatePanelKey, getYForNewRow } from '../../utils';
 import { PanelGroupDefinition, PanelGroupItemId, PanelGroupItemLayout } from '../../model';
 import { generateId, Middleware, createPanelDefinition } from './common';

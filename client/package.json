@@ -1,5 +1,5 @@
 {
-  "name": "@perses-dev/client",
+  "name": "@rafaysystems-perses/client",
   "version": "0.54.0-rc.0",
   "description": "Functions as an API client or Data fetching Layer for interacting with a backend service",
   "license": "Apache-2.0",

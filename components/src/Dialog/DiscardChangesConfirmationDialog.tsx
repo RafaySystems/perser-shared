@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button } from '@mui/material';
+import { Button } from '@rafaysystems-perses/components/compat/mui';
 import { ReactElement } from 'react';
 import { Dialog } from './Dialog';
 

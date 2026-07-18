@@ -16,8 +16,8 @@ import { screen, RenderOptions, render, RenderResult } from '@testing-library/re
 import { DurationString } from '@perses-dev/spec';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React, { ReactElement } from 'react';
-import { SnackbarProvider } from '@perses-dev/components';
-import { TimeRangeProviderBasic, TimeRangeProviderWithQueryParams } from '@perses-dev/plugin-system';
+import { SnackbarProvider } from '@rafaysystems-perses/components';
+import { TimeRangeProviderBasic, TimeRangeProviderWithQueryParams } from '@rafaysystems-perses/plugin-system';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryParamProvider } from 'use-query-params';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';

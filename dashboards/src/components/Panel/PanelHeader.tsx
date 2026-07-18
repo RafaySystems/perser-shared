@@ -11,10 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { CardHeader, CardHeaderProps, Stack, Typography, Tooltip } from '@mui/material';
-import { combineSx } from '@perses-dev/components';
+import { CardHeader, CardHeaderProps, Stack, Typography, Tooltip } from '@rafaysystems-perses/components/compat/mui';
+import { combineSx } from '@rafaysystems-perses/components';
 import { Link } from '@perses-dev/spec';
-import { ItemAction, QueryData, useAllVariableValues, useReplaceVariablesInString } from '@perses-dev/plugin-system';
+import { ItemAction, QueryData, useAllVariableValues, useReplaceVariablesInString } from '@rafaysystems-perses/plugin-system';
 import { ReactElement, ReactNode, useRef } from 'react';
 import { HEADER_ACTIONS_CONTAINER_NAME } from '../../constants';
 import { PanelActions, PanelActionsProps } from './PanelActions';
@@ -120,7 +120,7 @@ export function PanelHeader({
             </Stack>
           }
           sx={combineSx(
-            (theme) => ({
+            (theme: any) => ({
               containerType: 'inline-size',
               containerName: HEADER_ACTIONS_CONTAINER_NAME,
               padding: theme.spacing(1),

@@ -11,13 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { IconButton, IconButtonProps, styled } from '@mui/material';
-import { StyledComponent } from '@emotion/styled';
-import { Theme } from '@mui/material/styles';
+import { IconButton, IconButtonProps, styled } from '@rafaysystems-perses/components/compat/mui';
 
-export const HeaderIconButton: StyledComponent<IconButtonProps & { theme?: Theme }> = styled(IconButton)(
-  ({ theme }) => ({
-    borderRadius: theme.shape.borderRadius,
-    padding: '4px',
-  })
-);
+export const HeaderIconButton = styled(IconButton)(({ theme }: any) => ({
+  borderRadius: theme.shape.borderRadius,
+  padding: '4px',
+}));

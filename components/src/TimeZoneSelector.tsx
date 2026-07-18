@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { ReactElement, ReactNode, useMemo } from 'react';
-import { Select, MenuItem, SelectProps, SelectChangeEvent } from '@mui/material';
+import { Select, MenuItem, SelectProps, SelectChangeEvent } from '@rafaysystems-perses/components/compat/mui';
 import { TimeZoneOption, getTimeZoneOptions } from './model/timeZoneOption';
 
 export interface TimeZoneSelectorProps extends Omit<SelectProps, 'onChange' | 'variant' | 'value'> {

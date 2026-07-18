@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { UnknownSpec } from '@perses-dev/spec';
-import { PanelPlugin, MockPlugin } from '@perses-dev/plugin-system';
+import { PanelPlugin, MockPlugin } from '@rafaysystems-perses/plugin-system';
 import { ReactElement } from 'react';
 
 const FakeTimeSeriesChartOptionEditor = (): ReactElement => {

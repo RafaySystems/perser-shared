@@ -10,10 +10,30 @@ This monorepo manages the core UI libraries that power the Perses platform. Each
 
 | Package | NPM | Description |
 |---------|-----|-------------|
-| [`@perses-dev/components`](./components) | [![npm version](https://badge.fury.io/js/@perses-dev%2Fcomponents.svg)](https://www.npmjs.com/package/@perses-dev/components) | Common UI components used across Perses features |
-| [`@perses-dev/dashboards`](./dashboards) | [![npm version](https://badge.fury.io/js/@perses-dev%2Fdashboards.svg)](https://www.npmjs.com/package/@perses-dev/dashboards) | The dashboards feature in Perses |
-| [`@perses-dev/explore`](./explore) | [![npm version](https://badge.fury.io/js/@perses-dev%2Fexplore.svg)](https://www.npmjs.com/package/@perses-dev/explore) | The explore feature in Perses |
-| [`@perses-dev/plugin-system`](./plugin-system) | [![npm version](https://badge.fury.io/js/@perses-dev%2Fplugin-system.svg)](https://www.npmjs.com/package/@perses-dev/plugin-system) | The plugin system for Perses |
+| [`@rafaysystems-perses/components`](./components) | [![npm version](https://badge.fury.io/js/@rafaysystems-perses%2Fcomponents.svg)](https://www.npmjs.com/package/@rafaysystems-perses/components) | Common UI components used across Perses features |
+| [`@rafaysystems-perses/dashboards`](./dashboards) | [![npm version](https://badge.fury.io/js/@rafaysystems-perses%2Fdashboards.svg)](https://www.npmjs.com/package/@rafaysystems-perses/dashboards) | The dashboards feature in Perses |
+| [`@rafaysystems-perses/explore`](./explore) | [![npm version](https://badge.fury.io/js/@rafaysystems-perses%2Fexplore.svg)](https://www.npmjs.com/package/@rafaysystems-perses/explore) | The explore feature in Perses |
+| [`@rafaysystems-perses/plugin-system`](./plugin-system) | [![npm version](https://badge.fury.io/js/@rafaysystems-perses%2Fplugin-system.svg)](https://www.npmjs.com/package/@rafaysystems-perses/plugin-system) | The plugin system for Perses |
+
+## Installing From GitHub Packages
+
+Add this `.npmrc` in the consumer repository:
+
+```ini
+@rafaysystems-perses:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+Then install packages normally:
+
+```bash
+npm i @rafaysystems-perses/components@<version>
+npm i @rafaysystems-perses/dashboards@<version>
+npm i @rafaysystems-perses/explore@<version>
+npm i @rafaysystems-perses/plugin-system@<version>
+```
+
+> If this fork still uses `@perses-dev/*` package names, rename scopes in workspace `package.json` files and internal dependencies before publishing to your own GitHub Packages namespace.
 
 ## Getting Started
 
@@ -154,6 +174,11 @@ Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our development 
 ## Release Process
 
 See [RELEASE.md](./RELEASE.md) for information about the release process.
+
+## Private Package Consumption
+
+For local and CI authentication setup when consuming private GitHub Packages, see:
+[CONSUMING_PRIVATE_PACKAGES.md](./CONSUMING_PRIVATE_PACKAGES.md)
 
 ## License
 

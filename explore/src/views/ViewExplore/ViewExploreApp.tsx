@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box } from '@mui/material';
-import { ChartsProvider, useChartsTheme } from '@perses-dev/components';
+import { Box } from '@rafaysystems-perses/components/compat/mui';
+import { ChartsProvider, useChartsTheme } from '@rafaysystems-perses/components';
 import { ReactElement, ReactNode } from 'react';
 import { ExploreManager, ExplorerManagerProviderWithQueryParams } from '../../components';
 

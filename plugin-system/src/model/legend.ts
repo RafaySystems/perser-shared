@@ -19,7 +19,7 @@ import {
   LegendOptionsBase,
   LegendPositions,
   LegendSize,
-} from '@perses-dev/components';
+} from '@rafaysystems-perses/components';
 import { CALCULATIONS_CONFIG, CalculationType } from './calculations';
 
 // This file contains legend-related model code specific to panel plugin specs.

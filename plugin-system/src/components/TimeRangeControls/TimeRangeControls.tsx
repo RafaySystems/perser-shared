@@ -11,12 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import RefreshIcon from 'mdi-material-ui/Refresh';
+import { Refresh as RefreshIcon, PlusCircleOutline as ZoomIn, MinusCircleOutline as ZoomOut } from '@rafaysystems-perses/components/compat/icons';
 // eslint-disable-next-line import/no-duplicates
-import ZoomIn from 'mdi-material-ui/PlusCircleOutline';
-// eslint-disable-next-line import/no-duplicates
-import ZoomOut from 'mdi-material-ui/MinusCircleOutline';
-import { Stack } from '@mui/material';
+import { Stack } from '@rafaysystems-perses/components/compat/mui';
 import {
   RefreshIntervalPicker,
   InfoTooltip,
@@ -26,7 +23,7 @@ import {
   TimeZoneOption,
   getTimeZoneOptions,
   buildRelativeTimeOption,
-} from '@perses-dev/components';
+} from '@rafaysystems-perses/components';
 import { AbsoluteTimeRange, DurationString, parseDurationString, RelativeTimeRange } from '@perses-dev/spec';
 import { ReactElement, useCallback } from 'react';
 import { TOOLTIP_TEXT } from '../../constants';

@@ -1,5 +1,5 @@
 {
-  "name": "@perses-dev/explore",
+  "name": "@rafaysystems-perses/explore",
   "version": "0.54.0-rc.0",
   "description": "The explore feature in Perses",
   "license": "Apache-2.0",
@@ -28,10 +28,9 @@
   },
   "dependencies": {
     "@nexucis/fuzzy": "^0.5.1",
-    "@perses-dev/components": "0.54.0-rc.0",
-    "@perses-dev/dashboards": "0.54.0-rc.0",
-    "@perses-dev/plugin-system": "0.54.0-rc.0",
-    "mdi-material-ui": "^7.9.2",
+    "@rafaysystems-perses/components": "0.54.0-rc.0",
+    "@rafaysystems-perses/dashboards": "0.54.0-rc.0",
+    "@rafaysystems-perses/plugin-system": "0.54.0-rc.0",
     "qs": "^6.14.0",
     "react-virtuoso": "^4.12.2",
     "use-query-params": "^2.2.1",
@@ -42,7 +41,6 @@
     "react-router-dom": "^6.30.1"
   },
   "peerDependencies": {
-    "@mui/material": "^6.1.10",
     "@tanstack/react-query": "^4.39.1",
     "react": "^17.0.2 || ^18.0.0",
     "react-dom": "^17.0.2 || ^18.0.0"

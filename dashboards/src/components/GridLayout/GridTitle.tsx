@@ -11,19 +11,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, IconButton, Stack, Typography } from '@mui/material';
-import ExpandedIcon from 'mdi-material-ui/ChevronDown';
-import CollapsedIcon from 'mdi-material-ui/ChevronRight';
-import AddPanelIcon from 'mdi-material-ui/ChartBoxPlusOutline';
-import PencilIcon from 'mdi-material-ui/PencilOutline';
-import ArrowUpIcon from 'mdi-material-ui/ArrowUp';
-import ArrowDownIcon from 'mdi-material-ui/ArrowDown';
-import DeleteIcon from 'mdi-material-ui/DeleteOutline';
-import { InfoTooltip } from '@perses-dev/components';
-import { useReplaceVariablesInString, PanelGroupId } from '@perses-dev/plugin-system';
+import { Box, IconButton, Stack, Typography } from '@rafaysystems-perses/components/compat/mui';
+
+
+
+
+
+
+
+import { InfoTooltip } from '@rafaysystems-perses/components';
+import { useReplaceVariablesInString, PanelGroupId } from '@rafaysystems-perses/plugin-system';
 import { ReactElement } from 'react';
 import { ARIA_LABEL_TEXT, TOOLTIP_TEXT } from '../../constants';
 import { usePanelGroupActions, useEditMode, useDeletePanelGroupDialog } from '../../context';
+import { ChevronDown as ExpandedIcon, ChevronRight as CollapsedIcon, ChartBoxPlusOutline as AddPanelIcon, PencilOutline as PencilIcon, ArrowUp as ArrowUpIcon, ArrowDown as ArrowDownIcon, DeleteOutline as DeleteIcon } from '@rafaysystems-perses/components/compat/icons';
 
 export interface GridTitleProps {
   panelGroupId: PanelGroupId;
@@ -57,7 +58,7 @@ export function GridTitle(props: GridTitleProps): ReactElement {
         justifyContent: 'start',
         alignItems: 'center',
         cursor: collapse ? 'pointer' : 'auto',
-        backgroundColor: ({ palette }) => palette.background.paper,
+        backgroundColor: ({ palette }: any) => palette.background.paper,
       }}
       data-testid="panel-group-header"
     >
@@ -72,7 +73,7 @@ export function GridTitle(props: GridTitleProps): ReactElement {
               <InfoTooltip description={TOOLTIP_TEXT.addPanelToGroup}>
                 <IconButton
                   aria-label={ARIA_LABEL_TEXT.addPanelToGroup(title)}
-                  onClick={(e) => {
+                  onClick={(e: any) => {
                     // Don't trigger expand/collapse
                     e.stopPropagation();
                     openAddPanel();
@@ -84,7 +85,7 @@ export function GridTitle(props: GridTitleProps): ReactElement {
               <InfoTooltip description={TOOLTIP_TEXT.editGroup}>
                 <IconButton
                   aria-label={ARIA_LABEL_TEXT.editGroup(title)}
-                  onClick={(e) => {
+                  onClick={(e: any) => {
                     // Don't trigger expand/collapse
                     e.stopPropagation();
                     openEditPanelGroup();
@@ -96,7 +97,7 @@ export function GridTitle(props: GridTitleProps): ReactElement {
               <InfoTooltip description={TOOLTIP_TEXT.deleteGroup}>
                 <IconButton
                   aria-label={ARIA_LABEL_TEXT.deleteGroup(title)}
-                  onClick={(e) => {
+                  onClick={(e: any) => {
                     // Don't trigger expand/collapse
                     e.stopPropagation();
                     openDeletePanelGroupDialog(panelGroupId);
@@ -109,7 +110,7 @@ export function GridTitle(props: GridTitleProps): ReactElement {
                 <IconButton
                   aria-label={ARIA_LABEL_TEXT.moveGroupDown(title)}
                   disabled={moveDown === undefined}
-                  onClick={(e) => {
+                  onClick={(e: any) => {
                     // Don't trigger expand/collapse
                     e.stopPropagation();
                     moveDown?.();
@@ -122,7 +123,7 @@ export function GridTitle(props: GridTitleProps): ReactElement {
                 <IconButton
                   aria-label={ARIA_LABEL_TEXT.moveGroupUp(title)}
                   disabled={moveUp === undefined}
-                  onClick={(e) => {
+                  onClick={(e: any) => {
                     // Don't trigger expand/collapse
                     e.stopPropagation();
                     moveUp?.();

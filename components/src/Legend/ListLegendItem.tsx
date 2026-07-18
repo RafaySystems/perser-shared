@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { forwardRef, memo, MouseEvent, MouseEventHandler, ReactElement, useState } from 'react';
-import { Box, ListItemText, ListItemProps, ListItemButton } from '@mui/material';
+import { Box, ListItemText, ListItemProps, ListItemButton } from '@rafaysystems-perses/components/compat/mui';
 import { combineSx } from '../utils';
 import { LegendColorBadge } from './LegendColorBadge';
 import { LegendItem } from './legend-model';

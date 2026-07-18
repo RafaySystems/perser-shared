@@ -12,11 +12,11 @@
 // limitations under the License.
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, Divider, FormControlLabel, Grid, Stack, Switch, TextField, Typography } from '@mui/material';
-import { DiscardChangesConfirmationDialog, FormActions, getSubmitText, getTitleAction } from '@perses-dev/components';
+import { Box, Divider, FormControlLabel, Grid, Stack, Switch, TextField, Typography } from '@rafaysystems-perses/components/compat/mui';
+import { DiscardChangesConfirmationDialog, FormActions, getSubmitText, getTitleAction } from '@rafaysystems-perses/components';
 import { DispatchWithoutAction, ReactElement, useState } from 'react';
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { Action, DatasourceDefinition } from '@perses-dev/client';
+import { Action, DatasourceDefinition } from '@rafaysystems-perses/client';
 import { useValidationSchemas } from '../../context';
 import { PluginEditor } from '../PluginEditor';
 
@@ -78,8 +78,8 @@ export function DatasourceEditorForm(props: DatasourceEditorFormProps): ReactEle
         sx={{
           display: 'flex',
           alignItems: 'center',
-          padding: (theme) => theme.spacing(1, 2),
-          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+          padding: (theme: any) => theme.spacing(1, 2),
+          borderBottom: (theme: any) => `1px solid ${theme.palette.divider}`,
         }}
       >
         <Typography variant="h2">{titleAction} Datasource</Typography>
@@ -115,7 +115,7 @@ export function DatasourceEditorForm(props: DatasourceEditorFormProps): ReactEle
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                   value={field.value ?? ''}
-                  onChange={(event) => {
+                  onChange={(event: any) => {
                     field.onChange(event);
                   }}
                 />
@@ -139,7 +139,7 @@ export function DatasourceEditorForm(props: DatasourceEditorFormProps): ReactEle
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                   value={field.value ?? ''}
-                  onChange={(event) => {
+                  onChange={(event: any) => {
                     field.onChange(event);
                   }}
                 />
@@ -163,7 +163,7 @@ export function DatasourceEditorForm(props: DatasourceEditorFormProps): ReactEle
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                   value={field.value ?? ''}
-                  onChange={(event) => {
+                  onChange={(event: any) => {
                     field.onChange(event);
                   }}
                 />
@@ -183,7 +183,7 @@ export function DatasourceEditorForm(props: DatasourceEditorFormProps): ReactEle
                         {...field}
                         checked={!!field.value}
                         readOnly={action === 'read'}
-                        onChange={(event) => {
+                        onChange={(event: any) => {
                           if (action === 'read') return; // ReadOnly prop is not blocking user interaction...
                           field.onChange(event);
                         }}

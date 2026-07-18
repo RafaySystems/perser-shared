@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { DashboardResource } from '@perses-dev/client';
+import { DashboardResource } from '@rafaysystems-perses/client';
 import { stringify } from 'yaml';
 
 //TODO: Although the previous comment suggests the metadata not should not be used, I keep them. Need to be discussed.

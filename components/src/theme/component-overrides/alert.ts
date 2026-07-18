@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Components, Theme, alertClasses, linkClasses } from '@mui/material';
+import { Components, Theme, alertClasses, linkClasses } from '@rafaysystems-perses/components/compat/mui';
 
 export const MuiAlert: Components<Theme>['MuiAlert'] = {
   defaultProps: {

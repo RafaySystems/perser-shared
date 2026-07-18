@@ -5,8 +5,12 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
+    "moduleResolution": "bundler",
     "paths": {
-      "@perses-dev/plugin-system": ["./src"]
+      "@rafaysystems-perses/plugin-system": ["./src"],
+      "@rafaysystems-perses/plugin-system/*": ["./src/*"],
+      "@rafaysystems-perses/components/compat/icons": ["../components/dist/compat/icons"],
+      "@rafaysystems-perses/components/compat/mui": ["../components/dist/compat/mui"]
     }
   }
 }

@@ -11,10 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ErrorAlert } from '@perses-dev/components';
+import { ErrorAlert } from '@rafaysystems-perses/components';
 import { UnknownSpec } from '@perses-dev/spec';
 import { ReactElement } from 'react';
-import { CircularProgress, Stack } from '@mui/material';
+import { CircularProgress, Stack } from '@rafaysystems-perses/components/compat/mui';
 import { OptionsEditorProps } from '../../model';
 import { usePlugin } from '../../runtime';
 import { PluginEditorSelection } from '../PluginEditor';

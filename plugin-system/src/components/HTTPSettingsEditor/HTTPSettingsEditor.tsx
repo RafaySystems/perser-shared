@@ -11,14 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Grid, IconButton, MenuItem, TextField, Typography } from '@mui/material';
+import { Grid, IconButton, MenuItem, TextField, Typography } from '@rafaysystems-perses/components/compat/mui';
 import React, { Fragment, ReactElement, useState } from 'react';
 import { produce } from 'immer';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import MinusIcon from 'mdi-material-ui/Minus';
-import PlusIcon from 'mdi-material-ui/Plus';
+import { Minus as MinusIcon, Plus as PlusIcon } from '@rafaysystems-perses/components/compat/icons';
 import { HTTPDatasourceSpec } from '@perses-dev/spec';
-import { RequestHeaders } from '@perses-dev/client';
+import { RequestHeaders } from '@rafaysystems-perses/client';
 import { OptionsEditorRadios } from '../OptionsEditorRadios';
 
 type HeaderEntry = {
@@ -120,7 +119,7 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                   readOnly: isReadonly,
                 }}
                 InputLabelProps={{ shrink: isReadonly ? true : undefined }}
-                onChange={(e) => {
+                onChange={(e: any) => {
                   field.onChange(e);
                   onChange(
                     produce(value, (draft) => {
@@ -157,7 +156,7 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                               readOnly: isReadonly,
                             }}
                             InputLabelProps={{ shrink: isReadonly ? true : undefined }}
-                            onChange={(e) => {
+                            onChange={(e: any) => {
                               field.onChange(e);
                               onChange(
                                 produce(value, (draft) => {
@@ -198,7 +197,7 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                               readOnly: isReadonly,
                             }}
                             InputLabelProps={{ shrink: isReadonly ? true : undefined }}
-                            onChange={(e) => {
+                            onChange={(e: any) => {
                               field.onChange(e);
                               onChange(
                                 produce(value, (draft) => {
@@ -237,7 +236,7 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                             {...field}
                             disabled={isReadonly}
                             // Remove the given allowed endpoint from the list
-                            onClick={(e) => {
+                            onClick={(e: any) => {
                               field.onChange(e);
                               onChange(
                                 produce(value, (draft) => {
@@ -308,7 +307,7 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                             readOnly: isReadonly,
                           }}
                           InputLabelProps={{ shrink: isReadonly ? true : undefined }}
-                          onChange={(e) => {
+                          onChange={(e: any) => {
                             controllerField.onChange(e);
                             const updatedHeaders = [...watchedHeaders];
                             updatedHeaders[index] = { name: e.target.value, value: updatedHeaders[index]?.value ?? '' };
@@ -333,7 +332,7 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                             readOnly: isReadonly,
                           }}
                           InputLabelProps={{ shrink: isReadonly ? true : undefined }}
-                          onChange={(e) => {
+                          onChange={(e: any) => {
                             controllerField.onChange(e);
                             const updatedHeaders = [...watchedHeaders];
                             updatedHeaders[index] = { name: updatedHeaders[index]?.name ?? '', value: e.target.value };
@@ -391,7 +390,7 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                   readOnly: isReadonly,
                 }}
                 InputLabelProps={{ shrink: isReadonly ? true : undefined }}
-                onChange={(e) => {
+                onChange={(e: any) => {
                   field.onChange(e);
                   onChange(
                     produce(value, (draft) => {
@@ -424,7 +423,7 @@ export function HTTPSettingsEditor(props: HTTPSettingsEditor): ReactElement {
                 readOnly: isReadonly,
               }}
               InputLabelProps={{ shrink: isReadonly ? true : undefined }}
-              onChange={(e) => {
+              onChange={(e: any) => {
                 field.onChange(e);
                 onChange(
                   produce(value, (draft) => {

@@ -12,19 +12,19 @@
 // limitations under the License.
 
 import { ReactElement, useCallback, useEffect, useState } from 'react';
-import { Box, Button, Grid, MenuItem, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, MenuItem, Stack, TextField, Typography } from '@rafaysystems-perses/components/compat/mui';
 import { PanelDefinition } from '@perses-dev/spec';
-import { PanelEditorValues, PluginKindSelect, usePluginEditor, useValidationSchemas } from '@perses-dev/plugin-system';
+import { PanelEditorValues, PluginKindSelect, usePluginEditor, useValidationSchemas } from '@rafaysystems-perses/plugin-system';
 import {
   DiscardChangesConfirmationDialog,
   ErrorAlert,
   ErrorBoundary,
   getSubmitText,
   getTitleAction,
-} from '@perses-dev/components';
+} from '@rafaysystems-perses/components';
 import { Controller, FormProvider, SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Action } from '@perses-dev/client';
+import { Action } from '@rafaysystems-perses/client';
 import { useListPanelGroups } from '../../context';
 import { PanelEditorProvider } from '../../context/PanelEditorProvider/PanelEditorProvider';
 import { usePanelEditor } from './usePanelEditor';
@@ -140,8 +140,8 @@ export function PanelEditorForm(props: PanelEditorFormProps): ReactElement {
           sx={{
             display: 'flex',
             alignItems: 'center',
-            padding: (theme) => theme.spacing(1, 2),
-            borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+            padding: (theme: any) => theme.spacing(1, 2),
+            borderBottom: (theme: any) => `1px solid ${theme.palette.divider}`,
           }}
         >
           <Stack direction="row" spacing={1} alignItems="center">
@@ -157,7 +157,7 @@ export function PanelEditorForm(props: PanelEditorFormProps): ReactElement {
             </Button>
           </Stack>
         </Box>
-        <Box id={panelEditorFormId} sx={{ flex: 1, overflowY: 'scroll', padding: (theme) => theme.spacing(2) }}>
+        <Box id={panelEditorFormId} sx={{ flex: 1, overflowY: 'scroll', padding: (theme: any) => theme.spacing(2) }}>
           <Grid container spacing={2}>
             <Grid item xs={8}>
               <Controller
@@ -171,7 +171,7 @@ export function PanelEditorForm(props: PanelEditorFormProps): ReactElement {
                     error={!!fieldState.error}
                     helperText={fieldState.error?.message}
                     value={watchedName ?? ''}
-                    onChange={(event) => {
+                    onChange={(event: any) => {
                       field.onChange(event);
                       setName(event.target.value);
                     }}
@@ -192,7 +192,7 @@ export function PanelEditorForm(props: PanelEditorFormProps): ReactElement {
                     label="Group"
                     error={!!fieldState.error}
                     helperText={fieldState.error?.message}
-                    onChange={(event) => {
+                    onChange={(event: any) => {
                       field.onChange(event);
                     }}
                   >
@@ -217,7 +217,7 @@ export function PanelEditorForm(props: PanelEditorFormProps): ReactElement {
                     error={!!fieldState.error}
                     helperText={fieldState.error?.message}
                     value={watchedDescription ?? ''}
-                    onChange={(event) => {
+                    onChange={(event: any) => {
                       field.onChange(event);
                       setDescription(event.target.value);
                     }}
@@ -240,7 +240,7 @@ export function PanelEditorForm(props: PanelEditorFormProps): ReactElement {
                     error={!!pluginEditor.error || !!fieldState.error}
                     helperText={pluginEditor.error?.message ?? fieldState.error?.message}
                     value={{ type: 'Panel', kind: watchedPluginKind }}
-                    onChange={(event) => {
+                    onChange={(event: any) => {
                       field.onChange(event.kind);
                       pluginEditor.onSelectionChange(event);
                     }}

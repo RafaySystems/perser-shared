@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ProjectResource } from '@perses-dev/client';
+import { ProjectResource } from '@rafaysystems-perses/client';
 import { getResourceDisplayName, getResourceExtendedDisplayName } from './text';
 
 const projectWithDisplayName: ProjectResource = {

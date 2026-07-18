@@ -59,10 +59,10 @@ BACKUP_LOCK_FILE=""
 
 # Workspace packages defined in this project
 WORKSPACE_PACKAGES=(
-    "@perses-dev/components:components"
-    "@perses-dev/dashboards:dashboards"
-    "@perses-dev/plugin-system:plugin-system"
-    "@perses-dev/explore:explore"
+    "@rafaysystems-perses/components:components"
+    "@rafaysystems-perses/dashboards:dashboards"
+    "@rafaysystems-perses/plugin-system:plugin-system"
+    "@rafaysystems-perses/explore:explore"
 )
 
 # Debug flag (set via --debug flag)
@@ -464,7 +464,7 @@ do_unlink() {
     
     if [[ ! -f "$backup_path" ]]; then
         log_error "No backup file found. Cannot restore original versions."
-        echo "  Manually restore: cd $package_json_path && npm install @perses-dev/components@<version> ..."
+        echo "  Manually restore: cd $package_json_path && npm install @rafaysystems-perses/components@<version> ..."
         exit 1
     fi
     
@@ -472,7 +472,7 @@ do_unlink() {
     local backup_count=$(jq 'keys | length' "$backup_path" 2>/dev/null)
     if [[ -z "$backup_count" || "$backup_count" -eq 0 ]]; then
         log_error "Backup file is empty. Cannot restore original versions."
-        echo "  Manually restore: cd $package_json_path && npm install @perses-dev/components@<version> ..."
+        echo "  Manually restore: cd $package_json_path && npm install @rafaysystems-perses/components@<version> ..."
         echo "  Or: rm $backup_path && cd $package_json_path && npm install"
         exit 1
     fi

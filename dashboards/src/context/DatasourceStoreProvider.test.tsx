@@ -19,12 +19,12 @@ import {
   mockPluginRegistry,
   PluginRegistry,
   useListDatasourceSelectItems,
-} from '@perses-dev/plugin-system';
-import { DatasourceStoreProvider } from '@perses-dev/dashboards';
+} from '@rafaysystems-perses/plugin-system';
+import { DatasourceStoreProvider } from '@rafaysystems-perses/dashboards';
 import { PropsWithChildren, ReactElement } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { DashboardSpec, DatasourceSpec, UnknownSpec } from '@perses-dev/spec';
-import { DashboardResource, Datasource, DatasourceResource, GlobalDatasourceResource } from '@perses-dev/client';
+import { DashboardResource, Datasource, DatasourceResource, GlobalDatasourceResource } from '@rafaysystems-perses/client';
 
 const PROJECT = 'perses';
 const FAKE_PLUGIN_NAME = 'FakeDatasourcePlugin';

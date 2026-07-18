@@ -13,8 +13,8 @@
 
 import { createTimezoneAwareAxisFormatter } from './timezone-formatter';
 
-// Mock formatWithTimeZone since it's from @perses-dev/components
-jest.mock('@perses-dev/components', () => ({
+// Mock formatWithTimeZone since it's from @rafaysystems-perses/components
+jest.mock('@rafaysystems-perses/components', () => ({
   formatWithTimeZone: jest.fn((date: Date, format: string, timeZone: string) => {
     // Simple mock that returns format pattern with timezone
     return `${format}[${timeZone}]`;

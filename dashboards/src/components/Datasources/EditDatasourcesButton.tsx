@@ -12,14 +12,15 @@
 // limitations under the License.
 
 import { ReactElement, useState } from 'react';
-import { Button } from '@mui/material';
-import PencilIcon from 'mdi-material-ui/PencilOutline';
-import { Drawer, InfoTooltip } from '@perses-dev/components';
+import { Button } from '@rafaysystems-perses/components/compat/mui';
+
+import { Drawer, InfoTooltip } from '@rafaysystems-perses/components';
 import { DatasourceSpec } from '@perses-dev/spec';
-import { useDatasourceStore } from '@perses-dev/plugin-system';
+import { useDatasourceStore } from '@rafaysystems-perses/plugin-system';
 import { TOOLTIP_TEXT, editButtonStyle } from '../../constants';
 import { useDashboard } from '../../context';
 import { DatasourceEditor } from './DatasourceEditor';
+import { PencilOutline as PencilIcon } from '@rafaysystems-perses/components/compat/icons';
 
 export function EditDatasourcesButton(): ReactElement {
   const [isDatasourceEditorOpen, setIsDatasourceEditorOpen] = useState(false);

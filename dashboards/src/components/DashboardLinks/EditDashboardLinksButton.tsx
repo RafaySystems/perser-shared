@@ -12,15 +12,17 @@
 // limitations under the License.
 
 import { ReactElement, useState } from 'react';
-import { Button, ButtonProps } from '@mui/material';
-import PencilIcon from 'mdi-material-ui/PencilOutline';
-import { Drawer, InfoTooltip } from '@perses-dev/components';
+import { Button, ButtonProps } from '@rafaysystems-perses/components/compat/mui';
+
+import { Drawer, InfoTooltip } from '@rafaysystems-perses/components';
 import { Link } from '@perses-dev/spec';
 import { TOOLTIP_TEXT, editButtonStyle } from '../../constants';
 import { useDashboardLinks, useDashboardLinksActions } from '../../context';
 import { DashboardLinksEditor } from './DashboardLinksEditor';
+import { PencilOutline as PencilIcon } from '@rafaysystems-perses/components/compat/icons';
 
-export interface EditDashboardLinksButtonProps extends Pick<ButtonProps, 'fullWidth'> {
+export interface EditDashboardLinksButtonProps {
+  fullWidth?: ButtonProps['fullWidth'];
   /**
    * The variant to use to display the button.
    */

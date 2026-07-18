@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { replaceVariablesInString } from '@perses-dev/plugin-system';
+import { replaceVariablesInString } from '@rafaysystems-perses/plugin-system';
 
 describe('replaceVariablesInString()', () => {
   const tests = [

@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, BoxProps } from '@mui/material';
+import { Box, BoxProps } from '@rafaysystems-perses/components/compat/mui';
 import { ReactElement } from 'react';
 import { combineSx } from '../utils';
 

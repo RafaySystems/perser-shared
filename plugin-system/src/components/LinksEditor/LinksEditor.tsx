@@ -12,11 +12,10 @@
 // limitations under the License.
 
 import { Fragment, HTMLAttributes, ReactElement } from 'react';
-import { Divider, IconButton, Stack, Typography } from '@mui/material';
+import { Divider, IconButton, Stack, Typography } from '@rafaysystems-perses/components/compat/mui';
 import { Controller, useFieldArray, Control } from 'react-hook-form';
-import PlusIcon from 'mdi-material-ui/Plus';
-import MinusIcon from 'mdi-material-ui/Minus';
-import { LinkEditorForm } from '@perses-dev/components';
+import { Plus as PlusIcon, Minus as MinusIcon } from '@rafaysystems-perses/components/compat/icons';
+import { LinkEditorForm } from '@rafaysystems-perses/components';
 import { PanelEditorValues } from '../../model';
 
 export interface LinksEditorProps extends HTMLAttributes<HTMLDivElement> {

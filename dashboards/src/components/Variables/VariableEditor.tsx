@@ -12,6 +12,7 @@
 // limitations under the License.
 
 import { ReactElement, useMemo, useState } from 'react';
+import { Plus as AddIcon, Pencil as PencilIcon, ContentCopy as CloneIcon, TrashCan as TrashIcon, ArrowUp, ArrowDown, ContentDuplicate, OpenInNew as OpenInNewIcon, ChevronUp as ExpandMoreIcon } from '@rafaysystems-perses/components/compat/icons';
 import {
   Accordion,
   AccordionDetails,
@@ -33,18 +34,17 @@ import {
   TableRow,
   Tooltip,
   Typography,
-} from '@mui/material';
-import AddIcon from 'mdi-material-ui/Plus';
+} from '@rafaysystems-perses/components/compat/mui';
+
 import { BuiltinVariableDefinition, VariableDefinition } from '@perses-dev/spec';
 import { useImmer } from 'use-immer';
-import PencilIcon from 'mdi-material-ui/Pencil';
-import CloneIcon from 'mdi-material-ui/ContentCopy';
-import TrashIcon from 'mdi-material-ui/TrashCan';
-import ArrowUp from 'mdi-material-ui/ArrowUp';
-import ArrowDown from 'mdi-material-ui/ArrowDown';
-import ContentDuplicate from 'mdi-material-ui/ContentDuplicate';
-import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
-import ExpandMoreIcon from 'mdi-material-ui/ChevronUp';
+
+
+
+
+
+
+
 
 import {
   ValidationProvider,
@@ -52,9 +52,9 @@ import {
   VariableEditorForm,
   VariableState,
   useResolveListVariableValues,
-} from '@perses-dev/plugin-system';
-import { InfoTooltip } from '@perses-dev/components';
-import { Action } from '@perses-dev/client';
+} from '@rafaysystems-perses/plugin-system';
+import { InfoTooltip } from '@rafaysystems-perses/components';
+import { Action } from '@rafaysystems-perses/client';
 import { ExternalVariableDefinition } from '../../model/VariableDefinition';
 import { useDiscardChangesConfirmationDialog, VariableProvider } from '../../context';
 import { hydrateVariableDefinitionStates } from '../../context/VariableProvider/hydrationUtils';
@@ -218,8 +218,8 @@ export function VariableEditor(props: {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              padding: (theme) => theme.spacing(1, 2),
-              borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+              padding: (theme: any) => theme.spacing(1, 2),
+              borderBottom: (theme: any) => `1px solid ${theme.palette.divider}`,
             }}
           >
             <Typography variant="h2">Edit Dashboard Variables</Typography>
@@ -264,7 +264,7 @@ export function VariableEditor(props: {
                           <TableCell component="th" scope="row">
                             <Switch
                               checked={v.spec.display?.hidden !== true}
-                              onChange={(e) => {
+                              onChange={(e: any) => {
                                 toggleVariableVisibility(idx, e.target.checked);
                               }}
                             />
@@ -325,7 +325,7 @@ export function VariableEditor(props: {
                     extVar.definitions.length > 0 && (
                       <Accordion
                         key={key}
-                        sx={(theme) => ({
+                        sx={(theme: any) => ({
                           '.MuiAccordionSummary-root': {
                             backgroundColor: theme.palette.background.lighter,
                           },
@@ -501,14 +501,14 @@ export function VariableName(props: { name: string; state: VariableState | undef
     <>
       {!state?.overridden && `${name} `}
       {!state?.overridden && state?.overriding && (
-        <Box fontWeight="normal" color={(theme) => theme.palette.primary.main}>
+        <Box fontWeight="normal" color={(theme: any) => theme.palette.primary.main}>
           (overriding)
         </Box>
       )}
       {state?.overridden && (
         <>
-          <Box color={(theme) => theme.palette.grey[500]}>{name}</Box>
-          <Box fontWeight="normal" color={(theme) => theme.palette.grey[500]}>
+          <Box color={(theme: any) => theme.palette.grey[500]}>{name}</Box>
+          <Box fontWeight="normal" color={(theme: any) => theme.palette.grey[500]}>
             (overridden)
           </Box>
         </>

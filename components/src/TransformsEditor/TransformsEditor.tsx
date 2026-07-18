@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button, Stack, StackProps } from '@mui/material';
+import { Button, Stack, StackProps } from '@rafaysystems-perses/components/compat/mui';
 import { ReactElement, useState } from 'react';
-import AddIcon from 'mdi-material-ui/Plus';
+import { AddIcon } from '@rafaysystems-perses/components/compat/icons';
 import { Transform } from '../model';
 import { TransformEditorContainer } from './TransformEditorContainer';
 

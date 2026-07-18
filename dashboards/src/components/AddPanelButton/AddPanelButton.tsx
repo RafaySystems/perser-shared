@@ -11,14 +11,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button, ButtonProps } from '@mui/material';
-import AddPanelIcon from 'mdi-material-ui/ChartBoxPlusOutline';
-import { InfoTooltip } from '@perses-dev/components';
+import { Button, ButtonProps } from '@rafaysystems-perses/components/compat/mui';
+
+import { InfoTooltip } from '@rafaysystems-perses/components';
 import { ReactElement } from 'react';
 import { TOOLTIP_TEXT, editButtonStyle } from '../../constants';
 import { useDashboardActions } from '../../context';
+import { ChartBoxPlusOutline as AddPanelIcon } from '@rafaysystems-perses/components/compat/icons';
 
-export interface AddPanelButtonProps extends Pick<ButtonProps, 'fullWidth'> {
+export interface AddPanelButtonProps {
+  fullWidth?: ButtonProps['fullWidth'];
   /**
    * The variant to use to display the button.
    */

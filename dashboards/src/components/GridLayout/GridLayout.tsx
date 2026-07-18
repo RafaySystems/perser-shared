@@ -13,7 +13,7 @@
 import { ReactElement, useState } from 'react';
 import { Layout, Layouts } from 'react-grid-layout';
 
-import { useVariableValues, VariableContext, PanelGroupId } from '@perses-dev/plugin-system';
+import { useVariableValues, VariableContext, PanelGroupId } from '@rafaysystems-perses/plugin-system';
 import { PanelGroupDefinition } from '../../model';
 import { useEditMode, usePanelGroup, usePanelGroupActions, useViewPanelGroup } from '../../context';
 import { GRID_LAYOUT_SMALL_BREAKPOINT } from '../../constants';
@@ -137,7 +137,7 @@ export function RepeatGridLayout({
 
   return (
     <>
-      {variable.value.map((value) => (
+      {variable.value.map((value: any) => (
         <VariableContext.Provider
           key={`${repeatVariableName}-${value}`}
           value={{ state: { ...variables, [repeatVariableName]: { value, loading: false } } }}

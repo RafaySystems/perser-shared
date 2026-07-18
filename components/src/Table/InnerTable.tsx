@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Table as MuiTable, styled, TableProps as MuiTableProps } from '@mui/material';
+import { Table as MuiTable, styled, TableProps as MuiTableProps } from '@rafaysystems-perses/components/compat/mui';
 import { forwardRef } from 'react';
 import { TableDensity } from './model/table-model';
 

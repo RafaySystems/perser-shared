@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { Column, ColumnSizingInfoState, ColumnSizingState, flexRender, HeaderGroup, Row } from '@tanstack/react-table';
-import { Box, TablePagination, TableRow as MuiTableRow } from '@mui/material';
+import { Box, TablePagination, TableRow as MuiTableRow } from '@rafaysystems-perses/components/compat/mui';
 import { TableComponents, TableVirtuoso, TableVirtuosoHandle, TableVirtuosoProps } from 'react-virtuoso';
 import { ReactElement, useMemo, useRef } from 'react';
 import { TableToolbar, TableToolbarProps } from './TableToolbar';

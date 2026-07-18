@@ -11,12 +11,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Divider, IconButton, Stack, Tooltip, Typography } from '@mui/material';
-import ChevronRight from 'mdi-material-ui/ChevronRight';
-import ChevronDown from 'mdi-material-ui/ChevronDown';
-import EyeOffIcon from 'mdi-material-ui/EyeOffOutline';
-import EyeIcon from 'mdi-material-ui/EyeOutline';
-import DeleteIcon from 'mdi-material-ui/DeleteOutline';
+import { Divider, IconButton, Stack, Tooltip, Typography } from '@rafaysystems-perses/components/compat/mui';
+import { ChevronRight } from '@rafaysystems-perses/components/compat/icons';
+import { ChevronDown } from '@rafaysystems-perses/components/compat/icons';
+import { EyeOffIcon } from '@rafaysystems-perses/components/compat/icons';
+import { EyeIcon } from '@rafaysystems-perses/components/compat/icons';
+import { DeleteIcon } from '@rafaysystems-perses/components/compat/icons';
 import { ReactElement } from 'react';
 import { Transform, TRANSFORM_TEXT } from '../model';
 import { TransformEditor, TransformEditorProps } from './TransformEditor';
