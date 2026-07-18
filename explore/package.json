@@ -28,9 +28,9 @@
   },
   "dependencies": {
     "@nexucis/fuzzy": "^0.5.1",
-    "@rafaysystems-perses/components": "0.54.0-rc.0",
-    "@rafaysystems-perses/dashboards": "0.54.0-rc.0",
-    "@rafaysystems-perses/plugin-system": "0.54.0-rc.0",
+    "@rafaysystems-perses/components": "0.54.0-rc.1",
+    "@rafaysystems-perses/dashboards": "0.54.0-rc.1",
+    "@rafaysystems-perses/plugin-system": "0.54.0-rc.1",
     "qs": "^6.14.0",
     "react-virtuoso": "^4.12.2",
     "use-query-params": "^2.2.1",
