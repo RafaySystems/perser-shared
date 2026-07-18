@@ -1,6 +1,6 @@
 {
   "name": "@rafaysystems-perses/components",
-  "version": "0.54.0-rc.1",
+  "version": "0.54.0-rc.2",
   "description": "Common UI components used across Perses features",
   "license": "Apache-2.0",
   "homepage": "https://github.com/perses/perses/blob/main/README.md",
@@ -33,7 +33,7 @@
     "@codemirror/lang-json": "^6.0.1",
     "@date-fns/tz": "^1.4.1",
     "@fontsource/inter": "^5.0.0",
-    "@rafaysystems-perses/client": "0.54.0-rc.1",
+    "@rafaysystems-perses/client": "0.54.0-rc.2",
     "@perses-dev/spec": "0.2.0-beta.9",
     "@tanstack/match-sorter-utils": "^8.19.4",
     "@tanstack/react-table": "^8.20.5",
