@@ -28,9 +28,9 @@
   },
   "dependencies": {
     "@nexucis/fuzzy": "^0.5.1",
-    "@rafaysystems/components": "0.54.0-rc.3",
-    "@rafaysystems/dashboards": "0.54.0-rc.3",
-    "@rafaysystems/plugin-system": "0.54.0-rc.3",
+    "@rafaysystems/components": "0.54.0-rc.4",
+    "@rafaysystems/dashboards": "0.54.0-rc.4",
+    "@rafaysystems/plugin-system": "0.54.0-rc.4",
     "qs": "^6.14.0",
     "react-virtuoso": "^4.12.2",
     "use-query-params": "^2.2.1",
