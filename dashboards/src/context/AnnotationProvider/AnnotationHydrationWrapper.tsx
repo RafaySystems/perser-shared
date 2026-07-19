@@ -13,7 +13,7 @@
 
 import { ReactNode, useEffect } from 'react';
 import { AnnotationData } from '@perses-dev/spec';
-import { useAnnotations } from '@rafaysystems-perses/plugin-system';
+import { useAnnotations } from '@rafaysystems/plugin-system';
 import { UseQueryResult } from '@tanstack/react-query';
 import { useAnnotationActions, useAnnotationSpecs } from './AnnotationProvider';
 

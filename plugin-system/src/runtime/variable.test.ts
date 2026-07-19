@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { VariableStoreStateMap } from '@rafaysystems-perses/plugin-system';
+import { VariableStoreStateMap } from '@rafaysystems/plugin-system';
 
 describe('VariableStoreStateMap', function () {
   let sut: VariableStoreStateMap;

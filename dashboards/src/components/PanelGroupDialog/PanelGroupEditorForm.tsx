@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { FormEventHandler, ReactElement, useState } from 'react';
-import { FormControl, TextField, MenuItem, Typography } from '@rafaysystems-perses/components/compat/mui';
+import { FormControl, TextField, MenuItem, Typography } from '@rafaysystems/components/compat/mui';
 import { PanelGroupEditorValues } from '../../context';
 
 export interface PanelGroupEditorFormProps {

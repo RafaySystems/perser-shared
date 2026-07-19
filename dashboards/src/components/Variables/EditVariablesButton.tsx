@@ -12,16 +12,16 @@
 // limitations under the License.
 
 import { ReactElement, useState } from 'react';
-import { Button, ButtonProps } from '@rafaysystems-perses/components/compat/mui';
+import { Button, ButtonProps } from '@rafaysystems/components/compat/mui';
 
-import { Drawer, InfoTooltip } from '@rafaysystems-perses/components';
+import { Drawer, InfoTooltip } from '@rafaysystems/components';
 import { BuiltinVariableDefinition, VariableDefinition } from '@perses-dev/spec';
-import { useBuiltinVariableDefinitions } from '@rafaysystems-perses/plugin-system';
+import { useBuiltinVariableDefinitions } from '@rafaysystems/plugin-system';
 import { ExternalVariableDefinition } from '../../model/VariableDefinition';
 import { TOOLTIP_TEXT, editButtonStyle } from '../../constants';
 import { useExternalVariableDefinitions, useVariableDefinitionActions, useVariableDefinitions } from '../../context';
 import { VariableEditor } from './VariableEditor';
-import { PencilOutline as PencilIcon } from '@rafaysystems-perses/components/compat/icons';
+import { PencilOutline as PencilIcon } from '@rafaysystems/components/compat/icons';
 
 export interface EditVariablesButtonProps {
   fullWidth?: ButtonProps['fullWidth'];

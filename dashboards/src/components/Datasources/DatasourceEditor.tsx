@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Plus as AddIcon, Pencil as PencilIcon, TrashCan as TrashIcon } from '@rafaysystems-perses/components/compat/icons';
+import { Plus as AddIcon, Pencil as PencilIcon, TrashCan as TrashIcon } from '@rafaysystems/components/compat/icons';
 import {
   Box,
   Button,
@@ -24,15 +24,15 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@rafaysystems-perses/components/compat/mui';
+} from '@rafaysystems/components/compat/mui';
 
 
 
 import { DatasourceSpec } from '@perses-dev/spec';
-import { DatasourceEditorForm, ValidationProvider } from '@rafaysystems-perses/plugin-system';
+import { DatasourceEditorForm, ValidationProvider } from '@rafaysystems/plugin-system';
 import { ReactElement, useState } from 'react';
 import { useImmer } from 'use-immer';
-import { Action, DatasourceDefinition } from '@rafaysystems-perses/client';
+import { Action, DatasourceDefinition } from '@rafaysystems/client';
 import { useDiscardChangesConfirmationDialog } from '../../context';
 
 export function DatasourceEditor(props: {

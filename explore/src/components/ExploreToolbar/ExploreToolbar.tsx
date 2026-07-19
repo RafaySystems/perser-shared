@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Stack, Box, useTheme, useMediaQuery } from '@rafaysystems-perses/components/compat/mui';
-import { TimeRangeControls, useTimeZoneParams } from '@rafaysystems-perses/plugin-system';
+import { Stack, Box, useTheme, useMediaQuery } from '@rafaysystems/components/compat/mui';
+import { TimeRangeControls, useTimeZoneParams } from '@rafaysystems/plugin-system';
 import React, { ReactElement } from 'react';
 
 export interface ExploreToolbarProps {

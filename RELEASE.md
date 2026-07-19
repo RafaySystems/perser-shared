@@ -78,7 +78,7 @@ Update workspace `name` fields and cross-workspace dependencies to your own scop
 3. Select branch: `shadecdn`.
 4. Fill inputs:
    - `version`: e.g. `0.54.0-rc.1`
-   - `npm_scope` (optional): e.g. `@rafaysystems-perses` (defaults to repository owner)
+   - `npm_scope` (optional): e.g. `@rafaysystems` (defaults to workspace package scope)
    - `dist_tag` (optional): e.g. `next` or `latest`
    - `dry_run`: `true` first for validation, then `false` for real publish
 5. Click **Run workflow** and monitor logs.
@@ -87,8 +87,8 @@ Update workspace `name` fields and cross-workspace dependencies to your own scop
 ### C) Verify consumer install
 
 1. In a downstream private repo, add:
-   - `.npmrc` scope mapping for `@rafaysystems-perses`
+   - `.npmrc` scope mapping for `@rafaysystems`
    - token with `read:packages` + `repo`
 2. Run:
-   - `npm i @rafaysystems-perses/components@<version>`
+   - `npm i @rafaysystems/components@<version>`
 3. If install fails, use troubleshooting in `CONSUMING_PRIVATE_PACKAGES.md`.

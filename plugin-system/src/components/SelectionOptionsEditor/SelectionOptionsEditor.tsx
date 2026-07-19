@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Switch, SwitchProps } from '@rafaysystems-perses/components/compat/mui';
-import { OptionsEditorControl, OptionsEditorGroup } from '@rafaysystems-perses/components';
+import { Switch, SwitchProps } from '@rafaysystems/components/compat/mui';
+import { OptionsEditorControl, OptionsEditorGroup } from '@rafaysystems/components';
 import { ReactElement } from 'react';
 
 export interface SelectionOptions {

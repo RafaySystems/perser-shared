@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button, ButtonGroup, ButtonGroupProps } from '@rafaysystems-perses/components/compat/mui';
+import { Button, ButtonGroup, ButtonGroupProps } from '@rafaysystems/components/compat/mui';
 import { ReactElement } from 'react';
 import { SortOption } from './SortSelector';
 

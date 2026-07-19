@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { OptionsEditorControl, SettingsAutocomplete } from '@rafaysystems-perses/components';
+import { OptionsEditorControl, SettingsAutocomplete } from '@rafaysystems/components';
 import { ReactElement } from 'react';
 import { CALCULATIONS_CONFIG, CalculationConfig, CalculationType } from '../../model'; // TODO weird this is part of the model from the core package ...
 

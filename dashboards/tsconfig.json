@@ -5,10 +5,10 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "paths": {
-      "@rafaysystems-perses/components/compat/icons": ["../components/dist/compat/icons"],
-      "@rafaysystems-perses/components/compat/mui": ["../components/dist/compat/mui"],
-      "@rafaysystems-perses/dashboards": ["./src"],
-      "@rafaysystems-perses/dashboards/*": ["./src/*"]
+      "@rafaysystems/components/compat/icons": ["../components/dist/compat/icons"],
+      "@rafaysystems/components/compat/mui": ["../components/dist/compat/mui"],
+      "@rafaysystems/dashboards": ["./src"],
+      "@rafaysystems/dashboards/*": ["./src/*"]
     }
   }
 }

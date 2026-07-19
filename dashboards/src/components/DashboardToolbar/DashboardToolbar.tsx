@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Typography, Stack, Button, Box, useTheme, useMediaQuery, Alert } from '@rafaysystems-perses/components/compat/mui';
-import { ErrorBoundary, ErrorAlert } from '@rafaysystems-perses/components';
-import { TimeRangeControls, useTimeZoneParams } from '@rafaysystems-perses/plugin-system';
+import { Typography, Stack, Button, Box, useTheme, useMediaQuery, Alert } from '@rafaysystems/components/compat/mui';
+import { ErrorBoundary, ErrorAlert } from '@rafaysystems/components';
+import { TimeRangeControls, useTimeZoneParams } from '@rafaysystems/plugin-system';
 import { ReactElement, ReactNode } from 'react';
 import { OnSaveDashboard, useEditMode, useDashboardLinks } from '../../context';
 import { AddPanelButton } from '../AddPanelButton';

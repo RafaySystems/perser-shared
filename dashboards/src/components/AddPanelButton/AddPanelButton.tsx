@@ -11,13 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button, ButtonProps } from '@rafaysystems-perses/components/compat/mui';
+import { Button, ButtonProps } from '@rafaysystems/components/compat/mui';
 
-import { InfoTooltip } from '@rafaysystems-perses/components';
+import { InfoTooltip } from '@rafaysystems/components';
 import { ReactElement } from 'react';
 import { TOOLTIP_TEXT, editButtonStyle } from '../../constants';
 import { useDashboardActions } from '../../context';
-import { ChartBoxPlusOutline as AddPanelIcon } from '@rafaysystems-perses/components/compat/icons';
+import { ChartBoxPlusOutline as AddPanelIcon } from '@rafaysystems/components/compat/icons';
 
 export interface AddPanelButtonProps {
   fullWidth?: ButtonProps['fullWidth'];

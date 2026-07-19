@@ -12,9 +12,9 @@
 // limitations under the License.
 
 import React, { ReactElement, useMemo } from 'react';
-import { Dialog } from '@rafaysystems-perses/components';
-import { Button, Divider } from '@rafaysystems-perses/components/compat/mui';
-import { PluginSpecEditor } from '@rafaysystems-perses/plugin-system';
+import { Dialog } from '@rafaysystems/components';
+import { Button, Divider } from '@rafaysystems/components/compat/mui';
+import { PluginSpecEditor } from '@rafaysystems/plugin-system';
 import { QueryDefinition } from '@perses-dev/spec';
 
 export interface QueryViewerDialogProps {

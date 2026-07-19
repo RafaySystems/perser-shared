@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { TextField } from '@rafaysystems-perses/components/compat/mui';
-import { OptionsEditorControl } from '@rafaysystems-perses/components';
+import { TextField } from '@rafaysystems/components/compat/mui';
+import { OptionsEditorControl } from '@rafaysystems/components';
 import { FC } from 'react';
 
 export interface MetricLabelInputProps {

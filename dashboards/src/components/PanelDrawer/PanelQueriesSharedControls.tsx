@@ -11,16 +11,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Grid, Typography } from '@rafaysystems-perses/components/compat/mui';
-import { ErrorAlert, ErrorBoundary } from '@rafaysystems-perses/components';
-import { PanelEditorContext, PanelPreview } from '@rafaysystems-perses/dashboards';
+import { Grid, Typography } from '@rafaysystems/components/compat/mui';
+import { ErrorAlert, ErrorBoundary } from '@rafaysystems/components';
+import { PanelEditorContext, PanelPreview } from '@rafaysystems/dashboards';
 import {
   DataQueriesProvider,
   PanelEditorValues,
   PanelSpecEditor,
   usePlugin,
   useSuggestedStepMs,
-} from '@rafaysystems-perses/plugin-system';
+} from '@rafaysystems/plugin-system';
 import { Definition, PanelDefinition, QueryDefinition, UnknownSpec } from '@perses-dev/spec';
 import { Control } from 'react-hook-form';
 import { ReactElement, useCallback, useContext, useMemo, useState } from 'react';

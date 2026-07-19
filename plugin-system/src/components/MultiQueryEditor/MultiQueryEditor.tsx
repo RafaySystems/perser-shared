@@ -13,8 +13,8 @@
 
 import { forwardRef, ReactElement, useState } from 'react';
 import { produce } from 'immer';
-import { Button, Stack } from '@rafaysystems-perses/components/compat/mui';
-import { Plus as AddIcon } from '@rafaysystems-perses/components/compat/icons';
+import { Button, Stack } from '@rafaysystems/components/compat/mui';
+import { Plus as AddIcon } from '@rafaysystems/components/compat/icons';
 import { QueryDefinition, QueryPluginType } from '@perses-dev/spec';
 import { QueryData, useListPluginMetadata, usePlugin, usePluginRegistry } from '../../runtime';
 import { PluginEditorRef } from '../PluginEditor';

@@ -11,10 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { usePlugin, PanelProps } from '@rafaysystems-perses/plugin-system';
+import { usePlugin, PanelProps } from '@rafaysystems/plugin-system';
 import { UnknownSpec, QueryDataType } from '@perses-dev/spec';
 import { ReactElement } from 'react';
-import { Skeleton } from '@rafaysystems-perses/components/compat/mui';
+import { Skeleton } from '@rafaysystems/components/compat/mui';
 
 interface PanelPluginProps extends PanelProps<UnknownSpec, QueryDataType> {
   kind: string;

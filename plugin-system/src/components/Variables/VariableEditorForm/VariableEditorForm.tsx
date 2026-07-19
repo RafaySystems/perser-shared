@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { DispatchWithoutAction, ReactElement, useCallback, useState } from 'react';
-import { Box, Typography, Switch, TextField, Grid, FormControlLabel, MenuItem, Stack, Divider } from '@rafaysystems-perses/components/compat/mui';
+import { Box, Typography, Switch, TextField, Grid, FormControlLabel, MenuItem, Stack, Divider } from '@rafaysystems/components/compat/mui';
 import { VariableDefinition, ListVariableDefinition } from '@perses-dev/spec';
 
 import {
@@ -22,11 +22,11 @@ import {
   FormActions,
   getSubmitText,
   getTitleAction,
-} from '@rafaysystems-perses/components';
+} from '@rafaysystems/components';
 import { Control, Controller, FormProvider, SubmitHandler, useForm, useFormContext, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { Action } from '@rafaysystems-perses/client';
+import { Action } from '@rafaysystems/client';
 import { PluginEditor } from '../../PluginEditor';
 import { useValidationSchemas } from '../../../context';
 import { VARIABLE_TYPES } from '../variable-model';

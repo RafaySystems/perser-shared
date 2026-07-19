@@ -24,8 +24,8 @@ import {
   DialogContentProps as MuiDialogContentProps,
   styled,
   Theme,
-} from '@rafaysystems-perses/components/compat/mui';
-import { CloseIcon } from '@rafaysystems-perses/components/compat/icons';
+} from '@rafaysystems/components/compat/mui';
+import { CloseIcon } from '@rafaysystems/components/compat/icons';
 import { MouseEvent, ReactElement, ReactNode } from 'react';
 import { combineSx } from '../utils';
 

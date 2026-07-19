@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { SxProps, Theme } from '@rafaysystems-perses/components/compat/mui';
+import { SxProps, Theme } from '@rafaysystems/components/compat/mui';
 
 /**
  * Combines sx props from multiple sources. Useful when creating a component and

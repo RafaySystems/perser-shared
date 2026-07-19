@@ -8,8 +8,8 @@
     "strict": false,
     "noUncheckedIndexedAccess": false,
     "paths": {
-      "@rafaysystems-perses/components": ["./src"],
-      "@rafaysystems-perses/components/*": ["./src/*"]
+      "@rafaysystems/components": ["./src"],
+      "@rafaysystems/components/*": ["./src/*"]
     }
   }
 }

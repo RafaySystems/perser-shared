@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { ReactElement } from 'react';
-import { Button } from '@rafaysystems-perses/components/compat/mui';
+import { Button } from '@rafaysystems/components/compat/mui';
 import { OnSaveDashboard, useSaveDashboard } from '../../context';
 
 export interface SaveDashboardButtonProps {

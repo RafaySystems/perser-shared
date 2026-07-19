@@ -106,41 +106,41 @@ const getPluginRuntime = (): ModuleFederation => {
             requiredVersion: '^0.53.1',
           },
         },
-        '@rafaysystems-perses/client': {
+        '@rafaysystems/client': {
           version: '0.54.0-rc.0',
-          lib: () => require('@rafaysystems-perses/client'),
+          lib: () => require('@rafaysystems/client'),
           shareConfig: {
             singleton: true,
             requiredVersion: '^0.54.0-rc.0',
           },
         },
-        '@rafaysystems-perses/components': {
+        '@rafaysystems/components': {
           version: '0.54.0-rc.0',
-          lib: () => require('@rafaysystems-perses/components'),
+          lib: () => require('@rafaysystems/components'),
           shareConfig: {
             singleton: true,
             requiredVersion: '^0.54.0-rc.0',
           },
         },
-        '@rafaysystems-perses/plugin-system': {
+        '@rafaysystems/plugin-system': {
           version: '0.54.0-rc.0',
-          lib: () => require('@rafaysystems-perses/plugin-system'),
+          lib: () => require('@rafaysystems/plugin-system'),
           shareConfig: {
             singleton: true,
             requiredVersion: '^0.54.0-rc.0',
           },
         },
-        '@rafaysystems-perses/explore': {
+        '@rafaysystems/explore': {
           version: '0.54.0-rc.0',
-          lib: () => require('@rafaysystems-perses/explore'),
+          lib: () => require('@rafaysystems/explore'),
           shareConfig: {
             singleton: true,
             requiredVersion: '^0.54.0-rc.0',
           },
         },
-        '@rafaysystems-perses/dashboards': {
+        '@rafaysystems/dashboards': {
           version: '0.54.0-rc.0',
-          lib: () => require('@rafaysystems-perses/dashboards'),
+          lib: () => require('@rafaysystems/dashboards'),
           shareConfig: {
             singleton: true,
             requiredVersion: '^0.54.0-rc.0',

@@ -7,10 +7,10 @@
     "rootDir": "./src",
     "moduleResolution": "bundler",
     "paths": {
-      "@rafaysystems-perses/plugin-system": ["./src"],
-      "@rafaysystems-perses/plugin-system/*": ["./src/*"],
-      "@rafaysystems-perses/components/compat/icons": ["../components/dist/compat/icons"],
-      "@rafaysystems-perses/components/compat/mui": ["../components/dist/compat/mui"]
+      "@rafaysystems/plugin-system": ["./src"],
+      "@rafaysystems/plugin-system/*": ["./src/*"],
+      "@rafaysystems/components/compat/icons": ["../components/dist/compat/icons"],
+      "@rafaysystems/components/compat/mui": ["../components/dist/compat/mui"]
     }
   }
 }

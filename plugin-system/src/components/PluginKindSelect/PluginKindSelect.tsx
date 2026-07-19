@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { MenuItem, TextField, TextFieldProps } from '@rafaysystems-perses/components/compat/mui';
+import { MenuItem, TextField, TextFieldProps } from '@rafaysystems/components/compat/mui';
 import { forwardRef, ReactElement, useCallback, useMemo } from 'react';
 import { PluginType } from '../../model';
 import { useListPluginMetadata } from '../../runtime';

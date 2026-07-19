@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box } from '@rafaysystems-perses/components/compat/mui';
+import { Box } from '@rafaysystems/components/compat/mui';
 import { produce } from 'immer';
 import { ReactElement, ReactNode } from 'react';
 import { getLegendMode } from '../model';

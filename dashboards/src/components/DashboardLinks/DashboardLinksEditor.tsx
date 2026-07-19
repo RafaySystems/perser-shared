@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { useState, ReactElement } from 'react';
-import { Plus as AddIcon, TrashCan as TrashIcon, ArrowUp, ArrowDown, Pencil as PencilIcon, ChevronUp } from '@rafaysystems-perses/components/compat/icons';
+import { Plus as AddIcon, TrashCan as TrashIcon, ArrowUp, ArrowDown, Pencil as PencilIcon, ChevronUp } from '@rafaysystems/components/compat/icons';
 import {
   Button,
   Stack,
@@ -26,7 +26,7 @@ import {
   TableHead,
   TableRow,
   Collapse,
-} from '@rafaysystems-perses/components/compat/mui';
+} from '@rafaysystems/components/compat/mui';
 
 
 
@@ -35,7 +35,7 @@ import {
 
 import { Link } from '@perses-dev/spec';
 import { useImmer } from 'use-immer';
-import { InfoTooltip, LinkEditorForm } from '@rafaysystems-perses/components';
+import { InfoTooltip, LinkEditorForm } from '@rafaysystems/components';
 import { useDiscardChangesConfirmationDialog } from '../../context';
 
 export interface DashboardLinksEditorProps {

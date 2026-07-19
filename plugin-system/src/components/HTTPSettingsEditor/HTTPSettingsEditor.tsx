@@ -11,13 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Grid, IconButton, MenuItem, TextField, Typography } from '@rafaysystems-perses/components/compat/mui';
+import { Grid, IconButton, MenuItem, TextField, Typography } from '@rafaysystems/components/compat/mui';
 import React, { Fragment, ReactElement, useState } from 'react';
 import { produce } from 'immer';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { Minus as MinusIcon, Plus as PlusIcon } from '@rafaysystems-perses/components/compat/icons';
+import { Minus as MinusIcon, Plus as PlusIcon } from '@rafaysystems/components/compat/icons';
 import { HTTPDatasourceSpec } from '@perses-dev/spec';
-import { RequestHeaders } from '@rafaysystems-perses/client';
+import { RequestHeaders } from '@rafaysystems/client';
 import { OptionsEditorRadios } from '../OptionsEditorRadios';
 
 type HeaderEntry = {

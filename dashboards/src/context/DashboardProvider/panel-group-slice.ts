@@ -14,7 +14,7 @@
 import { getPanelKeyFromRef, LayoutDefinition } from '@perses-dev/spec';
 import { StateCreator } from 'zustand';
 import { WritableDraft } from 'immer';
-import { PanelGroupId } from '@rafaysystems-perses/plugin-system';
+import { PanelGroupId } from '@rafaysystems/plugin-system';
 import { PanelGroupDefinition } from '../../model';
 import { generateId, Middleware } from './common';
 

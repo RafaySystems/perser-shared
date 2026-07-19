@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Refresh as RefreshIcon, PlusCircleOutline as ZoomIn, MinusCircleOutline as ZoomOut } from '@rafaysystems-perses/components/compat/icons';
+import { Refresh as RefreshIcon, PlusCircleOutline as ZoomIn, MinusCircleOutline as ZoomOut } from '@rafaysystems/components/compat/icons';
 // eslint-disable-next-line import/no-duplicates
-import { Stack } from '@rafaysystems-perses/components/compat/mui';
+import { Stack } from '@rafaysystems/components/compat/mui';
 import {
   RefreshIntervalPicker,
   InfoTooltip,
@@ -23,7 +23,7 @@ import {
   TimeZoneOption,
   getTimeZoneOptions,
   buildRelativeTimeOption,
-} from '@rafaysystems-perses/components';
+} from '@rafaysystems/components';
 import { AbsoluteTimeRange, DurationString, parseDurationString, RelativeTimeRange } from '@perses-dev/spec';
 import { ReactElement, useCallback } from 'react';
 import { TOOLTIP_TEXT } from '../../constants';

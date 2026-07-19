@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import { TextField, Popper, PopperProps, Checkbox, Autocomplete, createFilterOptions, Chip, Box } from '@rafaysystems-perses/components/compat/mui';
+import { TextField, Popper, PopperProps, Checkbox, Autocomplete, createFilterOptions, Chip, Box } from '@rafaysystems/components/compat/mui';
 import {
   DEFAULT_ALL_VALUE,
   ListVariableDefinition,
@@ -27,7 +27,7 @@ import {
   useListVariablePluginValues,
   VariableOption,
   VariableState,
-} from '@rafaysystems-perses/plugin-system';
+} from '@rafaysystems/plugin-system';
 import { UseQueryResult } from '@tanstack/react-query';
 import { useVariableDefinitionAndState, useVariableDefinitionActions } from '../../context';
 import { MAX_VARIABLE_WIDTH, MIN_VARIABLE_WIDTH } from '../../constants';

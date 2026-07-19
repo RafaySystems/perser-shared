@@ -11,13 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { IconButton, Link as LinkComponent, Menu, MenuItem, Theme, Chip, capitalize, Stack } from '@rafaysystems-perses/components/compat/mui';
+import { IconButton, Link as LinkComponent, Menu, MenuItem, Theme, Chip, capitalize, Stack } from '@rafaysystems/components/compat/mui';
 
 import { Link } from '@perses-dev/spec';
 import { MouseEvent, ReactElement, useState } from 'react';
-import { InfoTooltip } from '@rafaysystems-perses/components';
-import { useReplaceVariablesInString } from '@rafaysystems-perses/plugin-system';
-import { Launch as LaunchIcon } from '@rafaysystems-perses/components/compat/icons';
+import { InfoTooltip } from '@rafaysystems/components';
+import { useReplaceVariablesInString } from '@rafaysystems/plugin-system';
+import { Launch as LaunchIcon } from '@rafaysystems/components/compat/icons';
 
 type LinksVariant = 'dashboard' | 'panel';
 

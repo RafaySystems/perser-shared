@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { ReactElement, ReactNode, useEffect, useState } from 'react';
-import { styled, SxProps, Theme } from '@rafaysystems-perses/components/compat/mui';
+import { styled, SxProps, Theme } from '@rafaysystems/components/compat/mui';
 
 export interface GridContainerProps {
   children: ReactNode;

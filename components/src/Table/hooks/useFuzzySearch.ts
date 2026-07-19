@@ -14,7 +14,7 @@
 import { ExpandedState, FilterFn, getFilteredRowModel, TableOptions } from '@tanstack/react-table';
 import { rankings, rankItem } from '@tanstack/match-sorter-utils';
 import { SetStateAction, useCallback, useState } from 'react';
-import { FuzzyMatchThreshold } from '@rafaysystems-perses/components';
+import { FuzzyMatchThreshold } from '@rafaysystems/components';
 
 const getFuzzyFilterFunction =
   (threshold: FuzzyMatchThreshold): FilterFn<unknown> =>

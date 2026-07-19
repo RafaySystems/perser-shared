@@ -12,8 +12,8 @@
 // limitations under the License.
 
 import { ReactElement, useContext, useEffect, useRef } from 'react';
-import { Box } from '@rafaysystems-perses/components/compat/mui';
-import { PanelEditorValues } from '@rafaysystems-perses/plugin-system';
+import { Box } from '@rafaysystems/components/compat/mui';
+import { PanelEditorValues } from '@rafaysystems/plugin-system';
 import { Panel } from '../Panel';
 import { PanelEditorContext } from '../../context';
 

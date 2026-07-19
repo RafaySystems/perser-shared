@@ -12,10 +12,10 @@
 // limitations under the License.
 
 // Allows extending Lab types/components also
-import type {} from '@rafaysystems-perses/components/compat/noop';
+import type {} from '@rafaysystems/components/compat/noop';
 
 // Use Typescript interface augmentation to extend the MUI type definition
-declare module '@rafaysystems-perses/components/compat/mui' {
+declare module '@rafaysystems/components/compat/mui' {
   interface Color {
     150: string;
     250: string;

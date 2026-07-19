@@ -12,14 +12,14 @@
 // limitations under the License.
 
 import { ReactElement, useState } from 'react';
-import { Button, ButtonProps } from '@rafaysystems-perses/components/compat/mui';
+import { Button, ButtonProps } from '@rafaysystems/components/compat/mui';
 
-import { Drawer, InfoTooltip } from '@rafaysystems-perses/components';
+import { Drawer, InfoTooltip } from '@rafaysystems/components';
 import { AnnotationSpec } from '@perses-dev/spec';
 import { TOOLTIP_TEXT, editButtonStyle } from '../../constants';
 import { useAnnotationActions, useAnnotationSpecs } from '../../context';
 import { AnnotationEditor } from './AnnotationsEditor';
-import { PencilOutline as PencilIcon } from '@rafaysystems-perses/components/compat/icons';
+import { PencilOutline as PencilIcon } from '@rafaysystems/components/compat/icons';
 
 export interface EditAnnotationsButtonProps {
   fullWidth?: ButtonProps['fullWidth'];

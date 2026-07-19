@@ -13,9 +13,9 @@
 
 import React, { ReactElement, useEffect, useRef } from 'react';
 import { produce } from 'immer';
-import { IconButton, ToggleButton, ToggleButtonGroup, Typography } from '@rafaysystems-perses/components/compat/mui';
-import { PlusIcon } from '@rafaysystems-perses/components/compat/icons';
-import { Stack } from '@rafaysystems-perses/components/compat/mui';
+import { IconButton, ToggleButton, ToggleButtonGroup, Typography } from '@rafaysystems/components/compat/mui';
+import { PlusIcon } from '@rafaysystems/components/compat/icons';
+import { Stack } from '@rafaysystems/components/compat/mui';
 import { useChartsTheme } from '../context/ChartsProvider';
 import { OptionsEditorControl, OptionsEditorGroup } from '../OptionsEditorLayout';
 import { InfoTooltip } from '../InfoTooltip';

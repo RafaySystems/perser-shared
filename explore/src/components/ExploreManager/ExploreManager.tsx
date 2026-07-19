@@ -11,11 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, Button, Stack, useMediaQuery } from '@rafaysystems-perses/components/compat/mui';
-import { PluginLoaderComponent, useListPluginMetadata } from '@rafaysystems-perses/plugin-system';
+import { Box, Button, Stack, useMediaQuery } from '@rafaysystems/components/compat/mui';
+import { PluginLoaderComponent, useListPluginMetadata } from '@rafaysystems/plugin-system';
 import { ReactElement, ReactNode, useEffect, useMemo } from 'react';
-import { ChevronRight, ChevronRight as ChevronLeft } from '@rafaysystems-perses/components/compat/icons';
-import { useLocalStorage } from '@rafaysystems-perses/components';
+import { ChevronRight, ChevronRight as ChevronLeft } from '@rafaysystems/components/compat/icons';
+import { useLocalStorage } from '@rafaysystems/components';
 import { ExploreToolbar } from '../ExploreToolbar';
 import { useExplorerManagerContext } from './ExplorerManagerProvider';
 

@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { FormControl, FormControlLabel, Radio, RadioGroup, RadioGroupProps, Box } from '@rafaysystems-perses/components/compat/mui';
+import { FormControl, FormControlLabel, Radio, RadioGroup, RadioGroupProps, Box } from '@rafaysystems/components/compat/mui';
 import { ReactElement, ReactNode, useState } from 'react';
 import { OptionsEditorTabPanel } from '../OptionsEditorTabPanel';
 

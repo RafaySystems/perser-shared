@@ -12,11 +12,11 @@
 // limitations under the License.
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, Divider, FormControlLabel, Grid, Stack, Switch, TextField, Typography } from '@rafaysystems-perses/components/compat/mui';
-import { DiscardChangesConfirmationDialog, FormActions, getSubmitText, getTitleAction } from '@rafaysystems-perses/components';
+import { Box, Divider, FormControlLabel, Grid, Stack, Switch, TextField, Typography } from '@rafaysystems/components/compat/mui';
+import { DiscardChangesConfirmationDialog, FormActions, getSubmitText, getTitleAction } from '@rafaysystems/components';
 import { DispatchWithoutAction, ReactElement, useState } from 'react';
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { Action, DatasourceDefinition } from '@rafaysystems-perses/client';
+import { Action, DatasourceDefinition } from '@rafaysystems/client';
 import { useValidationSchemas } from '../../context';
 import { PluginEditor } from '../PluginEditor';
 

@@ -11,11 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { IconButton, Stack, TextField } from '@rafaysystems-perses/components/compat/mui';
+import { IconButton, Stack, TextField } from '@rafaysystems/components/compat/mui';
 import { ChangeEvent, ReactElement, useState } from 'react';
 import { HexColorPicker } from 'react-colorful';
-import { CircleIcon } from '@rafaysystems-perses/components/compat/icons';
-import { DeleteIcon } from '@rafaysystems-perses/components/compat/icons';
+import { CircleIcon } from '@rafaysystems/components/compat/icons';
+import { DeleteIcon } from '@rafaysystems/components/compat/icons';
 
 interface ColorPickerProps {
   color: string;

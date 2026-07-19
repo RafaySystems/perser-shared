@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { createTheme } from '@rafaysystems-perses/components/compat/mui';
+import { createTheme } from '@rafaysystems/components/compat/mui';
 import { TableColumnConfig, getTableCellLayout, persesColumnsToTanstackColumns } from './table-model';
 
 const mockMuiTheme = createTheme({});

@@ -13,7 +13,7 @@
 
 import { useContext } from 'react';
 import { StoreApi } from 'zustand';
-import { DashboardResource } from '@rafaysystems-perses/client';
+import { DashboardResource } from '@rafaysystems/client';
 import { DashboardContext, DashboardStoreState } from '../context';
 import testDashboard from './testDashboard';
 

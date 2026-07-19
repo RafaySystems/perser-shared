@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { IconButton, IconButtonProps, styled } from '@rafaysystems-perses/components/compat/mui';
+import { IconButton, IconButtonProps, styled } from '@rafaysystems/components/compat/mui';
 
 export const HeaderIconButton = styled(IconButton)(({ theme }: any) => ({
   borderRadius: theme.shape.borderRadius,

@@ -13,7 +13,7 @@
 
 import { DurationString, TimeRangeValue } from '@perses-dev/spec';
 import React, { ReactElement } from 'react';
-import { TimeZoneProvider } from '@rafaysystems-perses/components';
+import { TimeZoneProvider } from '@rafaysystems/components';
 import { TimeRangeProvider } from './TimeRangeProvider';
 import { useSetRefreshIntervalParams, useTimeRangeParams, useTimeZoneParams } from './query-params';
 

@@ -11,13 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { VariableOption } from '@rafaysystems-perses/components';
+import type { VariableOption } from '@rafaysystems/components';
 import { AbsoluteTimeRange, UnknownSpec } from '@perses-dev/spec';
 import { DatasourceStore, VariableStateMap } from '../runtime';
 import { Plugin } from './plugin-base';
 
-// Re-export VariableOption from @rafaysystems-perses/components for backwards compatibility
-export type { VariableOption } from '@rafaysystems-perses/components';
+// Re-export VariableOption from @rafaysystems/components for backwards compatibility
+export type { VariableOption } from '@rafaysystems/components';
 
 export interface GetVariableOptionsContext {
   variables: VariableStateMap;

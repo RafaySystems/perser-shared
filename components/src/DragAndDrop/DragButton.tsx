@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { IconButton, IconButtonProps, Menu, MenuItem, MenuProps } from '@rafaysystems-perses/components/compat/mui';
-import { DragIcon } from '@rafaysystems-perses/components/compat/icons';
+import { IconButton, IconButtonProps, Menu, MenuItem, MenuProps } from '@rafaysystems/components/compat/mui';
+import { DragIcon } from '@rafaysystems/components/compat/icons';
 import { useState, MouseEvent, ReactElement, forwardRef } from 'react';
 
 export function handleMoveUp<T>(element: T, elements: T[]): T[] {

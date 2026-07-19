@@ -21,13 +21,13 @@ import {
   useEvent,
   DatasourceClient,
   DatasourceSelectItem,
-} from '@rafaysystems-perses/plugin-system';
+} from '@rafaysystems/plugin-system';
 import {
   BuildDatasourceProxyUrlParams,
   DashboardResource,
   DatasourceApi,
   DatasourceDefinition,
-} from '@rafaysystems-perses/client';
+} from '@rafaysystems/client';
 
 export interface DatasourceStoreProviderProps {
   dashboardResource?: DashboardResource;

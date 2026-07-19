@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { FormControl, FormLabel, FormControlLabelProps, Stack, Box, IconButton } from '@rafaysystems-perses/components/compat/mui';
+import { FormControl, FormLabel, FormControlLabelProps, Stack, Box, IconButton } from '@rafaysystems/components/compat/mui';
 import React, { ReactElement } from 'react';
-import { InformationOutlineIcon } from '@rafaysystems-perses/components/compat/icons';
+import { InformationOutlineIcon } from '@rafaysystems/components/compat/icons';
 import { useId } from '../utils';
 import { InfoTooltip } from '../InfoTooltip';
 

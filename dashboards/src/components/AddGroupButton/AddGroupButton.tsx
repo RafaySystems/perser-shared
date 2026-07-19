@@ -11,13 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button } from '@rafaysystems-perses/components/compat/mui';
+import { Button } from '@rafaysystems/components/compat/mui';
 
-import { InfoTooltip } from '@rafaysystems-perses/components';
+import { InfoTooltip } from '@rafaysystems/components';
 import { ReactElement } from 'react';
 import { TOOLTIP_TEXT, editButtonStyle } from '../../constants';
 import { useDashboardActions } from '../../context';
-import { PlusBoxOutline as AddGroupIcon } from '@rafaysystems-perses/components/compat/icons';
+import { PlusBoxOutline as AddGroupIcon } from '@rafaysystems/components/compat/icons';
 
 export const AddGroupButton = (): ReactElement => {
   const { openAddPanelGroup } = useDashboardActions();

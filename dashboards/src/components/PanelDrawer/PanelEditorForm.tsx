@@ -12,19 +12,19 @@
 // limitations under the License.
 
 import { ReactElement, useCallback, useEffect, useState } from 'react';
-import { Box, Button, Grid, MenuItem, Stack, TextField, Typography } from '@rafaysystems-perses/components/compat/mui';
+import { Box, Button, Grid, MenuItem, Stack, TextField, Typography } from '@rafaysystems/components/compat/mui';
 import { PanelDefinition } from '@perses-dev/spec';
-import { PanelEditorValues, PluginKindSelect, usePluginEditor, useValidationSchemas } from '@rafaysystems-perses/plugin-system';
+import { PanelEditorValues, PluginKindSelect, usePluginEditor, useValidationSchemas } from '@rafaysystems/plugin-system';
 import {
   DiscardChangesConfirmationDialog,
   ErrorAlert,
   ErrorBoundary,
   getSubmitText,
   getTitleAction,
-} from '@rafaysystems-perses/components';
+} from '@rafaysystems/components';
 import { Controller, FormProvider, SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Action } from '@rafaysystems-perses/client';
+import { Action } from '@rafaysystems/client';
 import { useListPanelGroups } from '../../context';
 import { PanelEditorProvider } from '../../context/PanelEditorProvider/PanelEditorProvider';
 import { usePanelEditor } from './usePanelEditor';

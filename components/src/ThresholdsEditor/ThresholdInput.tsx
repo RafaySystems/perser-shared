@@ -12,8 +12,8 @@
 // limitations under the License.
 
 import { ReactElement, RefObject, useState } from 'react';
-import { Stack, FormLabel, TextField, IconButton, Box } from '@rafaysystems-perses/components/compat/mui';
-import { DeleteIcon } from '@rafaysystems-perses/components/compat/icons';
+import { Stack, FormLabel, TextField, IconButton, Box } from '@rafaysystems/components/compat/mui';
+import { DeleteIcon } from '@rafaysystems/components/compat/icons';
 import { OptionsColorPicker } from '../ColorPicker/OptionsColorPicker';
 import { ThresholdOptions } from '../model';
 

@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { ReactElement, useState } from 'react';
-import { PinOutline, PinOffOutline } from '@rafaysystems-perses/components/compat/icons';
+import { PinOutline, PinOffOutline } from '@rafaysystems/components/compat/icons';
 import {
   AppBar,
   Box,
@@ -23,10 +23,10 @@ import {
   useMediaQuery,
   useScrollTrigger,
   useTheme,
-} from '@rafaysystems-perses/components/compat/mui';
+} from '@rafaysystems/components/compat/mui';
 
 
-import { TimeRangeControls, useTimeZoneParams } from '@rafaysystems-perses/plugin-system';
+import { TimeRangeControls, useTimeZoneParams } from '@rafaysystems/plugin-system';
 import { VariableList } from '../Variables';
 
 interface DashboardStickyToolbarProps {

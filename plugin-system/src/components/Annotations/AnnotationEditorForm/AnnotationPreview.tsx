@@ -24,9 +24,9 @@ import {
   IconButton,
   Stack,
   Typography,
-} from '@rafaysystems-perses/components/compat/mui';
-import { getDateAndTime, InfoTooltip, useTimeZone } from '@rafaysystems-perses/components';
-import { Alert as AlertIcon } from '@rafaysystems-perses/components/compat/icons';
+} from '@rafaysystems/components/compat/mui';
+import { getDateAndTime, InfoTooltip, useTimeZone } from '@rafaysystems/components';
+import { Alert as AlertIcon } from '@rafaysystems/components/compat/icons';
 import { useAnnotationData } from '../../../runtime';
 
 interface AnnotationPreviewCardProps extends CardProps {

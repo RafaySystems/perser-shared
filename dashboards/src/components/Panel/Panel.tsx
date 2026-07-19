@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Card, CardContent, CardProps } from '@rafaysystems-perses/components/compat/mui';
+import { Card, CardContent, CardProps } from '@rafaysystems/components/compat/mui';
 import {
   ErrorAlert,
   ErrorBoundary,
@@ -19,9 +19,9 @@ import {
   SelectionProvider,
   combineSx,
   useId,
-} from '@rafaysystems-perses/components';
+} from '@rafaysystems/components';
 import { PanelDefinition } from '@perses-dev/spec';
-import { ActionOptions, useDataQueriesContext, usePluginRegistry } from '@rafaysystems-perses/plugin-system';
+import { ActionOptions, useDataQueriesContext, usePluginRegistry } from '@rafaysystems/plugin-system';
 import { ReactNode, memo, useEffect, useMemo, useState } from 'react';
 import useResizeObserver from 'use-resize-observer';
 import { PanelGroupItemId } from '../../model';

@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { TableSortLabel, Typography, tableSortLabelClasses, Box, Divider } from '@rafaysystems-perses/components/compat/mui';
+import { TableSortLabel, Typography, tableSortLabelClasses, Box, Divider } from '@rafaysystems/components/compat/mui';
 import { ReactElement } from 'react';
 import { TableCell, TableCellProps } from './TableCell';
 import { SortDirection } from './model/table-model';

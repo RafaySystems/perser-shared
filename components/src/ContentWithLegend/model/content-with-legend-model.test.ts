@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { createTheme } from '@rafaysystems-perses/components/compat/mui';
+import { createTheme } from '@rafaysystems/components/compat/mui';
 import { legendModes, legendSizes } from '../../model';
 import * as table from '../../Table';
 import {

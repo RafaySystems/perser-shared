@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, Divider, Stack, Typography } from '@rafaysystems-perses/components/compat/mui';
+import { Box, Divider, Stack, Typography } from '@rafaysystems/components/compat/mui';
 import { ReactElement } from 'react';
 import { SeriesMarker } from './SeriesMarker';
 

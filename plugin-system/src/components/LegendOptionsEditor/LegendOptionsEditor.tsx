@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Switch, SwitchProps, ToggleButtonGroup, ToggleButton } from '@rafaysystems-perses/components/compat/mui';
+import { Switch, SwitchProps, ToggleButtonGroup, ToggleButton } from '@rafaysystems/components/compat/mui';
 import {
   ErrorAlert,
   OptionsEditorControl,
@@ -21,7 +21,7 @@ import {
   getLegendSize,
   getLegendMode,
   getLegendPosition,
-} from '@rafaysystems-perses/components';
+} from '@rafaysystems/components';
 import { ReactElement, useMemo } from 'react';
 import {
   LEGEND_MODE_CONFIG,

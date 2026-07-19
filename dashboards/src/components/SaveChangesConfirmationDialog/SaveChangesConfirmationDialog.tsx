@@ -12,10 +12,10 @@
 // limitations under the License.
 
 import { ReactElement, useState } from 'react';
-import { Checkbox, FormGroup, FormControlLabel, Typography } from '@rafaysystems-perses/components/compat/mui';
-import { DEFAULT_REFRESH_INTERVAL_OPTIONS, useTimeRange, useTimeZoneParams } from '@rafaysystems-perses/plugin-system';
+import { Checkbox, FormGroup, FormControlLabel, Typography } from '@rafaysystems/components/compat/mui';
+import { DEFAULT_REFRESH_INTERVAL_OPTIONS, useTimeRange, useTimeZoneParams } from '@rafaysystems/plugin-system';
 import { isRelativeTimeRange } from '@perses-dev/spec';
-import { Dialog } from '@rafaysystems-perses/components';
+import { Dialog } from '@rafaysystems/components';
 import { useSaveChangesConfirmationDialog, useVariableDefinitionActions } from '../../context';
 
 const SAVE_DEFAULTS_DIALOG_TEXT =

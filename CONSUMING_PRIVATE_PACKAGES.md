@@ -1,6 +1,6 @@
 # Consuming Private GitHub Packages
 
-This guide explains how to consume `@rafaysystems-perses/*` private npm packages from GitHub Packages.
+This guide explains how to consume `@rafaysystems/*` private npm packages from GitHub Packages.
 
 ## Package registry
 
@@ -10,14 +10,14 @@ All packages are published to:
 
 Scope:
 
-- `@rafaysystems-perses`
+- `@rafaysystems`
 
 ## 1) Local development setup
 
 Create or update `~/.npmrc`:
 
 ```ini
-@rafaysystems-perses:registry=https://npm.pkg.github.com
+@rafaysystems:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=ghp_xxx_your_token
 ```
 
@@ -29,10 +29,10 @@ Token requirements (for private packages):
 Then install normally in your consumer repo:
 
 ```bash
-npm i @rafaysystems-perses/components@<version>
-npm i @rafaysystems-perses/dashboards@<version>
-npm i @rafaysystems-perses/explore@<version>
-npm i @rafaysystems-perses/plugin-system@<version>
+npm i @rafaysystems/components@<version>
+npm i @rafaysystems/dashboards@<version>
+npm i @rafaysystems/explore@<version>
+npm i @rafaysystems/plugin-system@<version>
 ```
 
 ## 2) GitHub Actions setup (consumer repo)
@@ -60,7 +60,7 @@ steps:
 
   - name: Configure npm auth
     run: |
-      echo "@rafaysystems-perses:registry=https://npm.pkg.github.com" >> ~/.npmrc
+      echo "@rafaysystems:registry=https://npm.pkg.github.com" >> ~/.npmrc
       echo "//npm.pkg.github.com/:_authToken=${GH_PACKAGES_TOKEN}" >> ~/.npmrc
     env:
       GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}

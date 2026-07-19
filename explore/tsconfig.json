@@ -7,16 +7,16 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "paths": {
-      "@rafaysystems-perses/components/compat/icons": [
+      "@rafaysystems/components/compat/icons": [
         "../components/dist/compat/icons"
       ],
-      "@rafaysystems-perses/components/compat/mui": [
+      "@rafaysystems/components/compat/mui": [
         "../components/dist/compat/mui"
       ],
-      "@rafaysystems-perses/explore": [
+      "@rafaysystems/explore": [
         "./src"
       ],
-      "@rafaysystems-perses/explore/*": [
+      "@rafaysystems/explore/*": [
         "./src/*"
       ]
     }

@@ -33,8 +33,8 @@ import {
   SwitchProps,
   TextField,
   Typography,
-} from '@rafaysystems-perses/components/compat/mui';
-import { SelectChangeEvent } from '@rafaysystems-perses/components/compat/mui';
+} from '@rafaysystems/components/compat/mui';
+import { SelectChangeEvent } from '@rafaysystems/components/compat/mui';
 import {
   DragAndDropElement,
   DragButton,
@@ -45,7 +45,7 @@ import {
   OptionsEditorControl,
   OptionsEditorGroup,
   useDragAndDropMonitor,
-} from '@rafaysystems-perses/components';
+} from '@rafaysystems/components';
 import {
   Alert as AlertIcon,
   Check as CheckIcon,
@@ -67,7 +67,7 @@ import {
   Stop as StopIcon,
   Sync as SyncIcon,
   Upload as UploadIcon,
-} from '@rafaysystems-perses/components/compat/icons';
+} from '@rafaysystems/components/compat/icons';
 import { ReactElement, useCallback, useMemo, useState } from 'react';
 
 export type ActionIcon =

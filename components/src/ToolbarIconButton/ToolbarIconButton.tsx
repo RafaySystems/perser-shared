@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { ForwardedRef, forwardRef, ReactElement } from 'react';
-import { Button, styled, ButtonProps } from '@rafaysystems-perses/components/compat/mui';
+import { Button, styled, ButtonProps } from '@rafaysystems/components/compat/mui';
 
 type ToolbarIconButtonProps = ButtonProps;
 

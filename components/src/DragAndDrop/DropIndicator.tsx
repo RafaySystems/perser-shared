@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, Stack } from '@rafaysystems-perses/components/compat/mui';
+import { Box, Stack } from '@rafaysystems/components/compat/mui';
 import { ReactElement } from 'react';
 
 export function DropIndicator(): ReactElement {

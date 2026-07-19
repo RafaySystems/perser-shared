@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { DispatchWithoutAction, ReactElement, useCallback, useState } from 'react';
-import { Box, Typography, TextField, Grid, Divider, Stack, IconButton } from '@rafaysystems-perses/components/compat/mui';
+import { Box, Typography, TextField, Grid, Divider, Stack, IconButton } from '@rafaysystems/components/compat/mui';
 import { AnnotationSpec } from '@perses-dev/spec';
 import {
   DiscardChangesConfirmationDialog,
@@ -22,12 +22,12 @@ import {
   OptionsColorPicker,
   getSubmitText,
   getTitleAction,
-} from '@rafaysystems-perses/components';
+} from '@rafaysystems/components';
 import { Control, Controller, FormProvider, SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { InvertColors as InvertColorsIcon } from '@rafaysystems-perses/components/compat/icons';
-import { Action } from '@rafaysystems-perses/client';
+import { InvertColors as InvertColorsIcon } from '@rafaysystems/components/compat/icons';
+import { Action } from '@rafaysystems/client';
 import { PluginEditor } from '../../PluginEditor';
 import { useValidationSchemas } from '../../../context';
 import { DEFAULT_ANNOTATION_COLOR } from '../constants';

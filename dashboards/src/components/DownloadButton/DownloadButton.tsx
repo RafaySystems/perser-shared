@@ -11,13 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ClickAwayListener, Menu, MenuItem, MenuList } from '@rafaysystems-perses/components/compat/mui';
-import { ToolbarIconButton } from '@rafaysystems-perses/components';
+import { ClickAwayListener, Menu, MenuItem, MenuList } from '@rafaysystems/components/compat/mui';
+import { ToolbarIconButton } from '@rafaysystems/components';
 
 import React, { ReactElement, useRef } from 'react';
 import { useDashboard } from '../../context';
 import { serializeDashboard } from './serializeDashboard';
-import { DownloadOutline as DownloadIcon } from '@rafaysystems-perses/components/compat/icons';
+import { DownloadOutline as DownloadIcon } from '@rafaysystems/components/compat/icons';
 
 // Button that enables downloading the dashboard as a JSON file
 export function DownloadButton(): ReactElement {

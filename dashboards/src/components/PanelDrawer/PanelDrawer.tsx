@@ -26,8 +26,8 @@
 // limitations under the License.
 
 import { ReactElement, ReactNode, useCallback, useMemo, useState } from 'react';
-import { Drawer, ErrorAlert, ErrorBoundary } from '@rafaysystems-perses/components';
-import { PanelEditorValues, useVariableValues, VariableContext } from '@rafaysystems-perses/plugin-system';
+import { Drawer, ErrorAlert, ErrorBoundary } from '@rafaysystems/components';
+import { PanelEditorValues, useVariableValues, VariableContext } from '@rafaysystems/plugin-system';
 import { usePanelEditor, usePanelKey } from '../../context';
 import { PanelEditorForm } from './PanelEditorForm';
 

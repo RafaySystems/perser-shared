@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { DashboardResource } from '@rafaysystems-perses/client';
+import { DashboardResource } from '@rafaysystems/client';
 
 type DashboardResourceTest = Omit<DashboardResource, 'metadata'> & {
   metadata: {

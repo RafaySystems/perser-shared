@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { useState, useMemo, ReactElement } from 'react';
-import { Plus as AddIcon, Pencil as PencilIcon, TrashCan as TrashIcon, ArrowUp, ArrowDown } from '@rafaysystems-perses/components/compat/icons';
+import { Plus as AddIcon, Pencil as PencilIcon, TrashCan as TrashIcon, ArrowUp, ArrowDown } from '@rafaysystems/components/compat/icons';
 import {
   Button,
   Stack,
@@ -28,7 +28,7 @@ import {
   IconButton,
   Alert,
   styled,
-} from '@rafaysystems-perses/components/compat/mui';
+} from '@rafaysystems/components/compat/mui';
 
 import { AnnotationSpec, Definition, UnknownSpec } from '@perses-dev/spec';
 import { useImmer } from 'use-immer';
@@ -36,8 +36,8 @@ import { useImmer } from 'use-immer';
 
 
 
-import { ValidationProvider, AnnotationEditorForm } from '@rafaysystems-perses/plugin-system';
-import { Action } from '@rafaysystems-perses/client';
+import { ValidationProvider, AnnotationEditorForm } from '@rafaysystems/plugin-system';
+import { Action } from '@rafaysystems/client';
 import { useDiscardChangesConfirmationDialog } from '../../context';
 
 function validateAnnotationSpecs(annotationSpecs: AnnotationSpec[]): { isValid: boolean; errors: string[] } {

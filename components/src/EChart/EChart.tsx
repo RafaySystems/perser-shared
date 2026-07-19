@@ -13,7 +13,7 @@
 
 import { CSSProperties, memo, useEffect, useLayoutEffect, useRef } from 'react';
 import { ECharts, EChartsCoreOption, init, connect, use } from 'echarts/core';
-import { Box, SxProps, Theme } from '@rafaysystems-perses/components/compat/mui';
+import { Box, SxProps, Theme } from '@rafaysystems/components/compat/mui';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
 

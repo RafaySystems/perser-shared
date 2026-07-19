@@ -17,7 +17,7 @@ import { PersesColor } from './palette';
 export * from './theme';
 export * from './typography';
 
-declare module '@rafaysystems-perses/components/compat/mui' {
+declare module '@rafaysystems/components/compat/mui' {
   interface TypeBackground {
     navigation: string;
     tooltip: string;

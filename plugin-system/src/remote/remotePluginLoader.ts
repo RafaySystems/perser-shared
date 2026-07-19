@@ -17,7 +17,7 @@ import {
   PluginModuleResource,
   PluginType,
   getPluginModuleCompoundKey,
-} from '@rafaysystems-perses/plugin-system';
+} from '@rafaysystems/plugin-system';
 import { RemotePluginModule } from './PersesPlugin.types';
 import { loadPlugin } from './PluginRuntime';
 

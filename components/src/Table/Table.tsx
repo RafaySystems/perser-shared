@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Stack, useTheme } from '@rafaysystems-perses/components/compat/mui';
+import { Stack, useTheme } from '@rafaysystems/components/compat/mui';
 import {
   ColumnDef,
   ExpandedState,

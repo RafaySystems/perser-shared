@@ -23,7 +23,7 @@ import {
 } from '@perses-dev/spec';
 
 import { z } from 'zod';
-import { buildDatasourceDefinitionSchema, DatasourceDefinition, datasourceDefinitionSchema } from '@rafaysystems-perses/client';
+import { buildDatasourceDefinitionSchema, DatasourceDefinition, datasourceDefinitionSchema } from '@rafaysystems/client';
 import { buildPanelEditorSchema, panelEditorSchema as defaultPanelEditorSchema } from '../schema';
 import { PanelEditorValues } from '../model';
 

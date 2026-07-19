@@ -17,12 +17,12 @@ import {
   VariableStateMap,
   parseVariables,
   replaceVariables,
-} from '@rafaysystems-perses/components';
+} from '@rafaysystems/components';
 import { immerable } from 'immer';
 import { createContext, useContext, useMemo } from 'react';
 import { useBuiltinVariableValues } from './builtin-variables';
 
-// Re-export types from @rafaysystems-perses/components for backwards compatibility
+// Re-export types from @rafaysystems/components for backwards compatibility
 export type { VariableOption, VariableState, VariableStateMap };
 
 /**

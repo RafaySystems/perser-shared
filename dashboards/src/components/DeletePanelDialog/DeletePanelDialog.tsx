@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { FormEvent, ReactElement } from 'react';
-import { Dialog } from '@rafaysystems-perses/components';
+import { Dialog } from '@rafaysystems/components';
 import { useDeletePanelDialog, DeletePanelDialogState, useViewPanel } from '../../context';
 
 export const DeletePanelDialog = (): ReactElement => {

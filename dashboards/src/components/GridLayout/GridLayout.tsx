@@ -13,7 +13,7 @@
 import { ReactElement, useState } from 'react';
 import { Layout, Layouts } from 'react-grid-layout';
 
-import { useVariableValues, VariableContext, PanelGroupId } from '@rafaysystems-perses/plugin-system';
+import { useVariableValues, VariableContext, PanelGroupId } from '@rafaysystems/plugin-system';
 import { PanelGroupDefinition } from '../../model';
 import { useEditMode, usePanelGroup, usePanelGroupActions, useViewPanelGroup } from '../../context';
 import { GRID_LAYOUT_SMALL_BREAKPOINT } from '../../constants';

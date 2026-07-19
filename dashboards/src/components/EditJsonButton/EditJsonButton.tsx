@@ -12,11 +12,11 @@
 // limitations under the License.
 
 
-import { InfoTooltip, ToolbarIconButton } from '@rafaysystems-perses/components';
+import { InfoTooltip, ToolbarIconButton } from '@rafaysystems/components';
 import { ReactElement } from 'react';
 import { TOOLTIP_TEXT } from '../../constants';
 import { useEditJsonDialog } from '../../context';
-import { CodeBraces as CodeIcon } from '@rafaysystems-perses/components/compat/icons';
+import { CodeBraces as CodeIcon } from '@rafaysystems/components/compat/icons';
 
 export interface EditJsonButtonProps {
   isReadonly: boolean;

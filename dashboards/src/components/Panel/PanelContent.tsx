@@ -11,11 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { usePlugin, PanelProps, QueryData, PanelPlugin } from '@rafaysystems-perses/plugin-system';
+import { usePlugin, PanelProps, QueryData, PanelPlugin } from '@rafaysystems/plugin-system';
 import { UnknownSpec, PanelDefinition, QueryDataType } from '@perses-dev/spec';
 import { ReactElement } from 'react';
-import { LoadingOverlay } from '@rafaysystems-perses/components';
-import { Skeleton } from '@rafaysystems-perses/components/compat/mui';
+import { LoadingOverlay } from '@rafaysystems/components';
+import { Skeleton } from '@rafaysystems/components/compat/mui';
 import { PanelPluginLoader } from './PanelPluginLoader';
 
 export interface PanelContentProps extends Omit<PanelProps<UnknownSpec>, 'queryResults'> {

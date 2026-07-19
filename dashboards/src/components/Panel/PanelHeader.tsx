@@ -11,10 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { CardHeader, CardHeaderProps, Stack, Typography, Tooltip } from '@rafaysystems-perses/components/compat/mui';
-import { combineSx } from '@rafaysystems-perses/components';
+import { CardHeader, CardHeaderProps, Stack, Typography, Tooltip } from '@rafaysystems/components/compat/mui';
+import { combineSx } from '@rafaysystems/components';
 import { Link } from '@perses-dev/spec';
-import { ItemAction, QueryData, useAllVariableValues, useReplaceVariablesInString } from '@rafaysystems-perses/plugin-system';
+import { ItemAction, QueryData, useAllVariableValues, useReplaceVariablesInString } from '@rafaysystems/plugin-system';
 import { ReactElement, ReactNode, useRef } from 'react';
 import { HEADER_ACTIONS_CONTAINER_NAME } from '../../constants';
 import { PanelActions, PanelActionsProps } from './PanelActions';

@@ -22,7 +22,7 @@ import {
   CircularProgress,
   TextField,
   InputAdornment,
-} from '@rafaysystems-perses/components/compat/mui';
+} from '@rafaysystems/components/compat/mui';
 import {
   DeleteOutline as DeleteIcon,
   ChevronDown,
@@ -31,9 +31,9 @@ import {
   Pencil as PencilIcon,
   Check as CheckIcon,
   Close as CloseIcon,
-} from '@rafaysystems-perses/components/compat/icons';
+} from '@rafaysystems/components/compat/icons';
 import { forwardRef, ReactElement, useState } from 'react';
-import { InfoTooltip } from '@rafaysystems-perses/components';
+import { InfoTooltip } from '@rafaysystems/components';
 import { QueryData } from '../../runtime';
 import { PluginEditor, PluginEditorProps, PluginEditorRef } from '../PluginEditor';
 import { defaultQueryName } from './utils';

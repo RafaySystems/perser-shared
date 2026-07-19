@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { OpenInNew as OpenInNewIcon } from '@rafaysystems-perses/components/compat/icons';
+import { OpenInNew as OpenInNewIcon } from '@rafaysystems/components/compat/icons';
 import {
   Stack,
   ListItemText,
@@ -22,7 +22,7 @@ import {
   BaseSelectProps,
   Autocomplete,
   TextField,
-} from '@rafaysystems-perses/components/compat/mui';
+} from '@rafaysystems/components/compat/mui';
 import { DatasourceSelector, VariableName } from '@perses-dev/spec';
 import { ReactElement, useMemo } from 'react';
 import {

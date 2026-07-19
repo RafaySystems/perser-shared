@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, BoxProps } from '@rafaysystems-perses/components/compat/mui';
-import { ErrorBoundary, ErrorAlert } from '@rafaysystems-perses/components';
+import { Box, BoxProps } from '@rafaysystems/components/compat/mui';
+import { ErrorBoundary, ErrorAlert } from '@rafaysystems/components';
 import { ReactElement, useRef } from 'react';
 import { usePanelGroupIds } from '../../context';
 import { GridLayout } from '../GridLayout';

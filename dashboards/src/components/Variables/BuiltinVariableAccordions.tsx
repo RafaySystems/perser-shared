@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { BuiltinVariableDefinition } from '@perses-dev/spec';
-import { ChevronUp as ExpandMoreIcon } from '@rafaysystems-perses/components/compat/icons';
+import { ChevronUp as ExpandMoreIcon } from '@rafaysystems/components/compat/icons';
 import {
   Accordion,
   AccordionDetails,
@@ -24,9 +24,9 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@rafaysystems-perses/components/compat/mui';
+} from '@rafaysystems/components/compat/mui';
 
-import { InfoTooltip } from '@rafaysystems-perses/components';
+import { InfoTooltip } from '@rafaysystems/components';
 import { ReactElement, useMemo } from 'react';
 
 type BuiltinVariableAccordionsProps = {

@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { PanelGroupId } from '@rafaysystems-perses/plugin-system';
+import { PanelGroupId } from '@rafaysystems/plugin-system';
 /**
  * Panel Group Item Layout ID type. String identifier for items within a panel group.
  */

@@ -11,14 +11,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, BoxProps } from '@rafaysystems-perses/components/compat/mui';
+import { Box, BoxProps } from '@rafaysystems/components/compat/mui';
 import {
   TimeRangeProviderWithQueryParams,
   useInitialRefreshInterval,
   useInitialTimeRange,
-} from '@rafaysystems-perses/plugin-system';
+} from '@rafaysystems/plugin-system';
 
-import { ErrorAlert, ErrorBoundary, combineSx } from '@rafaysystems-perses/components';
+import { ErrorAlert, ErrorBoundary, combineSx } from '@rafaysystems/components';
 import {
   DatasourceStoreProviderProps,
   VariableProviderProps,
@@ -26,7 +26,7 @@ import {
   VariableProvider,
   DEFAULT_DASHBOARD_DURATION,
   DEFAULT_REFRESH_INTERVAL,
-} from '@rafaysystems-perses/dashboards';
+} from '@rafaysystems/dashboards';
 import React, { ReactElement } from 'react';
 import { ViewExploreApp } from './ViewExploreApp';
 

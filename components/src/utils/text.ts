@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Resource } from '@rafaysystems-perses/client';
+import { Resource } from '@rafaysystems/client';
 
 export function getResourceDisplayName<T extends Resource>(resource: T): string {
   const r = resource as any;

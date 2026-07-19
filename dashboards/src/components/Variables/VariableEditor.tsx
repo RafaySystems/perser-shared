@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { ReactElement, useMemo, useState } from 'react';
-import { Plus as AddIcon, Pencil as PencilIcon, ContentCopy as CloneIcon, TrashCan as TrashIcon, ArrowUp, ArrowDown, ContentDuplicate, OpenInNew as OpenInNewIcon, ChevronUp as ExpandMoreIcon } from '@rafaysystems-perses/components/compat/icons';
+import { Plus as AddIcon, Pencil as PencilIcon, ContentCopy as CloneIcon, TrashCan as TrashIcon, ArrowUp, ArrowDown, ContentDuplicate, OpenInNew as OpenInNewIcon, ChevronUp as ExpandMoreIcon } from '@rafaysystems/components/compat/icons';
 import {
   Accordion,
   AccordionDetails,
@@ -34,7 +34,7 @@ import {
   TableRow,
   Tooltip,
   Typography,
-} from '@rafaysystems-perses/components/compat/mui';
+} from '@rafaysystems/components/compat/mui';
 
 import { BuiltinVariableDefinition, VariableDefinition } from '@perses-dev/spec';
 import { useImmer } from 'use-immer';
@@ -52,9 +52,9 @@ import {
   VariableEditorForm,
   VariableState,
   useResolveListVariableValues,
-} from '@rafaysystems-perses/plugin-system';
-import { InfoTooltip } from '@rafaysystems-perses/components';
-import { Action } from '@rafaysystems-perses/client';
+} from '@rafaysystems/plugin-system';
+import { InfoTooltip } from '@rafaysystems/components';
+import { Action } from '@rafaysystems/client';
 import { ExternalVariableDefinition } from '../../model/VariableDefinition';
 import { useDiscardChangesConfirmationDialog, VariableProvider } from '../../context';
 import { hydrateVariableDefinitionStates } from '../../context/VariableProvider/hydrationUtils';

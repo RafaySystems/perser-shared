@@ -12,10 +12,10 @@
 // limitations under the License.
 
 import { Fragment, HTMLAttributes, ReactElement } from 'react';
-import { Divider, IconButton, Stack, Typography } from '@rafaysystems-perses/components/compat/mui';
+import { Divider, IconButton, Stack, Typography } from '@rafaysystems/components/compat/mui';
 import { Controller, useFieldArray, Control } from 'react-hook-form';
-import { Plus as PlusIcon, Minus as MinusIcon } from '@rafaysystems-perses/components/compat/icons';
-import { LinkEditorForm } from '@rafaysystems-perses/components';
+import { Plus as PlusIcon, Minus as MinusIcon } from '@rafaysystems/components/compat/icons';
+import { LinkEditorForm } from '@rafaysystems/components';
 import { PanelEditorValues } from '../../model';
 
 export interface LinksEditorProps extends HTMLAttributes<HTMLDivElement> {

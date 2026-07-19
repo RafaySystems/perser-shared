@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { TableRow as MuiTableRow, alpha } from '@rafaysystems-perses/components/compat/mui';
+import { TableRow as MuiTableRow, alpha } from '@rafaysystems/components/compat/mui';
 import { forwardRef } from 'react';
 import { TableDensity } from './model/table-model';
 

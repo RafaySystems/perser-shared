@@ -12,9 +12,9 @@
 // limitations under the License.
 
 import { FormEvent, ReactElement, useState } from 'react';
-import { Alert, FormControl } from '@rafaysystems-perses/components/compat/mui';
-import { Dialog, JSONEditor } from '@rafaysystems-perses/components';
-import { useDatasourceStore, useTimeRange } from '@rafaysystems-perses/plugin-system';
+import { Alert, FormControl } from '@rafaysystems/components/compat/mui';
+import { Dialog, JSONEditor } from '@rafaysystems/components';
+import { useDatasourceStore, useTimeRange } from '@rafaysystems/plugin-system';
 import { useEditJsonDialog, useDashboard } from '../../context';
 
 export interface EditJsonDialogProps {

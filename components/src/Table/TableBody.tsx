@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { TableBody as MuiTableBody, TableBodyProps as MuiTableBodyProps } from '@rafaysystems-perses/components/compat/mui';
+import { TableBody as MuiTableBody, TableBodyProps as MuiTableBodyProps } from '@rafaysystems/components/compat/mui';
 import { forwardRef } from 'react';
 
 type TableBodyProps = MuiTableBodyProps;

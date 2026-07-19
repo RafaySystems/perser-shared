@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Tab, Tabs, TabsProps, Box } from '@rafaysystems-perses/components/compat/mui';
+import { Tab, Tabs, TabsProps, Box } from '@rafaysystems/components/compat/mui';
 import { ReactElement, ReactNode, useState } from 'react';
 import { OptionsEditorTabPanel } from '../OptionsEditorTabPanel';
 

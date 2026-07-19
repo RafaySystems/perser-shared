@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Theme } from '@rafaysystems-perses/components/compat/mui';
+import { Theme } from '@rafaysystems/components/compat/mui';
 import merge from 'lodash/merge';
 import { EChartsTheme, PersesChartsTheme } from '../model';
 

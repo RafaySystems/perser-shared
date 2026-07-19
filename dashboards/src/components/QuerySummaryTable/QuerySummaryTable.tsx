@@ -23,10 +23,10 @@ import {
   TableRow,
   Typography,
   Stack,
-} from '@rafaysystems-perses/components/compat/mui';
+} from '@rafaysystems/components/compat/mui';
 import { useQueryClient } from '@tanstack/react-query';
 import { TimeSeriesQueryDefinition, UnknownSpec } from '@perses-dev/spec';
-import { useActiveTimeSeriesQueries, useDatasourceClient, useTimeRange } from '@rafaysystems-perses/plugin-system';
+import { useActiveTimeSeriesQueries, useDatasourceClient, useTimeRange } from '@rafaysystems/plugin-system';
 import { ReactElement } from 'react';
 
 export interface WarningDisplay {

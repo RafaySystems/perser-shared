@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, IconButton, Stack, Typography } from '@rafaysystems-perses/components/compat/mui';
+import { Box, IconButton, Stack, Typography } from '@rafaysystems/components/compat/mui';
 
 
 
@@ -19,12 +19,12 @@ import { Box, IconButton, Stack, Typography } from '@rafaysystems-perses/compone
 
 
 
-import { InfoTooltip } from '@rafaysystems-perses/components';
-import { useReplaceVariablesInString, PanelGroupId } from '@rafaysystems-perses/plugin-system';
+import { InfoTooltip } from '@rafaysystems/components';
+import { useReplaceVariablesInString, PanelGroupId } from '@rafaysystems/plugin-system';
 import { ReactElement } from 'react';
 import { ARIA_LABEL_TEXT, TOOLTIP_TEXT } from '../../constants';
 import { usePanelGroupActions, useEditMode, useDeletePanelGroupDialog } from '../../context';
-import { ChevronDown as ExpandedIcon, ChevronRight as CollapsedIcon, ChartBoxPlusOutline as AddPanelIcon, PencilOutline as PencilIcon, ArrowUp as ArrowUpIcon, ArrowDown as ArrowDownIcon, DeleteOutline as DeleteIcon } from '@rafaysystems-perses/components/compat/icons';
+import { ChevronDown as ExpandedIcon, ChevronRight as CollapsedIcon, ChartBoxPlusOutline as AddPanelIcon, PencilOutline as PencilIcon, ArrowUp as ArrowUpIcon, ArrowDown as ArrowDownIcon, DeleteOutline as DeleteIcon } from '@rafaysystems/components/compat/icons';
 
 export interface GridTitleProps {
   panelGroupId: PanelGroupId;

@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { PaletteMode, SimplePaletteColorOptions } from '@rafaysystems-perses/components/compat/mui';
+import { PaletteMode, SimplePaletteColorOptions } from '@rafaysystems/components/compat/mui';
 import { green } from './colors';
 
 export const success = (mode: PaletteMode): SimplePaletteColorOptions => {

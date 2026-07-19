@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, Typography } from '@rafaysystems-perses/components/compat/mui';
+import { Box, Typography } from '@rafaysystems/components/compat/mui';
 import { ReactElement } from 'react';
 
 interface YAxisLabelProps {

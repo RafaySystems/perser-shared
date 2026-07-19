@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button, Divider, Stack, Typography, Grid2 as Grid } from '@rafaysystems-perses/components/compat/mui';
+import { Button, Divider, Stack, Typography, Grid2 as Grid } from '@rafaysystems/components/compat/mui';
 import { FC, useState } from 'react';
-import { AddIcon } from '@rafaysystems-perses/components/compat/icons';
+import { AddIcon } from '@rafaysystems/components/compat/icons';
 import { ValueMapping } from '../model';
 import { ValueMappingEditor } from './ValueMappingEditor';
 

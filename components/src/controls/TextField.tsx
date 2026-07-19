@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { TextFieldProps as MuiTextFieldProps, TextField as MuiTextField } from '@rafaysystems-perses/components/compat/mui';
+import { TextFieldProps as MuiTextFieldProps, TextField as MuiTextField } from '@rafaysystems/components/compat/mui';
 import { ChangeEvent, ForwardedRef, forwardRef, useCallback, useMemo, useState } from 'react';
 import debounce from 'lodash/debounce';
 

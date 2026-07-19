@@ -12,8 +12,8 @@
 // limitations under the License.
 
 import { createPanelRef, DashboardSpec, DurationString, GridDefinition } from '@perses-dev/spec';
-import { DashboardResource } from '@rafaysystems-perses/client';
-import { PanelGroupId } from '@rafaysystems-perses/plugin-system';
+import { DashboardResource } from '@rafaysystems/client';
+import { PanelGroupId } from '@rafaysystems/plugin-system';
 import { PanelGroupDefinition } from '../model';
 
 import { useDashboardStore } from './DashboardProvider';

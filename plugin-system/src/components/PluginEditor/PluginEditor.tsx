@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, Button } from '@rafaysystems-perses/components/compat/mui';
-import { Reload } from '@rafaysystems-perses/components/compat/icons';
-import { ErrorAlert, ErrorBoundary } from '@rafaysystems-perses/components';
+import { Box, Button } from '@rafaysystems/components/compat/mui';
+import { Reload } from '@rafaysystems/components/compat/icons';
+import { ErrorAlert, ErrorBoundary } from '@rafaysystems/components';
 import { ReactElement, useCallback } from 'react';
 import { UnknownSpec } from '@perses-dev/spec';
 import { PluginKindSelect } from '../PluginKindSelect';

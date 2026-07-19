@@ -11,10 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Stack, Box, CircularProgress, styled, Popper, ClickAwayListener } from '@rafaysystems-perses/components/compat/mui';
+import { Stack, Box, CircularProgress, styled, Popper, ClickAwayListener } from '@rafaysystems/components/compat/mui';
 import { isValidElement, PropsWithChildren, ReactElement, ReactNode, useMemo, useState, MouseEvent } from 'react';
-import { InfoTooltip } from '@rafaysystems-perses/components';
-import { QueryData } from '@rafaysystems-perses/plugin-system';
+import { InfoTooltip } from '@rafaysystems/components';
+import { QueryData } from '@rafaysystems/plugin-system';
 
 
 
@@ -28,7 +28,7 @@ import { QueryData } from '@rafaysystems-perses/plugin-system';
 
 
 import { Link, Notice } from '@perses-dev/spec';
-import { DatabaseSearch, ArrowCollapse as ArrowCollapseIcon, ArrowExpand as ArrowExpandIcon, PencilOutline as PencilIcon, DeleteOutline as DeleteIcon, DragVertical as DragIcon, ContentCopy as ContentCopyIcon, Menu as MenuIcon, Alert as AlertIcon, AlertCircle as AlertCircleIcon, InformationOutline as InformationOutlineIcon, LightningBolt as LightningBoltIcon } from '@rafaysystems-perses/components/compat/icons';
+import { DatabaseSearch, ArrowCollapse as ArrowCollapseIcon, ArrowExpand as ArrowExpandIcon, PencilOutline as PencilIcon, DeleteOutline as DeleteIcon, DragVertical as DragIcon, ContentCopy as ContentCopyIcon, Menu as MenuIcon, Alert as AlertIcon, AlertCircle as AlertCircleIcon, InformationOutline as InformationOutlineIcon, LightningBolt as LightningBoltIcon } from '@rafaysystems/components/compat/icons';
 import {
   ARIA_LABEL_TEXT,
   HEADER_ACTIONS_CONTAINER_NAME,

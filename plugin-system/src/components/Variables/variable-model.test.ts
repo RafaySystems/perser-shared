@@ -17,7 +17,7 @@ import {
   usePlugins,
   VariableOption,
   VariableStateMap,
-} from '@rafaysystems-perses/plugin-system';
+} from '@rafaysystems/plugin-system';
 import { ListVariableDefinition, VariableDefinition } from '@perses-dev/spec';
 import { waitFor } from '@testing-library/react';
 import { renderHookWithContext } from '../../test/render-hook';

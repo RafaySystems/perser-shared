@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, CircularProgress } from '@rafaysystems-perses/components/compat/mui';
-import { Dialog, InfoTooltip, useItemActions, useSelection } from '@rafaysystems-perses/components';
-import { ACTION_ICONS, executeAction, ItemAction, VariableStateMap } from '@rafaysystems-perses/plugin-system';
+import { Box, CircularProgress } from '@rafaysystems/components/compat/mui';
+import { Dialog, InfoTooltip, useItemActions, useSelection } from '@rafaysystems/components';
+import { ACTION_ICONS, executeAction, ItemAction, VariableStateMap } from '@rafaysystems/plugin-system';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { HeaderIconButton } from './HeaderIconButton';
 

@@ -12,9 +12,9 @@
 // limitations under the License.
 
 import { ReactElement, useState } from 'react';
-import { useVariableValues } from '@rafaysystems-perses/plugin-system';
-import { Dialog } from '@rafaysystems-perses/components';
-import { Button } from '@rafaysystems-perses/components/compat/mui';
+import { useVariableValues } from '@rafaysystems/plugin-system';
+import { Dialog } from '@rafaysystems/components';
+import { Button } from '@rafaysystems/components/compat/mui';
 import { usePanelGroupEditor } from '../../context';
 import { PanelGroupEditorForm, panelGroupEditorFormId, PanelGroupEditorFormProps } from './PanelGroupEditorForm';
 

@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { DEFAULT_ALL_VALUE, VariableValue, VariableDefinition } from '@perses-dev/spec';
-import { VariableStoreStateMap, VariableState } from '@rafaysystems-perses/plugin-system';
+import { VariableStoreStateMap, VariableState } from '@rafaysystems/plugin-system';
 import { ExternalVariableDefinition } from '../../model/VariableDefinition';
 
 // TODO: move to VariableProvider/utils.ts

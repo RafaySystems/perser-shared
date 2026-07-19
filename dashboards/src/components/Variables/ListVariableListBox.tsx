@@ -12,8 +12,8 @@
 // limitations under the License.
 
 import React, { ForwardedRef, HTMLAttributes, ReactNode, forwardRef, useContext, useMemo } from 'react';
-import { Checkbox, Divider } from '@rafaysystems-perses/components/compat/mui';
-import { VariableOption } from '@rafaysystems-perses/plugin-system';
+import { Checkbox, Divider } from '@rafaysystems/components/compat/mui';
+import { VariableOption } from '@rafaysystems/plugin-system';
 import { DEFAULT_ALL_VALUE } from '@perses-dev/spec';
 
 export interface ListVariableListBoxContextValue {

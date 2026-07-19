@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Drawer as MuiDrawer, DrawerProps as MuiDrawerProps, useMediaQuery } from '@rafaysystems-perses/components/compat/mui';
+import { Drawer as MuiDrawer, DrawerProps as MuiDrawerProps, useMediaQuery } from '@rafaysystems/components/compat/mui';
 import React, { ReactElement, ReactNode } from 'react';
 import { combineSx } from '../utils';
 

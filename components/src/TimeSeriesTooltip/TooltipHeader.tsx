@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, Divider, Typography, Stack, Switch } from '@rafaysystems-perses/components/compat/mui';
-import { Pin } from '@rafaysystems-perses/components/compat/icons';
-import { PinOutline } from '@rafaysystems-perses/components/compat/icons';
+import { Box, Divider, Typography, Stack, Switch } from '@rafaysystems/components/compat/mui';
+import { Pin } from '@rafaysystems/components/compat/icons';
+import { PinOutline } from '@rafaysystems/components/compat/icons';
 import { memo, ReactElement } from 'react';
 import { useTimeZone } from '../context/TimeZoneProvider';
 import { NearbySeriesArray } from './types';
