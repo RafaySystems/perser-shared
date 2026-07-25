@@ -152,7 +152,7 @@ jobs:
           NODE
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --no-package-lock
 
       - name: Verify workspace versions
         shell: bash
