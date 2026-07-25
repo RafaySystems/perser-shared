@@ -104,7 +104,7 @@ jobs:
           echo "DRY_RUN=${DRY_RUN}" >> "$GITHUB_ENV"
           echo "PACKAGE_SCOPE=${SCOPE}" >> "$GITHUB_ENV"
 
-      - name: Align internal workspace dependency versions
+      - name: Align workspace versions and internal dependencies
         shell: bash
         run: |
           set -euo pipefail
@@ -123,12 +123,19 @@ jobs:
           }
 
           const depFields = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
-          let updates = 0;
+          let depUpdates = 0;
+          let versionUpdates = 0;
 
           for (const ws of workspaces) {
             const pkgPath = path.join(process.cwd(), ws, 'package.json');
             const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
             let touched = false;
+
+            if (pkg.version !== expected) {
+              pkg.version = expected;
+              touched = true;
+              versionUpdates += 1;
+            }
 
             for (const field of depFields) {
               const deps = pkg[field];
@@ -137,7 +144,7 @@ jobs:
                 if (workspaceNames.has(depName) && deps[depName] !== expected) {
                   deps[depName] = expected;
                   touched = true;
-                  updates += 1;
+                  depUpdates += 1;
                 }
               }
             }
@@ -148,7 +155,8 @@ jobs:
             }
           }
 
-          console.log(`Internal dependency updates applied: ${updates}`);
+          console.log(`Workspace version updates applied: ${versionUpdates}`);
+          console.log(`Internal dependency updates applied: ${depUpdates}`);
           NODE
 
       - name: Install dependencies
