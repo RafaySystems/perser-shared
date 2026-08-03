@@ -18,7 +18,7 @@ import {
   Typography,
   UseAutocompleteProps,
   createFilterOptions,
-} from '@mui/material';
+} from '@rafaysystems/components/compat/mui';
 import { ReactElement, ReactNode } from 'react';
 
 /**

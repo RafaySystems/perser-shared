@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { GlobalDatasourceResource } from '@perses-dev/client';
+import { GlobalDatasourceResource } from '@rafaysystems/client';
 import { DatasourceStoreProviderProps } from '../context';
 import { getTestDashboard } from './dashboard-provider';
 

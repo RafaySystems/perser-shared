@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Tab, Tabs, TabsProps, Box } from '@mui/material';
+import { Tab, Tabs, TabsProps, Box } from '@rafaysystems/components/compat/mui';
 import { ReactElement, ReactNode, useState } from 'react';
 import { OptionsEditorTabPanel } from '../OptionsEditorTabPanel';
 
@@ -30,13 +30,13 @@ export type OptionsEditorTabsProps = {
 export const OptionsEditorTabs = ({ tabs }: OptionsEditorTabsProps): ReactElement => {
   const [activeTab, setActiveTab] = useState(0);
 
-  const handleChange: TabsProps['onChange'] = (_, newValue) => {
+  const handleChange: TabsProps['onChange'] = (_: any, newValue: any) => {
     setActiveTab(newValue);
   };
 
   return (
     <>
-      <Box sx={{ borderBottom: 1, borderColor: (theme) => theme.palette.divider }}>
+      <Box sx={{ borderBottom: 1, borderColor: (theme: any) => theme.palette.divider }}>
         <Tabs value={activeTab} onChange={handleChange} aria-label="Panel configuration tabs">
           {tabs.map(({ label }, i) => {
             return (

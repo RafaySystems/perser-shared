@@ -1,6 +1,6 @@
 {
-  "name": "@perses-dev/explore",
-  "version": "0.54.0-rc.0",
+  "name": "@rafaysystems/explore",
+  "version": "0.54.0-rc.8",
   "description": "The explore feature in Perses",
   "license": "Apache-2.0",
   "homepage": "https://github.com/perses/perses/blob/main/README.md",
@@ -17,7 +17,7 @@
   "sideEffects": false,
   "scripts": {
     "clean": "rimraf dist/",
-    "build": "concurrently \"npm:build:*\"",
+    "build": "npm run clean && concurrently \"npm:build:*\"",
     "build:cjs": "swc ./src -d dist/cjs --strip-leading-paths --config-file ../.cjs.swcrc",
     "build:esm": "swc ./src -d dist --strip-leading-paths --config-file ../.swcrc",
     "build:types": "tsc --project tsconfig.build.json",
@@ -28,10 +28,9 @@
   },
   "dependencies": {
     "@nexucis/fuzzy": "^0.5.1",
-    "@perses-dev/components": "0.54.0-rc.0",
-    "@perses-dev/dashboards": "0.54.0-rc.0",
-    "@perses-dev/plugin-system": "0.54.0-rc.0",
-    "mdi-material-ui": "^7.9.2",
+    "@rafaysystems/components": "0.54.0-rc.8",
+    "@rafaysystems/dashboards": "0.54.0-rc.8",
+    "@rafaysystems/plugin-system": "0.54.0-rc.8",
     "qs": "^6.14.0",
     "react-virtuoso": "^4.12.2",
     "use-query-params": "^2.2.1",
@@ -42,7 +41,6 @@
     "react-router-dom": "^6.30.1"
   },
   "peerDependencies": {
-    "@mui/material": "^6.1.10",
     "@tanstack/react-query": "^4.39.1",
     "react": "^17.0.2 || ^18.0.0",
     "react-dom": "^17.0.2 || ^18.0.0"

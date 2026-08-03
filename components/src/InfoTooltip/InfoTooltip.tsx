@@ -18,7 +18,7 @@ import {
   Tooltip as MuiTooltip,
   tooltipClasses,
   Typography,
-} from '@mui/material';
+} from '@rafaysystems/components/compat/mui';
 
 export type TooltipPlacement = 'top' | 'left' | 'right' | 'bottom';
 

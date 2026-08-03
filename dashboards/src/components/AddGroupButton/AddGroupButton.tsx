@@ -11,12 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button } from '@mui/material';
-import AddGroupIcon from 'mdi-material-ui/PlusBoxOutline';
-import { InfoTooltip } from '@perses-dev/components';
+import { Button } from '@rafaysystems/components/compat/mui';
+
+import { InfoTooltip } from '@rafaysystems/components';
 import { ReactElement } from 'react';
 import { TOOLTIP_TEXT, editButtonStyle } from '../../constants';
 import { useDashboardActions } from '../../context';
+import { PlusBoxOutline as AddGroupIcon } from '@rafaysystems/components/compat/icons';
 
 export const AddGroupButton = (): ReactElement => {
   const { openAddPanelGroup } = useDashboardActions();

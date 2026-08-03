@@ -1,11 +1,15 @@
 {
   "extends": "../tsconfig.base.json",
   "include": ["src"],
+  "exclude": ["**/*.test.*", "**/*.stories.*"],
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
+    "strict": false,
+    "noUncheckedIndexedAccess": false,
     "paths": {
-      "@perses-dev/components": ["./src"]
+      "@rafaysystems/components": ["./src"],
+      "@rafaysystems/components/*": ["./src/*"]
     }
   }
 }

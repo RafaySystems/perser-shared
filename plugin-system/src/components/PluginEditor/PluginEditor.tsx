@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, Button } from '@mui/material';
-import Reload from 'mdi-material-ui/Reload';
-import { ErrorAlert, ErrorBoundary } from '@perses-dev/components';
+import { Box, Button } from '@rafaysystems/components/compat/mui';
+import { Reload } from '@rafaysystems/components/compat/icons';
+import { ErrorAlert, ErrorBoundary } from '@rafaysystems/components';
 import { ReactElement, useCallback } from 'react';
 import { UnknownSpec } from '@perses-dev/spec';
 import { PluginKindSelect } from '../PluginKindSelect';

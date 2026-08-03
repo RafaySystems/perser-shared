@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button, Divider, Stack, StackProps } from '@mui/material';
-import { Action } from '@perses-dev/client';
+import { Button, Divider, Stack, StackProps } from '@rafaysystems/components/compat/mui';
+import { Action } from '@rafaysystems/client';
 import { ReactElement } from 'react';
 
 export interface FormActionsProps extends StackProps {

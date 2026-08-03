@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ChartsProvider, SnackbarProvider, testChartsTheme } from '@perses-dev/components';
-import { mockPluginRegistry, PluginRegistry } from '@perses-dev/plugin-system';
+import { ChartsProvider, SnackbarProvider, testChartsTheme } from '@rafaysystems/components';
+import { mockPluginRegistry, PluginRegistry } from '@rafaysystems/plugin-system';
 import { HotkeysProvider } from '@tanstack/react-hotkeys';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';

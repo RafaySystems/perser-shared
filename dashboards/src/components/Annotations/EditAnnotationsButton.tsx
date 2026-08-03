@@ -12,15 +12,17 @@
 // limitations under the License.
 
 import { ReactElement, useState } from 'react';
-import { Button, ButtonProps } from '@mui/material';
-import PencilIcon from 'mdi-material-ui/PencilOutline';
-import { Drawer, InfoTooltip } from '@perses-dev/components';
+import { Button, ButtonProps } from '@rafaysystems/components/compat/mui';
+
+import { Drawer, InfoTooltip } from '@rafaysystems/components';
 import { AnnotationSpec } from '@perses-dev/spec';
 import { TOOLTIP_TEXT, editButtonStyle } from '../../constants';
 import { useAnnotationActions, useAnnotationSpecs } from '../../context';
 import { AnnotationEditor } from './AnnotationsEditor';
+import { PencilOutline as PencilIcon } from '@rafaysystems/components/compat/icons';
 
-export interface EditAnnotationsButtonProps extends Pick<ButtonProps, 'fullWidth'> {
+export interface EditAnnotationsButtonProps {
+  fullWidth?: ButtonProps['fullWidth'];
   /**
    * The variant to use to display the button.
    */

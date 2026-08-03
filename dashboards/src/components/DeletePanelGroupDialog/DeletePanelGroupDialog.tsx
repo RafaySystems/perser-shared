@@ -12,8 +12,8 @@
 // limitations under the License.
 
 import { FormEvent, ReactElement } from 'react';
-import { Dialog } from '@perses-dev/components';
-import { Button } from '@mui/material';
+import { Dialog } from '@rafaysystems/components';
+import { Button } from '@rafaysystems/components/compat/mui';
 import { useDeletePanelGroupDialog, useViewPanel } from '../../context';
 
 export const DeletePanelGroupDialog = (): ReactElement => {

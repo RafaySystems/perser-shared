@@ -13,9 +13,9 @@
 
 import { ReactElement, ReactNode, useEffect } from 'react';
 import { useBlocker } from 'react-router-dom';
-import { DiscardChangesConfirmationDialog } from '@perses-dev/components';
+import { DiscardChangesConfirmationDialog } from '@rafaysystems/components';
 import type { BlockerFunction } from '@remix-run/router';
-import { DashboardResource } from '@perses-dev/client';
+import { DashboardResource } from '@rafaysystems/client';
 
 const handleRouteChange = (event: BeforeUnloadEvent): string => {
   event.preventDefault();

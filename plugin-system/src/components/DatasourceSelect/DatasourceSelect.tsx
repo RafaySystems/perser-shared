@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
+import { OpenInNew as OpenInNewIcon } from '@rafaysystems/components/compat/icons';
 import {
   Stack,
   ListItemText,
@@ -22,7 +22,7 @@ import {
   BaseSelectProps,
   Autocomplete,
   TextField,
-} from '@mui/material';
+} from '@rafaysystems/components/compat/mui';
 import { DatasourceSelector, VariableName } from '@perses-dev/spec';
 import { ReactElement, useMemo } from 'react';
 import {
@@ -136,17 +136,17 @@ export function DatasourceSelect(props: DatasourceSelectProps): ReactElement {
   const fakeActionEvent = (): void => {};
 
   return (
-    <Autocomplete<DataSourceOption>
+    <Autocomplete
       readOnly={readOnly}
       options={options}
-      renderInput={(params) => <TextField {...params} label={others.label} placeholder="" />}
-      groupBy={(option) => option.groupLabel || 'No group'}
-      getOptionLabel={(option) => {
+      renderInput={(params: any) => <TextField {...params} label={others.label} placeholder="" />}
+      groupBy={(option: any) => option.groupLabel || 'No group'}
+      getOptionLabel={(option: any) => {
         return option.name;
       }}
-      onChange={(_, v) => handleChange(v)}
+      onChange={(_: any, v: any) => handleChange(v)}
       value={optionValue}
-      renderOption={(props, option) => {
+      renderOption={(props: any, option: any) => {
         return (
           <li {...props} key={option.value}>
             <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%">
@@ -185,7 +185,7 @@ export function DatasourceName(props: { name: string; overridden?: boolean; over
     <>
       {`${name} `}
       {!overridden && overriding && (
-        <Box display="inline" fontWeight="normal" color={(theme) => theme.palette.primary.main}>
+        <Box display="inline" fontWeight="normal" color={(theme: any) => theme.palette.primary.main}>
           (overriding)
         </Box>
       )}

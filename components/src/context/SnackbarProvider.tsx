@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import React, { useCallback } from 'react';
-import { styled } from '@mui/material/styles';
+import { styled } from '@rafaysystems/components/compat/mui';
 import {
   SnackbarProvider as NotistackProvider,
   ProviderContext as NotistackContext,

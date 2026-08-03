@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { DiscardChangesConfirmationDialog } from '@perses-dev/components';
+import { DiscardChangesConfirmationDialog } from '@rafaysystems/components';
 import { ReactElement } from 'react';
 import { useDiscardChangesConfirmationDialog } from '../../context';
 

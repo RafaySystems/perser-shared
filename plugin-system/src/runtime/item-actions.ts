@@ -17,8 +17,8 @@ import {
   interpolateSelectionIndividual,
   SelectionItem,
   VariableStateMap,
-} from '@perses-dev/components';
-import { fetch } from '@perses-dev/client';
+} from '@rafaysystems/components';
+import { fetch } from '@rafaysystems/client';
 import { ItemAction, EventAction, WebhookAction } from '../components/ItemSelectionActionsOptionsEditor';
 
 const BODY_METHODS = new Set(['POST', 'PUT', 'PATCH']);

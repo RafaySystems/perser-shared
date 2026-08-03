@@ -12,8 +12,8 @@
 // limitations under the License.
 
 import { ReactElement, useState, MouseEvent } from 'react';
-import { styled, IconButton, Popover } from '@mui/material';
-import CircleIcon from 'mdi-material-ui/Circle';
+import { styled, IconButton, Popover } from '@rafaysystems/components/compat/mui';
+import { CircleIcon } from '@rafaysystems/components/compat/icons';
 import { useChartsTheme } from '../context';
 import { ColorPicker } from './ColorPicker';
 

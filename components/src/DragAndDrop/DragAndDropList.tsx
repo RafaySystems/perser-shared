@@ -20,7 +20,7 @@ import {
 } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
 import { attachClosestEdge, extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
-import { Stack } from '@mui/material';
+import { Stack } from '@rafaysystems/components/compat/mui';
 import { idle, State } from './model';
 import { DropIndicator } from './DropIndicator';
 

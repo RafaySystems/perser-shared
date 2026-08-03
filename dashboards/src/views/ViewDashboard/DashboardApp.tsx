@@ -12,11 +12,11 @@
 // limitations under the License.
 
 import { ReactElement, ReactNode, useMemo, useState } from 'react';
-import { Box } from '@mui/material';
-import { ChartsProvider, ErrorAlert, ErrorBoundary, useChartsTheme } from '@perses-dev/components';
-import { useDatasourceStore } from '@perses-dev/plugin-system';
+import { Box } from '@rafaysystems/components/compat/mui';
+import { ChartsProvider, ErrorAlert, ErrorBoundary, useChartsTheme } from '@rafaysystems/components';
+import { useDatasourceStore } from '@rafaysystems/plugin-system';
 import { DashboardSpec } from '@perses-dev/spec';
-import { DashboardResource } from '@perses-dev/client';
+import { DashboardResource } from '@rafaysystems/client';
 import {
   PanelDrawer,
   Dashboard,
@@ -30,6 +30,7 @@ import {
   EditJsonDialog,
   SaveChangesConfirmationDialog,
   LeaveDialog,
+  ViewPanelDialog,
 } from '../../components';
 import { OnSaveDashboard, useDashboard, useDiscardChangesConfirmationDialog, useEditMode } from '../../context';
 import { PanelFocusProvider } from '../../keyboard-shortcuts';
@@ -171,6 +172,7 @@ const DashboardAppContent = (props: DashboardAppProps): ReactElement => {
         <ChartsProvider chartsTheme={chartsTheme} enablePinning={false} enableSyncGrouping={false}>
           <PanelDrawer />
         </ChartsProvider>
+        <ViewPanelDialog />
         <PanelGroupDialog />
         <DeletePanelGroupDialog />
         <DeletePanelDialog />

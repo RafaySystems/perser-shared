@@ -11,12 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ClickAwayListener, Menu, MenuItem, MenuList } from '@mui/material';
-import { ToolbarIconButton } from '@perses-dev/components';
-import DownloadIcon from 'mdi-material-ui/DownloadOutline';
+import { ClickAwayListener, Menu, MenuItem, MenuList } from '@rafaysystems/components/compat/mui';
+import { ToolbarIconButton } from '@rafaysystems/components';
+
 import React, { ReactElement, useRef } from 'react';
 import { useDashboard } from '../../context';
 import { serializeDashboard } from './serializeDashboard';
+import { DownloadOutline as DownloadIcon } from '@rafaysystems/components/compat/icons';
 
 // Button that enables downloading the dashboard as a JSON file
 export function DownloadButton(): ReactElement {
@@ -61,6 +62,8 @@ export function DownloadButton(): ReactElement {
         open={open}
         hideBackdrop={true}
         onClose={() => setAnchorEl(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         MenuListProps={{
           'aria-labelledby': 'download-dashboard-button',
         }}

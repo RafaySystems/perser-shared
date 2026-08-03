@@ -22,16 +22,18 @@ import {
   CircularProgress,
   TextField,
   InputAdornment,
-} from '@mui/material';
-import DeleteIcon from 'mdi-material-ui/DeleteOutline';
-import ChevronDown from 'mdi-material-ui/ChevronDown';
-import ChevronRight from 'mdi-material-ui/ChevronRight';
+} from '@rafaysystems/components/compat/mui';
+import {
+  DeleteOutline as DeleteIcon,
+  ChevronDown,
+  ChevronRight,
+  Alert as AlertIcon,
+  Pencil as PencilIcon,
+  Check as CheckIcon,
+  Close as CloseIcon,
+} from '@rafaysystems/components/compat/icons';
 import { forwardRef, ReactElement, useState } from 'react';
-import AlertIcon from 'mdi-material-ui/Alert';
-import { InfoTooltip } from '@perses-dev/components';
-import PencilIcon from 'mdi-material-ui/Pencil';
-import CheckIcon from 'mdi-material-ui/Check';
-import CloseIcon from 'mdi-material-ui/Close';
+import { InfoTooltip } from '@rafaysystems/components';
 import { QueryData } from '../../runtime';
 import { PluginEditor, PluginEditorProps, PluginEditorRef } from '../PluginEditor';
 import { defaultQueryName } from './utils';
@@ -103,7 +105,7 @@ export const QueryEditorContainer = forwardRef<PluginEditorRef, QueryEditorConta
           alignItems="center"
           justifyContent="space-between"
           borderBottom={1}
-          borderColor={(theme) => theme.palette.divider}
+          borderColor={(theme: any) => theme.palette.divider}
         >
           <Stack direction="row" gap={1} sx={{ width: '100%' }}>
             <IconButton
@@ -149,14 +151,14 @@ export const QueryEditorContainer = forwardRef<PluginEditorRef, QueryEditorConta
                   direction="row"
                   alignItems="center"
                   sx={{
-                    color: (theme) => theme.palette.error.main,
+                    color: (theme: any) => theme.palette.error.main,
                   }}
                 >
                   <IconButton
                     aria-label="query error"
                     size="small"
                     sx={{
-                      color: (theme) => theme.palette.error.main,
+                      color: (theme: any) => theme.palette.error.main,
                     }}
                   >
                     <AlertIcon />
@@ -195,7 +197,7 @@ export const QueryEditorContainer = forwardRef<PluginEditorRef, QueryEditorConta
             queryTypes={queryTypes}
             value={query}
             filteredQueryPlugins={filteredQueryPlugins}
-            onChange={(next) => onChange(index, next)}
+            onChange={(next: any) => onChange(index, next)}
             onQueryRun={() => onQueryRun(index, query)}
           />
         )}
@@ -230,7 +232,7 @@ function QueryNameInput({ initialName, onSave, onCancel }: QueryNameInputProps):
       label="Query name"
       aria-label="query name"
       value={draftName}
-      onChange={(e) => setDraftName(e.target.value)}
+      onChange={(e: any) => setDraftName(e.target.value)}
       fullWidth={true}
       InputProps={{
         endAdornment: (
@@ -272,7 +274,7 @@ const QueryEditor = forwardRef<PluginEditorRef, QueryEditorProps>((props, ref): 
 
   const handlePluginChange: PluginEditorProps['onChange'] = (next) => {
     onChange(
-      produce(value, (draft) => {
+      produce(value, (draft: any) => {
         draft.kind = next.selection.type;
         draft.spec.plugin.kind = next.selection.kind;
         draft.spec.plugin.spec = next.spec;

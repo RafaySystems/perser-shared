@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { DispatchWithoutAction, ReactElement, useCallback, useState } from 'react';
-import { Box, Typography, TextField, Grid, Divider, Stack, IconButton } from '@mui/material';
+import { Box, Typography, TextField, Grid, Divider, Stack, IconButton } from '@rafaysystems/components/compat/mui';
 import { AnnotationSpec } from '@perses-dev/spec';
 import {
   DiscardChangesConfirmationDialog,
@@ -22,12 +22,12 @@ import {
   OptionsColorPicker,
   getSubmitText,
   getTitleAction,
-} from '@perses-dev/components';
+} from '@rafaysystems/components';
 import { Control, Controller, FormProvider, SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import InvertColorsIcon from 'mdi-material-ui/InvertColors';
-import { Action } from '@perses-dev/client';
+import { InvertColors as InvertColorsIcon } from '@rafaysystems/components/compat/icons';
+import { Action } from '@rafaysystems/client';
 import { PluginEditor } from '../../PluginEditor';
 import { useValidationSchemas } from '../../../context';
 import { DEFAULT_ANNOTATION_COLOR } from '../constants';
@@ -147,8 +147,8 @@ export function AnnotationEditorForm({
         sx={{
           display: 'flex',
           alignItems: 'center',
-          padding: (theme) => theme.spacing(1, 2),
-          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+          padding: (theme: any) => theme.spacing(1, 2),
+          borderBottom: (theme: any) => `1px solid ${theme.palette.divider}`,
         }}
       >
         <Typography variant="h2">{titleAction} Annotation</Typography>
@@ -183,7 +183,7 @@ export function AnnotationEditorForm({
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                   value={field.value ?? ''}
-                  onChange={(event) => {
+                  onChange={(event: any) => {
                     field.onChange(event);
                   }}
                 />
@@ -232,7 +232,7 @@ export function AnnotationEditorForm({
                     error={!!fieldState.error}
                     helperText={fieldState.error?.message}
                     value={field.value ?? ''}
-                    onChange={(event) => {
+                    onChange={(event: any) => {
                       field.onChange(event);
                     }}
                   />

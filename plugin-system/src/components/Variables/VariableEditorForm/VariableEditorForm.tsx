@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { DispatchWithoutAction, ReactElement, useCallback, useState } from 'react';
-import { Box, Typography, Switch, TextField, Grid, FormControlLabel, MenuItem, Stack, Divider } from '@mui/material';
+import { Box, Typography, Switch, TextField, Grid, FormControlLabel, MenuItem, Stack, Divider } from '@rafaysystems/components/compat/mui';
 import { VariableDefinition, ListVariableDefinition } from '@perses-dev/spec';
 
 import {
@@ -22,11 +22,11 @@ import {
   FormActions,
   getSubmitText,
   getTitleAction,
-} from '@perses-dev/components';
+} from '@rafaysystems/components';
 import { Control, Controller, FormProvider, SubmitHandler, useForm, useFormContext, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { Action } from '@perses-dev/client';
+import { Action } from '@rafaysystems/client';
 import { PluginEditor } from '../../PluginEditor';
 import { useValidationSchemas } from '../../../context';
 import { VARIABLE_TYPES } from '../variable-model';
@@ -67,7 +67,7 @@ function TextVariableEditorForm({ action, control }: KindVariableEditorFormProps
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
                 value={field.value ?? ''}
-                onChange={(event) => {
+                onChange={(event: any) => {
                   field.onChange(event);
                 }}
               />
@@ -86,7 +86,7 @@ function TextVariableEditorForm({ action, control }: KindVariableEditorFormProps
                   checked={!!field.value}
                   readOnly={action === 'read'}
                   value={field.value ?? false}
-                  onChange={(event) => {
+                  onChange={(event: any) => {
                     if (action === 'read') return; // ReadOnly prop is not blocking user interaction...
                     field.onChange(event);
                   }}
@@ -213,7 +213,7 @@ function ListVariableEditorForm({ action, control }: KindVariableEditorFormProps
                 }}
                 error={!!fieldState.error}
                 value={field.value ?? ''}
-                onChange={(event) => {
+                onChange={(event: any) => {
                   if (event.target.value === '') {
                     field.onChange(undefined);
                   } else {
@@ -247,7 +247,7 @@ function ListVariableEditorForm({ action, control }: KindVariableEditorFormProps
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
                 value={field.value ?? 'none'}
-                onChange={(event) => {
+                onChange={(event: any) => {
                   field.onChange(event);
                 }}
               >
@@ -285,7 +285,7 @@ function ListVariableEditorForm({ action, control }: KindVariableEditorFormProps
                     checked={!!field.value}
                     readOnly={action === 'read'}
                     value={field.value ?? false}
-                    onChange={(event) => {
+                    onChange={(event: any) => {
                       if (action === 'read') return; // ReadOnly prop is not blocking user interaction...
                       field.onChange(event);
                     }}
@@ -309,7 +309,7 @@ function ListVariableEditorForm({ action, control }: KindVariableEditorFormProps
                     checked={!!field.value}
                     readOnly={action === 'read'}
                     value={field.value ?? false}
-                    onChange={(event) => {
+                    onChange={(event: any) => {
                       if (action === 'read') return; // ReadOnly prop is not blocking user interaction...
                       field.onChange(event);
                     }}
@@ -329,7 +329,7 @@ function ListVariableEditorForm({ action, control }: KindVariableEditorFormProps
                   <Switch
                     checked={_customAllValue !== undefined}
                     readOnly={action === 'read'}
-                    onChange={(event) => {
+                    onChange={(event: any) => {
                       if (action === 'read') return;
                       const isEnabled = event.target.checked;
                       if (isEnabled) {
@@ -360,7 +360,7 @@ function ListVariableEditorForm({ action, control }: KindVariableEditorFormProps
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message}
                       value={field.value ?? ''}
-                      onChange={(event) => {
+                      onChange={(event: any) => {
                         field.onChange(event.target.value || '');
                       }}
                     />
@@ -444,8 +444,8 @@ export function VariableEditorForm({
         sx={{
           display: 'flex',
           alignItems: 'center',
-          padding: (theme) => theme.spacing(1, 2),
-          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+          padding: (theme: any) => theme.spacing(1, 2),
+          borderBottom: (theme: any) => `1px solid ${theme.palette.divider}`,
         }}
       >
         <Typography variant="h2">{titleAction} Variable</Typography>
@@ -480,7 +480,7 @@ export function VariableEditorForm({
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                   value={field.value ?? ''}
-                  onChange={(event) => {
+                  onChange={(event: any) => {
                     field.onChange(event);
                   }}
                 />
@@ -503,7 +503,7 @@ export function VariableEditorForm({
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                   value={field.value ?? ''}
-                  onChange={(event) => {
+                  onChange={(event: any) => {
                     field.onChange(event);
                   }}
                 />
@@ -526,7 +526,7 @@ export function VariableEditorForm({
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                   value={field.value ?? ''}
-                  onChange={(event) => {
+                  onChange={(event: any) => {
                     field.onChange(event);
                   }}
                 />
@@ -550,7 +550,7 @@ export function VariableEditorForm({
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
                   value={field.value ?? 'TextVariable'}
-                  onChange={(event) => {
+                  onChange={(event: any) => {
                     field.onChange(event);
                   }}
                 >

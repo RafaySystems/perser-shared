@@ -12,9 +12,9 @@
 // limitations under the License.
 
 import React, { ReactElement, useMemo, useState } from 'react';
-import { Alert, Box, Card, Chip, CircularProgress, IconButton, Stack, Typography } from '@mui/material';
-import { InfoTooltip, useSnackbar } from '@perses-dev/components';
-import Clipboard from 'mdi-material-ui/ClipboardOutline';
+import { Alert, Box, Card, Chip, CircularProgress, IconButton, Stack, Typography } from '@rafaysystems/components/compat/mui';
+import { InfoTooltip, useSnackbar } from '@rafaysystems/components';
+import { ClipboardOutline as Clipboard } from '@rafaysystems/components/compat/icons';
 import { ListVariableDefinition } from '@perses-dev/spec';
 import { TOOLTIP_TEXT } from '../../../constants';
 import { useListVariablePluginValues } from '../variable-model';

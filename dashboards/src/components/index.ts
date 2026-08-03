@@ -36,3 +36,4 @@ export * from './QueryViewerDialog';
 export * from './SaveChangesConfirmationDialog';
 export * from './SaveDashboardButton';
 export * from './Variables';
+export * from './ViewPanelDialog';

@@ -11,27 +11,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Drawer as MuiDrawer, DrawerProps as MuiDrawerProps, useMediaQuery } from '@mui/material';
-import { ReactElement } from 'react';
+import { Drawer as MuiDrawer, DrawerProps as MuiDrawerProps, useMediaQuery } from '@rafaysystems/components/compat/mui';
+import React, { CSSProperties, ReactElement, ReactNode } from 'react';
 import { combineSx } from '../utils';
 
 export interface DrawerProps extends MuiDrawerProps {
+  children?: ReactNode;
   isOpen: boolean;
   onClose: () => void;
   anchor?: 'left' | 'right';
+  PaperProps?: any;
+  slotProps?: any;
 }
 
 const DRAWER_DEFAULT_WIDTH = 1080;
 
-export const Drawer = ({
+export const Drawer: React.FC<any> = ({
   anchor = 'right',
   isOpen,
   onClose,
   PaperProps,
+  slotProps,
   children,
   ...rest
 }: DrawerProps): ReactElement => {
   const isSmaller = useMediaQuery(`(max-width:${DRAWER_DEFAULT_WIDTH}px)`);
+  const width = isSmaller ? '100%' : `${DRAWER_DEFAULT_WIDTH}px`;
 
   return (
     <MuiDrawer
@@ -39,17 +44,23 @@ export const Drawer = ({
       open={isOpen}
       onClose={onClose}
       anchor={anchor}
+      slotProps={slotProps}
       PaperProps={{
         ...PaperProps,
+        style: {
+          width,
+          maxWidth: '100%',
+          ...(PaperProps?.style as CSSProperties | undefined),
+        },
         sx: combineSx(
           {
-            width: isSmaller ? '100%' : `${DRAWER_DEFAULT_WIDTH}px`,
+            width,
             overflow: 'hidden',
           },
           PaperProps?.sx
         ),
       }}
-      aria-hidden={!isOpen} // Ensure the drawer is not focusable when closed + disable console.error about focusable elements
+      aria-hidden={!isOpen}
     >
       {children}
     </MuiDrawer>

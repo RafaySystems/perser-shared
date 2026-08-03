@@ -15,7 +15,7 @@ import { ReactElement, useState } from 'react';
 import CodeMirror, { ReactCodeMirrorProps } from '@uiw/react-codemirror';
 import { json, jsonParseLinter } from '@codemirror/lang-json';
 import { linter, lintGutter } from '@codemirror/lint';
-import { useTheme } from '@mui/material';
+import { useTheme } from '@rafaysystems/components/compat/mui';
 
 type JSONEditorProps<T> = Omit<ReactCodeMirrorProps, 'onBlur' | 'theme' | 'extensions' | 'onChange' | 'value'> & {
   value: T;

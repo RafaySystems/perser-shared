@@ -12,6 +12,7 @@
 // limitations under the License.
 
 import { useState, useMemo, ReactElement } from 'react';
+import { Plus as AddIcon, Pencil as PencilIcon, TrashCan as TrashIcon, ArrowUp, ArrowDown } from '@rafaysystems/components/compat/icons';
 import {
   Button,
   Stack,
@@ -27,17 +28,16 @@ import {
   IconButton,
   Alert,
   styled,
-} from '@mui/material';
-import AddIcon from 'mdi-material-ui/Plus';
+} from '@rafaysystems/components/compat/mui';
+
 import { AnnotationSpec, Definition, UnknownSpec } from '@perses-dev/spec';
 import { useImmer } from 'use-immer';
-import PencilIcon from 'mdi-material-ui/Pencil';
-import TrashIcon from 'mdi-material-ui/TrashCan';
-import ArrowUp from 'mdi-material-ui/ArrowUp';
-import ArrowDown from 'mdi-material-ui/ArrowDown';
 
-import { ValidationProvider, AnnotationEditorForm } from '@perses-dev/plugin-system';
-import { Action } from '@perses-dev/client';
+
+
+
+import { ValidationProvider, AnnotationEditorForm } from '@rafaysystems/plugin-system';
+import { Action } from '@rafaysystems/client';
 import { useDiscardChangesConfirmationDialog } from '../../context';
 
 function validateAnnotationSpecs(annotationSpecs: AnnotationSpec[]): { isValid: boolean; errors: string[] } {
@@ -169,8 +169,8 @@ export function AnnotationEditor(props: {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              padding: (theme) => theme.spacing(1, 2),
-              borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+              padding: (theme: any) => theme.spacing(1, 2),
+              borderBottom: (theme: any) => `1px solid ${theme.palette.divider}`,
             }}
           >
             <Typography variant="h2">Edit Dashboard Annotations</Typography>
@@ -215,7 +215,7 @@ export function AnnotationEditor(props: {
                           <TableCell component="th" scope="row">
                             <Switch
                               checked={v.display?.hidden !== true}
-                              onChange={(e) => {
+                              onChange={(e: any) => {
                                 toggleAnnotationVisibility(idx, e.target.checked);
                               }}
                             />

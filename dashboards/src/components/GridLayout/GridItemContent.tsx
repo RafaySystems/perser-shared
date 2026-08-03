@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, useForkRef } from '@mui/material';
+import { Box, useForkRef } from '@rafaysystems/components/compat/mui';
 import { useInView } from 'react-intersection-observer';
-import { DataQueriesProvider, usePlugin, useSuggestedStepMs } from '@perses-dev/plugin-system';
+import { DataQueriesProvider, usePlugin, useSuggestedStepMs } from '@rafaysystems/plugin-system';
 import React, { ReactElement, useMemo, useState } from 'react';
 import { isPanelGroupItemIdEqual, PanelGroupItemId } from '../../model'; // TODO
 import { useEditMode, usePanel, usePanelActions, useViewPanelGroup } from '../../context';

@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Checkbox, CheckboxProps, alpha } from '@mui/material';
+import { Checkbox, CheckboxProps, alpha } from '@rafaysystems/components/compat/mui';
 import { ReactElement } from 'react';
 import { TableDensity } from './model/table-model';
 

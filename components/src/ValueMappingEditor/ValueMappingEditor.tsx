@@ -21,9 +21,9 @@ import {
   Tooltip,
   Typography,
   Grid2 as Grid,
-} from '@mui/material';
-import DeleteIcon from 'mdi-material-ui/DeleteOutline';
-import PlusIcon from 'mdi-material-ui/Plus';
+} from '@rafaysystems/components/compat/mui';
+import { DeleteIcon } from '@rafaysystems/components/compat/icons';
+import { PlusIcon } from '@rafaysystems/components/compat/icons';
 import { FC } from 'react';
 import { OptionsColorPicker } from '../ColorPicker/OptionsColorPicker';
 import { ValueMapping } from '../model';

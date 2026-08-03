@@ -1,6 +1,6 @@
 # Perses Shared Libraries
 
-A monorepo containing shared UI libraries for the [Perses](https://github.com/perses/perses) project. All libraries are versioned together and published as independent npm packages under the `@perses-dev` org.
+A monorepo containing shared UI libraries for the [Perses](https://github.com/perses/perses) project. All libraries are versioned together and published as independent npm packages under the `@rafaysystems` scope.
 
 ## Overview
 
@@ -10,10 +10,30 @@ This monorepo manages the core UI libraries that power the Perses platform. Each
 
 | Package | NPM | Description |
 |---------|-----|-------------|
-| [`@perses-dev/components`](./components) | [![npm version](https://badge.fury.io/js/@perses-dev%2Fcomponents.svg)](https://www.npmjs.com/package/@perses-dev/components) | Common UI components used across Perses features |
-| [`@perses-dev/dashboards`](./dashboards) | [![npm version](https://badge.fury.io/js/@perses-dev%2Fdashboards.svg)](https://www.npmjs.com/package/@perses-dev/dashboards) | The dashboards feature in Perses |
-| [`@perses-dev/explore`](./explore) | [![npm version](https://badge.fury.io/js/@perses-dev%2Fexplore.svg)](https://www.npmjs.com/package/@perses-dev/explore) | The explore feature in Perses |
-| [`@perses-dev/plugin-system`](./plugin-system) | [![npm version](https://badge.fury.io/js/@perses-dev%2Fplugin-system.svg)](https://www.npmjs.com/package/@perses-dev/plugin-system) | The plugin system for Perses |
+| [`@rafaysystems/components`](./components) | [![npm version](https://badge.fury.io/js/@rafaysystems%2Fcomponents.svg)](https://www.npmjs.com/package/@rafaysystems/components) | Common UI components used across Perses features |
+| [`@rafaysystems/dashboards`](./dashboards) | [![npm version](https://badge.fury.io/js/@rafaysystems%2Fdashboards.svg)](https://www.npmjs.com/package/@rafaysystems/dashboards) | The dashboards feature in Perses |
+| [`@rafaysystems/explore`](./explore) | [![npm version](https://badge.fury.io/js/@rafaysystems%2Fexplore.svg)](https://www.npmjs.com/package/@rafaysystems/explore) | The explore feature in Perses |
+| [`@rafaysystems/plugin-system`](./plugin-system) | [![npm version](https://badge.fury.io/js/@rafaysystems%2Fplugin-system.svg)](https://www.npmjs.com/package/@rafaysystems/plugin-system) | The plugin system for Perses |
+
+## Installing From GitHub Packages
+
+Add this `.npmrc` in the consumer repository:
+
+```ini
+@rafaysystems:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+Then install packages normally:
+
+```bash
+npm i @rafaysystems/components@<version>
+npm i @rafaysystems/dashboards@<version>
+npm i @rafaysystems/explore@<version>
+npm i @rafaysystems/plugin-system@<version>
+```
+
+> If this fork still uses `@perses-dev/*` package names, rename scopes in workspace `package.json` files and internal dependencies before publishing to your own GitHub Packages namespace.
 
 ## Getting Started
 
@@ -154,6 +174,11 @@ Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our development 
 ## Release Process
 
 See [RELEASE.md](./RELEASE.md) for information about the release process.
+
+## Private Package Consumption
+
+For local and CI authentication setup when consuming private GitHub Packages, see:
+[CONSUMING_PRIVATE_PACKAGES.md](./CONSUMING_PRIVATE_PACKAGES.md)
 
 ## License
 

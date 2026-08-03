@@ -26,7 +26,7 @@ import {
   VariableOption,
   BuiltinVariableContext,
   useTimeRange,
-} from '@perses-dev/plugin-system';
+} from '@rafaysystems/plugin-system';
 import {
   DEFAULT_ALL_VALUE as ALL_VALUE,
   VariableName,

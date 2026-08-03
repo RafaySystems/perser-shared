@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { ReactElement, useMemo } from 'react';
-import { Box } from '@mui/material';
+import { Box } from '@rafaysystems/components/compat/mui';
 import { NearbySeriesArray } from './types';
 import { SeriesInfo } from './SeriesInfo';
 

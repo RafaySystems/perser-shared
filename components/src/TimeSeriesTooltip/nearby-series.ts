@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ECharts as EChartsInstance } from 'echarts/core';
-import { BarSeriesOption } from 'echarts/charts';
+import type { ChartCoordinateSystem as EChartsInstance } from '../model';
+
 import { TimeSeries, TimeSeriesValueTuple } from '@perses-dev/spec';
 import {
   EChartsDataFormat,
@@ -161,7 +161,7 @@ function gatherCandidates(
       const isWithinXBounds = cursorXPixel >= segmentBounds.left && cursorXPixel <= segmentBounds.right;
       if (!isWithinXBounds) continue;
 
-      const stackId = (currentSeries as BarSeriesOption).stack;
+      const stackId = currentSeries?.stack;
       let isHoveringYBounds = true;
 
       if (stackId) {
@@ -499,7 +499,7 @@ export function getNearbySeriesData({
     if (currentParent !== null) {
       const currentGrandparent = currentParent.parentElement;
       if (currentGrandparent !== null) {
-        const chartDom = chart.getDom();
+        const chartDom = chart.getDom?.();
         if (chartDom === currentGrandparent) {
           cursorTargetMatchesChart = true;
         }

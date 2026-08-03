@@ -12,8 +12,8 @@
 // limitations under the License.
 
 import { memo, MutableRefObject, useCallback, useLayoutEffect, useRef, useState } from 'react';
-import { Box, Portal, Stack } from '@mui/material';
-import { ECharts as EChartsInstance } from 'echarts/core';
+import { Box, Portal, Stack } from '@rafaysystems/components/compat/mui';
+import type { ChartCoordinateSystem as EChartsInstance } from '../model';
 import { TimeSeries } from '@perses-dev/spec';
 import useResizeObserver from 'use-resize-observer';
 import { FormatOptions, TimeChartSeriesMapping } from '../model';
@@ -91,7 +91,11 @@ export const TimeChartTooltip = memo(function TimeChartTooltip({
 
   if (mousePos === null || mousePos.target === null || data === null) return null;
 
-  if (pinnedPos === null && (mousePos.target as HTMLElement).tagName !== 'CANVAS') return null;
+  // Recharts renders SVG; legacy ECharts used CANVAS.
+  const targetTag = (mousePos.target as HTMLElement).tagName;
+  if (pinnedPos === null && targetTag !== 'CANVAS' && targetTag !== 'svg' && targetTag !== 'path' && targetTag !== 'rect') {
+    return null;
+  }
 
   const chart = chartRef.current;
 

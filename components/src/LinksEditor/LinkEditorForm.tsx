@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Checkbox, FormControlLabel, Stack } from '@mui/material';
+import { Checkbox, FormControlLabel, Stack } from '@rafaysystems/components/compat/mui';
 import { ReactElement } from 'react';
 import { TextField } from '../controls';
 

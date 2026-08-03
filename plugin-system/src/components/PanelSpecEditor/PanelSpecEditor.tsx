@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ErrorAlert, JSONEditor } from '@perses-dev/components';
+import { ErrorAlert, JSONEditor } from '@rafaysystems/components';
 import { PanelDefinition, QueryDefinition, UnknownSpec } from '@perses-dev/spec';
 import { Control, Controller } from 'react-hook-form';
 import { forwardRef, ReactElement } from 'react';

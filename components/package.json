@@ -1,6 +1,6 @@
 {
-  "name": "@perses-dev/components",
-  "version": "0.54.0-rc.0",
+  "name": "@rafaysystems/components",
+  "version": "0.54.0-rc.11",
   "description": "Common UI components used across Perses features",
   "license": "Apache-2.0",
   "homepage": "https://github.com/perses/perses/blob/main/README.md",
@@ -14,9 +14,37 @@
   "module": "dist/index.js",
   "main": "dist/cjs/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./compat/mui": {
+      "types": "./dist/compat/mui.d.ts",
+      "import": "./dist/compat/mui.js",
+      "require": "./dist/cjs/compat/mui.js"
+    },
+    "./compat/icons": {
+      "types": "./dist/compat/icons.d.ts",
+      "import": "./dist/compat/icons.js",
+      "require": "./dist/cjs/compat/icons.js"
+    },
+    "./compat/date-pickers": {
+      "types": "./dist/compat/date-pickers.d.ts",
+      "import": "./dist/compat/date-pickers.js",
+      "require": "./dist/cjs/compat/date-pickers.js"
+    },
+    "./compat/noop": {
+      "types": "./dist/compat/noop.d.ts",
+      "import": "./dist/compat/noop.js",
+      "require": "./dist/cjs/compat/noop.js"
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "clean": "rimraf dist/",
-    "build": "concurrently \"npm:build:*\"",
+    "build": "npm run clean && concurrently \"npm:build:*\"",
     "build:cjs": "swc ./src -d dist/cjs --strip-leading-paths --config-file ../.cjs.swcrc",
     "build:esm": "swc ./src -d dist --strip-leading-paths --config-file ../.swcrc",
     "build:types": "tsc --project tsconfig.build.json",
@@ -33,31 +61,40 @@
     "@codemirror/lang-json": "^6.0.1",
     "@date-fns/tz": "^1.4.1",
     "@fontsource/inter": "^5.0.0",
-    "@mui/x-date-pickers": "^7.23.1",
+    "@rafaysystems/client": "0.54.0-rc.8",
+    "@perses-dev/core": "0.53.0",
     "@perses-dev/spec": "0.2.0-beta.9",
-    "@perses-dev/client": "0.54.0-rc.0",
-    "numbro": "^2.3.6",
     "@tanstack/match-sorter-utils": "^8.19.4",
     "@tanstack/react-table": "^8.20.5",
     "@uiw/react-codemirror": "^4.19.1",
+    "autoprefixer": "^10.5.4",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
-    "echarts": "5.5.0",
+    "react-day-picker": "^9.4.4",
     "immer": "^10.1.1",
     "lodash": "^4.17.21",
+    "lucide-react": "^1.25.0",
     "mathjs": "^10.6.4",
-    "mdi-material-ui": "^7.9.2",
     "notistack": "^3.0.2",
+    "numbro": "^2.3.6",
     "react-colorful": "^5.6.1",
     "react-error-boundary": "^3.1.4",
-    "react-virtuoso": "^4.12.2"
+    "react-virtuoso": "^4.12.2",
+    "@reduxjs/toolkit": "^2.5.0",
+    "react-redux": "^9.2.0",
+    "recharts": "^3.8.1",
+    "redux": "^5.0.1",
+    "redux-thunk": "^3.1.0",
+    "reselect": "^5.1.0",
+    "tailwind-merge": "^3.6.0",
+    "tailwindcss": "^4.3.3",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.20"
   },
   "peerDependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "@mui/material": "^6.1.10",
     "lodash": "^4.17.21",
     "react": "^17.0.2 || ^18.0.0",
     "react-dom": "^17.0.2 || ^18.0.0"

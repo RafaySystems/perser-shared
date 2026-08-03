@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Grid, Stack } from '@mui/material';
+import { Grid, Stack } from '@rafaysystems/components/compat/mui';
 import { ReactElement } from 'react';
 
 export type OptionsEditorColumnProps = {

@@ -11,10 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useListVariableState } from '@perses-dev/dashboards';
+import { useListVariableState } from '@rafaysystems/dashboards';
 import { renderHook } from '@testing-library/react';
 import { VariableValue } from '@perses-dev/spec';
-import { VariableOption } from '@perses-dev/plugin-system';
+import { VariableOption } from '@rafaysystems/plugin-system';
 
 /**
  * Builder shortcut used in test to build a dummy option from value.

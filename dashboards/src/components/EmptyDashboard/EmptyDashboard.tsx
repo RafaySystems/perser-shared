@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Typography, Box } from '@mui/material';
+import { Typography, Box } from '@rafaysystems/components/compat/mui';
 import { ReactElement, ReactNode } from 'react';
 import { useEditMode } from '../../context';
 import { AddPanelButton } from '../AddPanelButton';

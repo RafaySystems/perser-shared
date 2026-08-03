@@ -5,7 +5,10 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "paths": {
-      "@perses-dev/dashboards": ["./src"]
+      "@rafaysystems/components/compat/icons": ["../components/dist/compat/icons"],
+      "@rafaysystems/components/compat/mui": ["../components/dist/compat/mui"],
+      "@rafaysystems/dashboards": ["./src"],
+      "@rafaysystems/dashboards/*": ["./src/*"]
     }
   }
 }

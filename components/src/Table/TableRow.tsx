@@ -11,15 +11,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { TableRow as MuiTableRow, TableRowProps as MuiTableRowProps, alpha } from '@mui/material';
+import { TableRow as MuiTableRow, alpha } from '@rafaysystems/components/compat/mui';
 import { forwardRef } from 'react';
 import { TableDensity } from './model/table-model';
 
-interface TableRowProps extends MuiTableRowProps<'div'> {
+interface TableRowProps {
   density: TableDensity;
+  [key: string]: any;
 }
 
-export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(function TableRow(props, ref) {
+export const TableRow = forwardRef<any, TableRowProps>(function TableRow(props, ref) {
   return (
     <MuiTableRow
       {...props}

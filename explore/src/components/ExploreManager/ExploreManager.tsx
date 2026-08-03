@@ -11,12 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, Button, Card, Stack, Tab, Tabs, useMediaQuery } from '@mui/material';
-import { PluginLoaderComponent, useListPluginMetadata } from '@perses-dev/plugin-system';
+import { Box, Button, Stack, useMediaQuery } from '@rafaysystems/components/compat/mui';
+import { PluginLoaderComponent, useListPluginMetadata } from '@rafaysystems/plugin-system';
 import { ReactElement, ReactNode, useEffect, useMemo } from 'react';
-import ChevronRight from 'mdi-material-ui/ChevronRight';
-import ChevronLeft from 'mdi-material-ui/ChevronLeft';
-import { useLocalStorage } from '@perses-dev/components';
+import { ChevronRight, ChevronRight as ChevronLeft } from '@rafaysystems/components/compat/icons';
+import { useLocalStorage } from '@rafaysystems/components';
 import { ExploreToolbar } from '../ExploreToolbar';
 import { useExplorerManagerContext } from './ExplorerManagerProvider';
 
@@ -78,38 +77,42 @@ export function ExploreManager(props: ExploreManagerProps): ReactElement {
                 zIndex: 1,
                 padding: 0.5,
                 minWidth: 'auto',
-                backgroundColor: (theme) => theme.palette.background.default,
+                backgroundColor: (theme: any) => theme.palette.background.default,
               }}
               onClick={() => setIsCollapsed(!isCollapsed)}
             >
-              {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
+              {isCollapsed ? <ChevronRight /> : <ChevronLeft style={{ transform: 'rotate(180deg)' }} />}
             </Button>
           </Box>
 
-          <Tabs
-            orientation={isSmallScreen ? 'horizontal' : 'vertical'}
-            value={explorer}
-            onChange={(_, state) => setExplorer(state)}
-            variant={isSmallScreen ? 'fullWidth' : 'scrollable'}
+          <Stack
+            role="tablist"
+            direction={isSmallScreen ? 'row' : 'column'}
             sx={{
               display: isCollapsed ? 'none' : 'flex',
+              width: isSmallScreen ? '100%' : undefined,
             }}
           >
             {plugins.data
               ?.sort((a, b) => a.spec.display.name.localeCompare(b.spec.display.name))
               .map((plugin) => (
-                <Tab
+                <Button
                   key={`${plugin.module.name}-${plugin.spec.name}`}
-                  value={`${plugin.module.name}-${plugin.spec.name}`}
-                  label={plugin.spec.display.name}
+                  role="tab"
+                  aria-selected={explorer === `${plugin.module.name}-${plugin.spec.name}`}
+                  variant={explorer === `${plugin.module.name}-${plugin.spec.name}` ? 'contained' : 'text'}
+                  onClick={() => setExplorer(`${plugin.module.name}-${plugin.spec.name}`)}
                   sx={{
                     padding: 0.5,
+                    justifyContent: 'flex-start',
                   }}
-                />
+                >
+                  {plugin.spec.display.name}
+                </Button>
               ))}
-          </Tabs>
+          </Stack>
         </Stack>
-        <Card sx={{ padding: '10px', width: '100%' }}>
+        <Box sx={{ padding: '10px', width: '100%', border: '1px solid', borderColor: 'divider', borderRadius: 1 }}>
           {currentPlugin && (
             <PluginLoaderComponent
               key={`${currentPlugin.module.name}-${currentPlugin.spec.name}`}
@@ -119,7 +122,7 @@ export function ExploreManager(props: ExploreManagerProps): ReactElement {
               }}
             />
           )}
-        </Card>
+        </Box>
       </Stack>
     </Stack>
   );

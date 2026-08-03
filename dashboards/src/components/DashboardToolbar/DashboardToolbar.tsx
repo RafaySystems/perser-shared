@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Typography, Stack, Button, Box, useTheme, useMediaQuery, Alert } from '@mui/material';
-import { ErrorBoundary, ErrorAlert } from '@perses-dev/components';
-import { TimeRangeControls, useTimeZoneParams } from '@perses-dev/plugin-system';
+import { Typography, Stack, Button, Box, useTheme, useMediaQuery, Alert } from '@rafaysystems/components/compat/mui';
+import { ErrorBoundary, ErrorAlert } from '@rafaysystems/components';
+import { TimeRangeControls, useTimeZoneParams } from '@rafaysystems/plugin-system';
 import { ReactElement, ReactNode } from 'react';
 import { OnSaveDashboard, useEditMode, useDashboardLinks } from '../../context';
 import { AddPanelButton } from '../AddPanelButton';
@@ -82,7 +82,7 @@ export const DashboardToolbar = (props: DashboardToolbarProps): ReactElement => 
           px={2}
           py={1.5}
           display="flex"
-          sx={{ gap: 2, backgroundColor: (theme) => theme.palette.primary.main + (isEditMode ? '30' : '0') }}
+          sx={{ gap: 2, backgroundColor: (theme: any) => theme.palette.primary.main + (isEditMode ? '30' : '0') }}
         >
           {dashboardTitle}
           {isLinksEnabled && (
@@ -113,8 +113,22 @@ export const DashboardToolbar = (props: DashboardToolbarProps): ReactElement => 
           ) : (
             <>
               {isBiggerThanSm && (
-                <Stack direction="row" gap={1} ml="auto">
-                  <EditButton onClick={onEditButtonClick} />
+                <Stack direction="row" gap={1} ml="auto" alignItems="center">
+                  {isReadonly ? (
+                    <Alert
+                      severity="info"
+                      sx={{
+                        backgroundColor: 'transparent',
+                        padding: 0,
+                        color: 'text.secondary',
+                        '& .MuiAlert-message': { padding: 0 },
+                      }}
+                    >
+                      Readonly view
+                    </Alert>
+                  ) : (
+                    <EditButton onClick={onEditButtonClick} />
+                  )}
                 </Stack>
               )}
             </>
@@ -125,7 +139,7 @@ export const DashboardToolbar = (props: DashboardToolbarProps): ReactElement => 
             display: 'flex',
             width: '100%',
             alignItems: 'start',
-            padding: (theme) => theme.spacing(1, 2, 0, 2),
+            padding: (theme: any) => theme.spacing(1, 2, 0, 2),
             flexDirection: isBiggerThanMd ? 'row' : 'column',
             flexWrap: 'nowrap',
             gap: 1,
@@ -136,7 +150,7 @@ export const DashboardToolbar = (props: DashboardToolbarProps): ReactElement => 
               <DashboardStickyToolbar
                 initialVariableIsSticky={initialVariableIsSticky}
                 sx={{
-                  backgroundColor: ({ palette }) => palette.background.default,
+                  backgroundColor: ({ palette }: any) => palette.background.default,
                 }}
               />
             </ErrorBoundary>

@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box, MenuItem, Popover, Select, IconButton, TextField, Stack } from '@mui/material';
-import Calendar from 'mdi-material-ui/Calendar';
-import EarthIcon from 'mdi-material-ui/Earth';
+import { Box, MenuItem, Popover, Select, IconButton, TextField, Stack } from '@rafaysystems/components/compat/mui';
+import { Calendar } from '@rafaysystems/components/compat/icons';
+import { EarthIcon } from '@rafaysystems/components/compat/icons';
 import { TimeRangeValue, isRelativeTimeRange, AbsoluteTimeRange, toAbsoluteTimeRange } from '@perses-dev/spec';
 import { ReactElement, useMemo, useRef, useState } from 'react';
 import { useTimeZone } from '../context';
@@ -131,10 +131,10 @@ export function TimeRangeSelector({
       </Popover>
       <Popover
         anchorEl={anchorEl.current}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         open={showCustomDateSelector}
         onClose={() => setShowCustomDateSelector(false)}
-        sx={(theme) => ({ padding: theme.spacing(2) })}
       >
         <DateTimeRangePicker
           initialTimeRange={convertedTimeRange}
@@ -150,9 +150,14 @@ export function TimeRangeSelector({
       <Box ref={anchorEl}>
         <Select
           open={open}
+          onClose={() => setOpen(false)}
           value={formatTimeRange(value, timeZone)}
           onClick={() => setOpen(!open)}
           IconComponent={Calendar}
+          MenuProps={{
+            anchorOrigin: { vertical: 'bottom', horizontal: 'right' },
+            transformOrigin: { vertical: 'top', horizontal: 'right' },
+          }}
           renderValue={() => (
             <Stack direction="row" alignItems="center" spacing={1}>
               <span>
@@ -166,9 +171,7 @@ export function TimeRangeSelector({
           )}
           inputProps={{ 'aria-label': `Select time range. Currently set to ${value}` }}
           sx={{
-            '.MuiSelect-icon': { marginTop: '1px', transform: 'none' },
-            '.MuiSelect-select.MuiSelect-outlined.MuiInputBase-input': { paddingRight: '36px' },
-            '.MuiSelect-select': height ? { lineHeight: height, paddingY: 0 } : {},
+            ...(height ? { height, minHeight: height } : {}),
           }}
         >
           <MenuItem
@@ -205,6 +208,7 @@ export function TimeRangeSelector({
               value={formatTimeRange(item.value, timeZone)}
               onClick={() => {
                 onChange(item.value);
+                setOpen(false);
               }}
             >
               {item.display}
@@ -213,7 +217,10 @@ export function TimeRangeSelector({
           {showCustomTimeRange && (
             <MenuItem
               value={formatTimeRange(lastOption.value, timeZone)}
-              onClick={() => setShowCustomDateSelector(true)}
+              onClick={() => {
+                setShowCustomDateSelector(true);
+                setOpen(false);
+              }}
             >
               {lastOption.display}
             </MenuItem>

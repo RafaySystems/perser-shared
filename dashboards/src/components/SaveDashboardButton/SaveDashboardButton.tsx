@@ -12,10 +12,10 @@
 // limitations under the License.
 
 import { ReactElement } from 'react';
-import { Button, ButtonProps } from '@mui/material';
+import { Button } from '@rafaysystems/components/compat/mui';
 import { OnSaveDashboard, useSaveDashboard } from '../../context';
 
-export interface SaveDashboardButtonProps extends Pick<ButtonProps, 'fullWidth'> {
+export interface SaveDashboardButtonProps {
   onSave?: OnSaveDashboard;
   isDisabled: boolean;
   variant?: 'contained' | 'text' | 'outlined';

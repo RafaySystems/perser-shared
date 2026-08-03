@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { TimeSeries, TimeSeriesValueTuple } from '@perses-dev/spec';
-import { ECharts as EChartsInstance } from 'echarts/core';
+import type { ChartCoordinateSystem as EChartsInstance } from '../model';
 import { DatapointInfo } from '../model';
 import {
   batchDispatchNearbySeriesActions,

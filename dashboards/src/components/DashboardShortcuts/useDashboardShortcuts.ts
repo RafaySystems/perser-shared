@@ -13,8 +13,8 @@
 
 import { useCallback } from 'react';
 import { AbsoluteTimeRange, TimeRangeValue, isRelativeTimeRange, toAbsoluteTimeRange } from '@perses-dev/spec';
-import { useSnackbar } from '@perses-dev/components';
-import { useTimeRange } from '@perses-dev/plugin-system';
+import { useSnackbar } from '@rafaysystems/components';
+import { useTimeRange } from '@rafaysystems/plugin-system';
 import { useHotkeys, useHotkeySequences } from '@tanstack/react-hotkeys';
 import { PanelGroupItemId } from '../../model';
 import {

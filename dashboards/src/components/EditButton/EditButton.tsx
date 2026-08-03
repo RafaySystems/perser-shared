@@ -11,9 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button } from '@mui/material';
-import PencilIcon from 'mdi-material-ui/PencilOutline';
+import { Button } from '@rafaysystems/components/compat/mui';
+
 import { ReactElement } from 'react';
+import { PencilOutline as PencilIcon } from '@rafaysystems/components/compat/icons';
 
 export interface EditButtonProps {
   /**

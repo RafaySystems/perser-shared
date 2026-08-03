@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ECharts as EChartsInstance } from 'echarts/core';
+import type { ChartCoordinateSystem } from '../model';
 import { TimeSeries, TimeSeriesValueTuple } from '@perses-dev/spec';
 import { DatapointInfo, PINNED_CROSSHAIR_SERIES_NAME, TimeChartSeriesMapping } from '../model';
 
@@ -21,59 +21,32 @@ export interface ZoomEventData {
 }
 
 /**
- * Enable dataZoom without requring user to click toolbox icon.
- * https://stackoverflow.com/questions/57183297/is-there-a-way-to-use-zoom-of-type-select-without-showing-the-toolbar
+ * @deprecated No-op under Recharts. Zoom is handled by chart brush/interaction props.
  */
-export function enableDataZoom(chart: EChartsInstance): void {
-  const chartModel = chart['_model'];
-  if (chartModel === undefined) return;
-  if (chartModel.option.toolbox !== undefined && chartModel.option.toolbox.length > 0) {
-    // check if hidden data zoom icon is unselected (if selected it would be 'emphasis' instead of 'normal')
-    if (chartModel.option.toolbox[0].feature.dataZoom.iconStatus.zoom === 'normal') {
-      chart.dispatchAction({
-        type: 'takeGlobalCursor',
-        key: 'dataZoomSelect',
-        dataZoomSelectActive: true,
-      });
-    }
-  }
+export function enableDataZoom(_chart: ChartCoordinateSystem): void {
+  // intentionally empty
 }
 
 /**
- * Restore chart to original state before zoom or other actions were dispatched
+ * @deprecated No-op under Recharts.
  */
-export function restoreChart(chart: EChartsInstance): void {
-  // TODO: support incremental unzoom instead of restore to original state
-  chart.dispatchAction({
-    type: 'restore', // https://echarts.apache.org/en/api.html#events.restore
-  });
+export function restoreChart(chart: ChartCoordinateSystem): void {
+  chart.dispatchAction?.({ type: 'restore' });
 }
 
-/*
- * Clear all highlighted series when cursor exits canvas
- * https://echarts.apache.org/en/api.html#action.downplay
+/**
+ * Clear highlighted series when cursor exits the plot.
  */
-export function clearHighlightedSeries(chart: EChartsInstance): void {
-  if (chart.dispatchAction !== undefined) {
-    // Clear any selected data points
-    chart.dispatchAction({
-      type: 'unselect',
-    });
-
-    // Clear any highlighted series
-    chart.dispatchAction({
-      type: 'downplay',
-    });
-  }
+export function clearHighlightedSeries(chart: ChartCoordinateSystem): void {
+  chart.dispatchAction?.({ type: 'unselect' });
+  chart.dispatchAction?.({ type: 'downplay' });
 }
 
-/*
+/**
  * Convert a point from pixel coordinate to logical coordinate.
- * Used to determine if cursor is over chart canvas and closest datapoint.
- * https://echarts.apache.org/en/api.html#echartsInstance.convertFromPixel
  */
-export function getPointInGrid(cursorCoordX: number, cursorCoordY: number, chart?: EChartsInstance): number[] | null {
-  if (chart === undefined) {
+export function getPointInGrid(cursorCoordX: number, cursorCoordY: number, chart?: ChartCoordinateSystem): number[] | null {
+  if (chart === undefined || !chart.convertFromPixel || !chart.containPixel) {
     return null;
   }
 
@@ -82,50 +55,37 @@ export function getPointInGrid(cursorCoordX: number, cursorCoordY: number, chart
     return null;
   }
 
-  const pointInGrid: number[] = chart.convertFromPixel('grid', pointInPixel);
-  return pointInGrid;
+  return chart.convertFromPixel('grid', pointInPixel) ?? null;
 }
 
-/*
- * TimeSeriesChart tooltip is built custom to support finding nearby series instead of single or all series.
- * This means ECharts actions need to be dispatched manually for series highlighting, datapoint select state, etc.
- * More info: https://echarts.apache.org/en/api.html#action
+/**
+ * Dispatch nearby-series highlight actions when a chart coordinate system supports them.
  */
 export function batchDispatchNearbySeriesActions(
-  chart: EChartsInstance,
+  chart: ChartCoordinateSystem,
   nearbySeriesIndexes: number[],
   emphasizedSeriesIndexes: number[],
   nonEmphasizedSeriesIndexes: number[],
   emphasizedDatapoints: DatapointInfo[],
   duplicateDatapoints: DatapointInfo[]
 ): void {
-  // Accounts for multiple series that are rendered direct on top of eachother.
-  // Only applies select state to the datapoint that is visible to avoid color mismatch.
+  if (!chart.dispatchAction) return;
+
   const lastEmphasizedDatapoint =
     duplicateDatapoints.length > 0
       ? duplicateDatapoints[duplicateDatapoints.length - 1]
       : emphasizedDatapoints[emphasizedDatapoints.length - 1];
   if (lastEmphasizedDatapoint !== undefined) {
-    // Corresponds to select options inside getTimeSeries util.
-    // https://echarts.apache.org/en/option.html#series-line.select.itemStyle
     chart.dispatchAction({
       type: 'select',
       seriesIndex: lastEmphasizedDatapoint.seriesIndex,
       dataIndex: lastEmphasizedDatapoint.dataIndex,
-      // Shared crosshair should not emphasize datapoints on adjacent charts.
-      escapeConnect: true, // TODO: try to remove escapeConnect and match by seriesName for cross panel correlation
+      escapeConnect: true,
     });
   }
 
-  // Blanket downplay clears axis-triggered emphasis (enlarged "big point" markers) before
-  // re-applying emphasis to only the winner series.
-  // https://echarts.apache.org/en/api.html#action.downplay
-  chart.dispatchAction({
-    type: 'downplay',
-  });
+  chart.dispatchAction({ type: 'downplay' });
 
-  // Clears emphasis state of all lines that are not emphasized.
-  // Emphasized is a subset of just the nearby series that are closest to cursor.
   if (nonEmphasizedSeriesIndexes.length > 0) {
     chart.dispatchAction({
       type: 'downplay',
@@ -133,43 +93,28 @@ export function batchDispatchNearbySeriesActions(
     });
   }
 
-  // https://echarts.apache.org/en/api.html#action.highlight
   if (emphasizedSeriesIndexes.length > 0) {
-    // Fadeout opacity of all series not closest to cursor.
     chart.dispatchAction({
       type: 'highlight',
       seriesIndex: emphasizedSeriesIndexes,
-      notBlur: false, // ensure blur IS triggered, this is default but setting so it is explicit
-      escapeConnect: true, // shared crosshair should not emphasize series on adjacent charts
+      notBlur: false,
+      escapeConnect: true,
     });
   } else {
-    // When no emphasized series with bold text, notBlur allows opacity fadeout to not trigger.
     chart.dispatchAction({
       type: 'highlight',
       seriesIndex: nearbySeriesIndexes,
-      notBlur: true, // do not trigger blur state when cursor is not immediately close to any series
-      escapeConnect: true, // shared crosshair should not emphasize series on adjacent charts
+      notBlur: true,
+      escapeConnect: true,
     });
-
-    // Clears selected datapoints since no bold series in tooltip, restore does not impact highlighting
-    chart.dispatchAction({
-      type: 'toggleSelect', // https://echarts.apache.org/en/api.html#action.toggleSelect
-    });
+    chart.dispatchAction({ type: 'toggleSelect' });
   }
 }
 
-/*
- * Determine whether a markLine was pushed into the final series, which means crosshair was already pinned onClick
- */
 export function checkCrosshairPinnedStatus(seriesMapping: TimeChartSeriesMapping): boolean {
-  const isCrosshairPinned = seriesMapping[seriesMapping.length - 1]?.name === PINNED_CROSSHAIR_SERIES_NAME;
-  return isCrosshairPinned;
+  return seriesMapping[seriesMapping.length - 1]?.name === PINNED_CROSSHAIR_SERIES_NAME;
 }
 
-/*
- * Find closest timestamp to logical x coordinate returned from echartsInstance.convertFromPixel
- * Used to find nearby series in time series tooltip.
- */
 export function getClosestTimestamp(timeSeriesValues?: TimeSeriesValueTuple[], cursorX?: number): number | null {
   if (timeSeriesValues === undefined || cursorX === undefined) {
     return null;
@@ -188,9 +133,6 @@ export function getClosestTimestamp(timeSeriesValues?: TimeSeriesValueTuple[], c
   return currentClosestTimestamp;
 }
 
-/*
- * Find closest timestamp in full dataset, used to snap crosshair into place onClick when tooltip is pinned.
- */
 export function getClosestTimestampInFullDataset(data: TimeSeries[], cursorX?: number): number | null {
   if (cursorX === undefined) {
     return null;
@@ -200,8 +142,7 @@ export function getClosestTimestampInFullDataset(data: TimeSeries[], cursorX?: n
   for (let seriesIdx = 0; seriesIdx < totalSeries; seriesIdx++) {
     const currentDataset = totalSeries > 0 ? data[seriesIdx] : null;
     if (!currentDataset) break;
-    const currentValues: TimeSeriesValueTuple[] = currentDataset.values;
-    closestTimestamp = getClosestTimestamp(currentValues, cursorX);
+    closestTimestamp = getClosestTimestamp(currentDataset.values, cursorX);
   }
   return closestTimestamp;
 }

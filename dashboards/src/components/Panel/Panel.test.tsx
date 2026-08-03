@@ -14,8 +14,8 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PanelDefinition } from '@perses-dev/spec';
-import { DataQueriesProvider, TimeRangeProviderBasic, useDataQueriesContext } from '@perses-dev/plugin-system';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { DataQueriesProvider, TimeRangeProviderBasic, useDataQueriesContext } from '@rafaysystems/plugin-system';
+import { createTheme, ThemeProvider } from '@rafaysystems/components/compat/mui';
 import { renderWithContext } from '../../test';
 import { VariableProvider } from '../../context';
 import { Panel, PanelProps } from './Panel';
@@ -46,8 +46,8 @@ const testTheme = createTheme({
   },
 });
 
-jest.mock('@perses-dev/components', () => ({
-  ...jest.requireActual('@perses-dev/components'),
+jest.mock('@rafaysystems/components', () => ({
+  ...jest.requireActual('@rafaysystems/components'),
   InfoTooltip: ({ children, description }: { children: React.ReactNode; description: string }): JSX.Element => (
     <>
       {children}
@@ -56,15 +56,15 @@ jest.mock('@perses-dev/components', () => ({
   ),
 }));
 
-jest.mock('@mui/material/CircularProgress', () => {
+jest.mock('@rafaysystems/components/compat/mui', () => {
   return function MockCircularProgress(props: { 'aria-label'?: string }): JSX.Element {
     return <div aria-label={props['aria-label'] || 'loading'} />;
   };
 });
 
-jest.mock('@perses-dev/plugin-system', () => {
+jest.mock('@rafaysystems/plugin-system', () => {
   return {
-    ...jest.requireActual('@perses-dev/plugin-system'),
+    ...jest.requireActual('@rafaysystems/plugin-system'),
     useDataQueriesContext: jest.fn(() => ({
       queryResults: [],
     })),

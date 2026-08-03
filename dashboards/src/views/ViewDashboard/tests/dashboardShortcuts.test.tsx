@@ -13,7 +13,7 @@
 
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { TimeRangeProviderBasic } from '@perses-dev/plugin-system';
+import { TimeRangeProviderBasic } from '@rafaysystems/plugin-system';
 import { ReactElement, useState } from 'react';
 import { useHotkeyRegistrations } from '@tanstack/react-hotkeys';
 // Import to enable declaration merging for HotkeyMeta.category

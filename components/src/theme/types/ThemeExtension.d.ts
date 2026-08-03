@@ -12,10 +12,10 @@
 // limitations under the License.
 
 // Allows extending Lab types/components also
-import type {} from '@mui/lab/themeAugmentation';
+import type {} from '@rafaysystems/components/compat/noop';
 
 // Use Typescript interface augmentation to extend the MUI type definition
-declare module '@mui/material' {
+declare module '@rafaysystems/components/compat/mui' {
   interface Color {
     150: string;
     250: string;

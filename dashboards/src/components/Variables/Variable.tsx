@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import { TextField, Popper, PopperProps, Checkbox, Autocomplete, createFilterOptions, Chip, Box } from '@mui/material';
+import { TextField, Popper, PopperProps, Checkbox, Autocomplete, createFilterOptions, Chip, Box } from '@rafaysystems/components/compat/mui';
 import {
   DEFAULT_ALL_VALUE,
   ListVariableDefinition,
@@ -27,7 +27,7 @@ import {
   useListVariablePluginValues,
   VariableOption,
   VariableState,
-} from '@perses-dev/plugin-system';
+} from '@rafaysystems/plugin-system';
 import { UseQueryResult } from '@tanstack/react-query';
 import { useVariableDefinitionAndState, useVariableDefinitionActions } from '../../context';
 import { MAX_VARIABLE_WIDTH, MIN_VARIABLE_WIDTH } from '../../constants';
@@ -192,7 +192,7 @@ function ListVariable({ name, source }: VariableProps): ReactElement {
   const filterOptions = createFilterOptions<VariableOption>({});
 
   const filteredOptions = useMemo(
-    () => filterOptions(viewOptions, { inputValue, getOptionLabel: (o) => o.label }),
+    () => filterOptions(viewOptions, { inputValue, getOptionLabel: (o: VariableOption) => o.label }),
     [inputValue, viewOptions, filterOptions]
   );
 
@@ -257,7 +257,7 @@ function ListVariable({ name, source }: VariableProps): ReactElement {
         filterOptions={filterOptions}
         options={viewOptions}
         value={selectedOptions}
-        onChange={(_, value) => {
+        onChange={(_: any, value: any) => {
           if ((value === null || (Array.isArray(value) && value.length === 0)) && allowAllValue) {
             setVariableValue(name, DEFAULT_ALL_VALUE, source);
           } else {
@@ -265,7 +265,7 @@ function ListVariable({ name, source }: VariableProps): ReactElement {
           }
         }}
         inputValue={allowMultiple ? inputValue : undefined}
-        onInputChange={(_, newInputValue) => {
+        onInputChange={(_: any, newInputValue: any) => {
           if (!allowMultiple) {
             setInputWidth(getWidthPx(newInputValue, 'list'));
           }
@@ -275,14 +275,14 @@ function ListVariable({ name, source }: VariableProps): ReactElement {
             setInputValue('');
           }
         }}
-        renderInput={(params) => {
+        renderInput={(params: any) => {
           return allowMultiple ? (
-            <TextField {...params} label={title} onChange={(e) => setInputValue(e.target.value)} />
+            <TextField {...params} label={title} onChange={(e: any) => setInputValue(e.target.value)} />
           ) : (
             <TextField {...params} label={title} style={{ width: `${inputWidth}px` }} />
           );
         }}
-        renderOption={(props, option, { selected }) => {
+        renderOption={(props: any, option: VariableOption, { selected }: { selected: boolean }) => {
           const { key, ...optionProps } = props;
           return (
             <li key={key} {...optionProps} style={{ padding: 0 }}>
@@ -291,12 +291,12 @@ function ListVariable({ name, source }: VariableProps): ReactElement {
             </li>
           );
         }}
-        renderTags={(value, getTagProps, ownerState) => {
+        renderTags={(value: VariableOption[], getTagProps: any, ownerState: any) => {
           // When focused, if there are too much value selected, it will use all screen place. Putting limit to 200px (~6 lines of chips)
           if (ownerState.focused) {
             return (
               <Box sx={{ maxHeight: 200, overflowY: 'auto' }}>
-                {value.map((option, index) => (
+                {value.map((option: VariableOption, index: number) => (
                   <Chip {...getTagProps({ index })} key={index} label={option.label} size="small" />
                 ))}
               </Box>
@@ -308,7 +308,7 @@ function ListVariable({ name, source }: VariableProps): ReactElement {
 
           return (
             <>
-              {value.slice(0, limitTags).map((option, index) => (
+              {value.slice(0, limitTags).map((option: VariableOption, index: number) => (
                 <Chip {...getTagProps({ index })} key={index} label={option.label} size="small" />
               ))}
 
@@ -358,7 +358,7 @@ function TextVariable({ name, source }: VariableProps): ReactElement {
     <TextField
       title={tempValue as string}
       value={tempValue}
-      onChange={(e) => {
+      onChange={(e: any) => {
         setTempValue(e.target.value);
         setInputWidth(getWidthPx(e.target.value, 'text'));
       }}

@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Button, ButtonGroup, ButtonGroupProps } from '@mui/material';
+import { Button, ButtonGroup, ButtonGroupProps } from '@rafaysystems/components/compat/mui';
 import { ReactElement } from 'react';
 
 export type AlignOption = 'left' | 'center' | 'right';

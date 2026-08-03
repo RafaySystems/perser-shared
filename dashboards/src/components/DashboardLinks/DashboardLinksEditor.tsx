@@ -12,6 +12,7 @@
 // limitations under the License.
 
 import { useState, ReactElement } from 'react';
+import { Plus as AddIcon, TrashCan as TrashIcon, ArrowUp, ArrowDown, Pencil as PencilIcon, ChevronUp } from '@rafaysystems/components/compat/icons';
 import {
   Button,
   Stack,
@@ -25,16 +26,16 @@ import {
   TableHead,
   TableRow,
   Collapse,
-} from '@mui/material';
-import AddIcon from 'mdi-material-ui/Plus';
-import TrashIcon from 'mdi-material-ui/TrashCan';
-import ArrowUp from 'mdi-material-ui/ArrowUp';
-import ArrowDown from 'mdi-material-ui/ArrowDown';
-import PencilIcon from 'mdi-material-ui/Pencil';
-import ChevronUp from 'mdi-material-ui/ChevronUp';
+} from '@rafaysystems/components/compat/mui';
+
+
+
+
+
+
 import { Link } from '@perses-dev/spec';
 import { useImmer } from 'use-immer';
-import { InfoTooltip, LinkEditorForm } from '@perses-dev/components';
+import { InfoTooltip, LinkEditorForm } from '@rafaysystems/components';
 import { useDiscardChangesConfirmationDialog } from '../../context';
 
 export interface DashboardLinksEditorProps {
@@ -140,8 +141,8 @@ export function DashboardLinksEditor({
         sx={{
           display: 'flex',
           alignItems: 'center',
-          padding: (theme) => theme.spacing(1, 2),
-          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+          padding: (theme: any) => theme.spacing(1, 2),
+          borderBottom: (theme: any) => `1px solid ${theme.palette.divider}`,
         }}
       >
         <Typography variant="h2">Edit Dashboard Links</Typography>

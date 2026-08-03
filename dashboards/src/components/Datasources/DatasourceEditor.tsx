@@ -11,6 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { Plus as AddIcon, Pencil as PencilIcon, TrashCan as TrashIcon } from '@rafaysystems/components/compat/icons';
 import {
   Box,
   Button,
@@ -23,15 +24,15 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@mui/material';
-import AddIcon from 'mdi-material-ui/Plus';
-import PencilIcon from 'mdi-material-ui/Pencil';
-import TrashIcon from 'mdi-material-ui/TrashCan';
+} from '@rafaysystems/components/compat/mui';
+
+
+
 import { DatasourceSpec } from '@perses-dev/spec';
-import { DatasourceEditorForm, ValidationProvider } from '@perses-dev/plugin-system';
+import { DatasourceEditorForm, ValidationProvider } from '@rafaysystems/plugin-system';
 import { ReactElement, useState } from 'react';
 import { useImmer } from 'use-immer';
-import { Action, DatasourceDefinition } from '@perses-dev/client';
+import { Action, DatasourceDefinition } from '@rafaysystems/client';
 import { useDiscardChangesConfirmationDialog } from '../../context';
 
 export function DatasourceEditor(props: {
@@ -121,8 +122,8 @@ export function DatasourceEditor(props: {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              padding: (theme) => theme.spacing(1, 2),
-              borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+              padding: (theme: any) => theme.spacing(1, 2),
+              borderBottom: (theme: any) => `1px solid ${theme.palette.divider}`,
             }}
           >
             <Typography variant="h2">Edit Dashboard Datasources</Typography>

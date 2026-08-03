@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ECharts as EChartsInstance } from 'echarts/core';
+import type { ChartCoordinateSystem as EChartsInstance } from '../model';
 import { TimeSeries } from '@perses-dev/spec';
 import { EChartsDataFormat, FormatOptions, TimeChartSeriesMapping } from '../model';
 import {

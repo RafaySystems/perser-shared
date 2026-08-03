@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Re-export all variable interpolation utilities from @perses-dev/components for backwards compatibility
-export type { VariableOption, VariableState, VariableStateMap } from '@perses-dev/components';
+// Re-export all variable interpolation utilities from @rafaysystems/components for backwards compatibility
+export type { VariableOption, VariableState, VariableStateMap } from '@rafaysystems/components';
 export {
   InterpolationFormat,
   interpolate,
@@ -20,4 +20,4 @@ export {
   parseVariablesAndFormat,
   replaceVariable,
   replaceVariables,
-} from '@perses-dev/components';
+} from '@rafaysystems/components';

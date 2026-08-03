@@ -20,7 +20,7 @@ import {
   Switch,
   Typography,
   TextField as MuiTextField,
-} from '@mui/material';
+} from '@rafaysystems/components/compat/mui';
 
 import { ReactElement } from 'react';
 

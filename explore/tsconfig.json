@@ -7,8 +7,17 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "paths": {
-      "@perses-dev/explore": [
+      "@rafaysystems/components/compat/icons": [
+        "../components/dist/compat/icons"
+      ],
+      "@rafaysystems/components/compat/mui": [
+        "../components/dist/compat/mui"
+      ],
+      "@rafaysystems/explore": [
         "./src"
+      ],
+      "@rafaysystems/explore/*": [
+        "./src/*"
       ]
     }
   }
