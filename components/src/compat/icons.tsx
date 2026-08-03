@@ -44,6 +44,8 @@ import {
   Droplets,
   Columns3,
   Globe,
+  Maximize2,
+  Minimize2,
   PanelLeftClose,
   PanelLeftOpen,
   Trash2,
@@ -101,8 +103,11 @@ export const Alert = icon(AlertTriangle);
 export const AlertCircle = icon(AlertCircleLucide);
 export const LightningBolt = icon(Zap);
 export const DatabaseSearch = icon(Search);
-export const ArrowCollapse = icon(PanelLeftClose);
-export const ArrowExpand = icon(PanelLeftOpen);
+export const ArrowCollapse = icon(Minimize2);
+export const ArrowExpand = icon(Maximize2);
+// Keep sidebar-panel aliases available for other callers.
+export const PanelCollapse = icon(PanelLeftClose);
+export const PanelExpand = icon(PanelLeftOpen);
 export const PinOffOutline = icon(PinOff);
 export const InformationOutline = icon(Info);
 export const Check = icon(CheckLucide);

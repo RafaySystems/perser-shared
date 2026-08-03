@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { Drawer as MuiDrawer, DrawerProps as MuiDrawerProps, useMediaQuery } from '@rafaysystems/components/compat/mui';
-import React, { ReactElement, ReactNode } from 'react';
+import React, { CSSProperties, ReactElement, ReactNode } from 'react';
 import { combineSx } from '../utils';
 
 export interface DrawerProps extends MuiDrawerProps {
@@ -31,10 +31,12 @@ export const Drawer: React.FC<any> = ({
   isOpen,
   onClose,
   PaperProps,
+  slotProps,
   children,
   ...rest
 }: DrawerProps): ReactElement => {
   const isSmaller = useMediaQuery(`(max-width:${DRAWER_DEFAULT_WIDTH}px)`);
+  const width = isSmaller ? '100%' : `${DRAWER_DEFAULT_WIDTH}px`;
 
   return (
     <MuiDrawer
@@ -42,17 +44,23 @@ export const Drawer: React.FC<any> = ({
       open={isOpen}
       onClose={onClose}
       anchor={anchor}
+      slotProps={slotProps}
       PaperProps={{
         ...PaperProps,
+        style: {
+          width,
+          maxWidth: '100%',
+          ...(PaperProps?.style as CSSProperties | undefined),
+        },
         sx: combineSx(
           {
-            width: isSmaller ? '100%' : `${DRAWER_DEFAULT_WIDTH}px`,
+            width,
             overflow: 'hidden',
           },
           PaperProps?.sx
         ),
       }}
-      aria-hidden={!isOpen} // Ensure the drawer is not focusable when closed + disable console.error about focusable elements
+      aria-hidden={!isOpen}
     >
       {children}
     </MuiDrawer>

@@ -11,31 +11,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Stack, Box, CircularProgress, styled, Popper, ClickAwayListener } from '@rafaysystems/components/compat/mui';
+import { Stack, Box, CircularProgress, Popper, ClickAwayListener } from '@rafaysystems/components/compat/mui';
 import { isValidElement, PropsWithChildren, ReactElement, ReactNode, useMemo, useState, MouseEvent } from 'react';
 import { InfoTooltip } from '@rafaysystems/components';
 import { QueryData } from '@rafaysystems/plugin-system';
-
-
-
-
-
-
-
-
-
-
-
-
 import { Link, Notice } from '@perses-dev/spec';
-import { DatabaseSearch, ArrowCollapse as ArrowCollapseIcon, ArrowExpand as ArrowExpandIcon, PencilOutline as PencilIcon, DeleteOutline as DeleteIcon, DragVertical as DragIcon, ContentCopy as ContentCopyIcon, Menu as MenuIcon, Alert as AlertIcon, AlertCircle as AlertCircleIcon, InformationOutline as InformationOutlineIcon, LightningBolt as LightningBoltIcon } from '@rafaysystems/components/compat/icons';
 import {
-  ARIA_LABEL_TEXT,
-  HEADER_ACTIONS_CONTAINER_NAME,
-  HEADER_MEDIUM_WIDTH,
-  HEADER_SMALL_WIDTH,
-  TOOLTIP_TEXT,
-} from '../../constants';
+  DatabaseSearch,
+  ArrowCollapse as ArrowCollapseIcon,
+  ArrowExpand as ArrowExpandIcon,
+  PencilOutline as PencilIcon,
+  DeleteOutline as DeleteIcon,
+  DragVertical as DragIcon,
+  ContentCopy as ContentCopyIcon,
+  Menu as MenuIcon,
+  Alert as AlertIcon,
+  AlertCircle as AlertCircleIcon,
+  InformationOutline as InformationOutlineIcon,
+  LightningBolt as LightningBoltIcon,
+} from '@rafaysystems/components/compat/icons';
+import { ARIA_LABEL_TEXT, TOOLTIP_TEXT } from '../../constants';
 import { LinksDisplay } from '../LinksDisplay';
 import { HeaderIconButton } from './HeaderIconButton';
 import { PanelOptions } from './Panel';
@@ -71,13 +66,6 @@ export interface PanelActionsProps {
   showIcons: PanelOptions['showIcons'];
 }
 
-const ConditionalBox = styled(Box)({
-  display: 'none',
-  alignItems: 'center',
-  flexGrow: 1,
-  justifyContent: 'flex-end',
-});
-
 export const PanelActions: React.FC<PanelActionsProps> = ({
   editHandlers,
   readHandlers,
@@ -90,7 +78,7 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
   queryResults,
   pluginActions = [],
   itemActions = [],
-  showIcons,
+  showIcons: _showIcons,
 }) => {
   const descriptionAction = useMemo((): ReactNode | undefined => {
     if (description && description.trim().length > 0) {
@@ -255,86 +243,38 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
     return undefined;
   }, [editActions, readHandlers, title]);
 
-  const divider = <Box sx={{ flexGrow: 1 }}></Box>;
+  const divider = <Box sx={{ flexGrow: 1 }} />;
 
-  // By default, the panel header shows certain icons only on hover if the panel is in non-editing, non-fullscreen mode
-  const OnHover = ({ children }: PropsWithChildren): ReactNode =>
-    showIcons === 'hover' ? <Box sx={{ display: 'var(--panel-hover, none)' }}>{children}</Box> : <>{children}</>;
-
+  // Always show header actions. Hover/container-query visibility relied on MUI
+  // CSS-in-JS which the shadcn compat layer cannot apply as real stylesheets.
   return (
-    <>
-      {/* small panel width: move all icons except move/grab to overflow menu */}
-      <ConditionalBox
-        sx={(theme: any) => ({
-          [theme.containerQueries(HEADER_ACTIONS_CONTAINER_NAME).between(0, HEADER_SMALL_WIDTH)]: { display: 'flex' },
-        })}
-      >
-        {divider}
-        <OnHover>
-          <OverflowMenu title={title}>
-            {descriptionAction} {linksAction} {queryStateIndicator} {noticesIndicator} {extraActions} {viewQueryAction}
-            {readActions} {pluginActions} {itemActions}
-            {editActions}
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        flexGrow: 1,
+        justifyContent: 'flex-end',
+        minWidth: 0,
+      }}
+    >
+      {descriptionAction} {linksAction}
+      {divider} {queryStateIndicator}
+      {noticesIndicator}
+      {extraActions}
+      {viewQueryAction}
+      {readActions} {editActions}
+      {pluginActions.length <= 1 ? pluginActions : <OverflowMenu title={title}>{pluginActions}</OverflowMenu>}
+      {itemActions.length <= 1 ? (
+        itemActions
+      ) : (
+        <InfoTooltip description={`${itemActions.length} actions`}>
+          <OverflowMenu icon={<LightningBoltIcon fontSize="inherit" />} direction="column" title={title}>
+            {itemActions}
           </OverflowMenu>
-          {moveAction}
-        </OnHover>
-      </ConditionalBox>
-
-      {/* medium panel width: move edit icons to overflow menu */}
-      <ConditionalBox
-        sx={(theme: any) => ({
-          [theme.containerQueries(HEADER_ACTIONS_CONTAINER_NAME).between(HEADER_SMALL_WIDTH, HEADER_MEDIUM_WIDTH)]: {
-            display: 'flex',
-          },
-        })}
-      >
-        <OnHover>
-          {descriptionAction} {linksAction}
-        </OnHover>
-        {divider} {queryStateIndicator}
-        {noticesIndicator}
-        <OnHover>
-          {extraActions}
-          {readActions}
-          <OverflowMenu title={title}>
-            {editActions} {viewQueryAction} {pluginActions} {itemActions}
-          </OverflowMenu>
-          {moveAction}
-        </OnHover>
-      </ConditionalBox>
-
-      {/* large panel width: show all icons in panel header */}
-      <ConditionalBox
-        sx={(theme: any) => ({
-          // flip the logic here; if the browser (or jsdom) does not support container queries, always show all icons
-          display: 'flex',
-          [theme.containerQueries(HEADER_ACTIONS_CONTAINER_NAME).down(HEADER_MEDIUM_WIDTH)]: { display: 'none' },
-        })}
-      >
-        <OnHover>
-          {descriptionAction} {linksAction}
-        </OnHover>
-        {divider} {queryStateIndicator}
-        {noticesIndicator}
-        <OnHover>
-          {extraActions}
-          {viewQueryAction}
-          {readActions} {editActions}
-          {/* Show plugin actions inside a menu if it gets crowded */}
-          {pluginActions.length <= 1 ? pluginActions : <OverflowMenu title={title}>{pluginActions}</OverflowMenu>}
-          {itemActions.length <= 1 ? (
-            itemActions
-          ) : (
-            <InfoTooltip description={`${itemActions.length} actions`}>
-              <OverflowMenu icon={<LightningBoltIcon fontSize="inherit" />} direction="column" title={title}>
-                {itemActions}
-              </OverflowMenu>
-            </InfoTooltip>
-          )}
-          {moveAction}
-        </OnHover>
-      </ConditionalBox>
-    </>
+        </InfoTooltip>
+      )}
+      {moveAction}
+    </Box>
   );
 };
 

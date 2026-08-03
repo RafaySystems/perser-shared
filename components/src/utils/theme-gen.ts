@@ -11,255 +11,47 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Theme } from '@rafaysystems/components/compat/mui';
 import merge from 'lodash/merge';
-import { EChartsTheme, PersesChartsTheme } from '../model';
+import { CHART_SERIES_COLORS } from '../charts/chartColors';
+import { PersesChartsTheme } from '../model';
 
-const DEFAULT_TEXT_COLOR = '#222';
+export type ChartsThemeMode = 'light' | 'dark';
 
-// avoid component override type errors since only palette and typography are used
-type MuiTheme = Omit<Theme, 'components'>;
+const LIGHT = {
+  success: { main: '#4CAF50' },
+  warning: { main: '#FF9800' },
+  error: { main: '#EA4747' },
+  primary: '#1473E6',
+};
 
+const DARK = {
+  success: { main: '#66BB6A' },
+  warning: { main: '#FFA726' },
+  error: { main: '#EE6C6C' },
+  primary: '#438FEB',
+};
+
+/**
+ * Builds a Perses chart theme from the active colour mode, using shadcn chart CSS variables.
+ * Accepts either `'light' | 'dark'` or a MUI-like theme with `palette.mode`.
+ */
 export function generateChartsTheme(
-  muiTheme: MuiTheme,
-  persesChartsThemeOverride: Partial<PersesChartsTheme>
+  modeOrTheme: ChartsThemeMode | { palette?: { mode?: string } },
+  persesChartsThemeOverride: Partial<PersesChartsTheme> = {}
 ): PersesChartsTheme {
-  const primaryTextColor = muiTheme.palette.text?.primary ?? DEFAULT_TEXT_COLOR;
-
-  const muiConvertedTheme: EChartsTheme = {
-    title: {
-      show: false,
-    },
-    textStyle: {
-      color: primaryTextColor,
-      fontFamily: muiTheme.typography.fontFamily,
-      fontSize: 12,
-    },
-    grid: {
-      top: 5,
-      right: 20,
-      bottom: 0,
-      left: 20,
-      containLabel: true,
-    },
-    // Accessible categorical palette from: https://davidmathlogic.com/colorblind
-    color: [
-      '#56B4E9', // lt blue
-      '#009E73', // med green
-      '#0072B2', // dk blue
-      '#CC79A7', // lt purple
-      '#F0E442', // yellow
-      '#E69F00', // orange
-      '#D55E00', // red
-    ],
-    categoryAxis: {
-      show: true,
-      axisLabel: {
-        show: true,
-        color: primaryTextColor,
-        margin: 15,
-      },
-      axisTick: {
-        show: false,
-        length: 6,
-        lineStyle: {
-          color: muiTheme.palette.grey[600],
-        },
-      },
-      axisLine: {
-        show: true,
-        lineStyle: {
-          color: muiTheme.palette.grey[600],
-        },
-      },
-      splitLine: {
-        show: true,
-        lineStyle: {
-          width: 0.5,
-          color: muiTheme.palette.grey[300],
-          opacity: 0.4,
-        },
-      },
-      splitArea: {
-        show: false,
-        areaStyle: {
-          color: [muiTheme.palette.grey[300]],
-        },
-      },
-    },
-    timeAxis: {
-      show: true,
-      axisLabel: {
-        show: true,
-        color: primaryTextColor,
-        margin: 15,
-      },
-      axisTick: {
-        show: false,
-        length: 6,
-        lineStyle: {
-          color: muiTheme.palette.grey[600],
-        },
-      },
-      axisLine: {
-        show: true,
-        lineStyle: {
-          color: muiTheme.palette.grey[600],
-        },
-      },
-      splitLine: {
-        show: true,
-        lineStyle: {
-          width: 0.5,
-          color: muiTheme.palette.grey[300],
-          opacity: 0.4,
-        },
-      },
-      splitArea: {
-        show: false,
-        areaStyle: {
-          color: [muiTheme.palette.grey[300]],
-        },
-      },
-    },
-    valueAxis: {
-      show: true,
-      axisLabel: {
-        color: primaryTextColor,
-        margin: 12,
-      },
-      axisLine: {
-        show: false,
-      },
-      splitLine: {
-        show: true,
-        lineStyle: {
-          width: 0.5,
-          color: muiTheme.palette.grey[300],
-          opacity: 0.6,
-        },
-      },
-    },
-    legend: {
-      orient: 'horizontal',
-      textStyle: {
-        color: primaryTextColor,
-      },
-      pageTextStyle: {
-        color: muiTheme.palette.grey[600],
-      },
-      pageIconColor: muiTheme?.palette?.action?.active,
-      pageIconInactiveColor: muiTheme?.palette?.action?.disabled,
-    },
-    toolbox: {
-      show: true,
-      top: 10,
-      right: 10,
-      iconStyle: {
-        borderColor: primaryTextColor,
-      },
-    },
-    tooltip: {
-      backgroundColor: muiTheme.palette.designSystem?.grey[800],
-      borderColor: muiTheme.palette.designSystem?.grey[800],
-      textStyle: {
-        color: '#fff',
-        fontSize: 11,
-      },
-    },
-    axisPointer: {
-      lineStyle: {
-        color: muiTheme.palette.grey[500],
-      },
-    },
-    markLine: {
-      symbol: 'none',
-      symbolSize: 0,
-      itemStyle: {
-        color: muiTheme.palette.grey[500],
-      },
-      lineStyle: {
-        type: 'dashed',
-        width: 1,
-      },
-    },
-    line: {
-      showSymbol: false,
-      symbol: 'circle',
-      symbolSize: 4,
-      smooth: false,
-      lineStyle: {
-        width: 1,
-      },
-      emphasis: {
-        lineStyle: {
-          width: 1.5,
-        },
-      },
-    },
-    bar: {
-      barMaxWidth: 150,
-      itemStyle: {
-        borderWidth: 0,
-        borderRadius: 0,
-        borderColor: muiTheme.palette.grey[300],
-      },
-      label: {
-        show: false,
-        color: primaryTextColor,
-      },
-    },
-    gauge: {
-      detail: {
-        fontSize: 18,
-        fontWeight: 600,
-        valueAnimation: false,
-      },
-      splitLine: {
-        distance: 0,
-        length: 4,
-        lineStyle: {
-          width: 1,
-        },
-      },
-      splitNumber: 12,
-    },
-  };
+  const mode: ChartsThemeMode =
+    typeof modeOrTheme === 'string' ? modeOrTheme : modeOrTheme.palette?.mode === 'dark' ? 'dark' : 'light';
+  const palette = mode === 'dark' ? DARK : LIGHT;
 
   return merge(
     {
-      echartsTheme: muiConvertedTheme,
-      noDataOption: {
-        title: {
-          show: true,
-          textStyle: {
-            color: primaryTextColor,
-            fontSize: 16,
-            fontWeight: 400,
-          },
-          text: 'No data',
-          left: 'center',
-          top: 'center',
-        },
-        xAxis: {
-          show: false,
-        },
-        yAxis: {
-          show: false,
-        },
-      },
-      sparkline: {
-        width: 2,
-        color: '#1976d2',
-      },
-      container: {
-        padding: {
-          default: parseInt(muiTheme.spacing(1.5), 10),
-        },
-      },
+      seriesColors: [...CHART_SERIES_COLORS],
+      noDataMessage: 'No data',
+      sparkline: { width: 2, color: palette.primary, areaOpacity: 0.25 },
+      container: { padding: { default: 12 } },
       thresholds: {
-        defaultColor: muiTheme.palette.success.main,
-        palette: ['#FFCC00', muiTheme.palette.warning.main, muiTheme.palette.error.main],
+        defaultColor: palette.success.main,
+        palette: ['#FFCC00', palette.warning.main, palette.error.main],
       },
     },
     persesChartsThemeOverride

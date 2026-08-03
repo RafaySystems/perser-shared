@@ -11,32 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { createTheme as createMuiTheme } from '@rafaysystems/components/compat/mui';
-import { PersesChartsTheme, EChartsTheme } from '../model';
+import { PersesChartsTheme } from '../model';
 import { generateChartsTheme } from '../utils';
 import { SharedChartsState } from '../context';
 
-// app specific echarts option overrides
-const TEST_ECHARTS_THEME_OVERRIDES: EChartsTheme = {
-  textStyle: { fontFamily: 'Lato' },
-  categoryAxis: {
-    splitLine: {
-      show: false,
-    },
-  },
-  timeAxis: {
-    splitLine: {
-      show: false,
-    },
-  },
-  bar: {
-    barCategoryGap: 2,
-  },
-};
-
-export const testChartsTheme: PersesChartsTheme = generateChartsTheme(createMuiTheme({}), {
-  echartsTheme: TEST_ECHARTS_THEME_OVERRIDES,
-});
+export const testChartsTheme: PersesChartsTheme = generateChartsTheme('light');
 
 export const mockChartsContext: SharedChartsState = {
   chartsTheme: testChartsTheme,

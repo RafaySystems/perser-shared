@@ -11,6 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// shadcn/ui chart primitives & Recharts panels
+export * from './ui/chart';
+export * from './charts';
+
 export * from './AlignSelector';
 export * from './ColorPicker';
 export * from './ContentWithLegend';
@@ -19,7 +23,6 @@ export * from './Dialog';
 export * from './DensitySelector';
 export * from './DragAndDrop';
 export * from './Drawer';
-export * from './EChart';
 export * from './ErrorAlert';
 export * from './ErrorBoundary';
 export * from './FontSizeSelector';

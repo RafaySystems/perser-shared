@@ -17,7 +17,7 @@ import { defaultFallbackInView } from 'react-intersection-observer';
 import '@testing-library/jest-dom/extend-expect';
 
 // Always mock e-charts during tests since we don't have a proper canvas in jsdom
-jest.mock('echarts/core');
+// echarts removed — charts use recharts
 
 // Tell react-intersection-observer that everything should be considered in-view for tests (see package documentation
 // for other options)

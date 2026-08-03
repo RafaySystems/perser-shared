@@ -12,7 +12,6 @@
 // limitations under the License.
 
 import { TimeSeriesValueTuple } from '@perses-dev/spec';
-import { LineSeriesOption, BarSeriesOption } from 'echarts/charts';
 import { LegendItem } from '../Legend';
 
 // adjust display when there are many time series to help with performance
@@ -26,18 +25,29 @@ export interface GraphSeries {
   id?: string;
 }
 
+/** Numeric series values used by chart adapters (legacy ECharts name retained for callers). */
 export type EChartsValues = number | null | '-';
 
-export interface LegacyTimeSeries extends Omit<LineSeriesOption, 'data'> {
+/**
+ * Renderer-agnostic series option used by tooltip/legend helpers.
+ * Formerly typed against ECharts LineSeriesOption / BarSeriesOption.
+ */
+export interface TimeSeriesOption {
+  name?: string;
+  type?: 'line' | 'bar';
+  stack?: string | number;
+  color?: string;
+  datasetIndex?: number;
+  yAxisIndex?: number;
+  [key: string]: unknown;
+}
+
+export interface LegacyTimeSeries extends TimeSeriesOption {
   data: EChartsValues[];
 }
 
-// Used for TimeChart dataset support, each time series returned is mapped to series options using datasetIndex
-// - https://apache.github.io/echarts-handbook/en/concepts/dataset/#how-to-reference-several-datasets
 export type TimeChartSeriesMapping = TimeSeriesOption[];
 export type TimeChartLegendItems = LegendItem[];
-
-export type TimeSeriesOption = LineSeriesOption | BarSeriesOption;
 
 export type EChartsDataFormat = {
   timeSeries: LegacyTimeSeries[];
@@ -47,50 +57,20 @@ export type EChartsDataFormat = {
   rangeMs?: number;
 };
 
-// Intentionally making this an object to start because it is plausible we will
-// want to support focusing by other attributes (e.g. index, name) in the future,
-// and starting with an object will make adding them a non-breaking change.
 export type ChartInstanceFocusOpts = {
-  name?: string; // e.g the TimeSeriesChart plugin uses name
+  name?: string;
 };
 
 export type ChartInstance = {
-  /**
-   * Highlight the series associated with the specified options.
-   */
   highlightSeries: (opts: ChartInstanceFocusOpts) => void;
-
-  /**
-   * Clear all highlighted series.
-   */
   clearHighlightedSeries: () => void;
 };
 
 export const PINNED_CROSSHAIR_SERIES_NAME = 'Pinned Crosshair';
 
-export const DEFAULT_PINNED_CROSSHAIR: LineSeriesOption = {
+export const DEFAULT_PINNED_CROSSHAIR: TimeSeriesOption = {
   name: PINNED_CROSSHAIR_SERIES_NAME,
   type: 'line',
-  // https://echarts.apache.org/en/option.html#series-line.markLine
-  markLine: {
-    data: [],
-    lineStyle: {
-      type: 'dashed',
-      width: 2,
-    },
-    emphasis: {
-      lineStyle: {
-        width: 2,
-        opacity: 1,
-      },
-    },
-    blur: {
-      lineStyle: {
-        width: 2,
-        opacity: 1,
-      },
-    },
-  },
 };
 
 export interface DatapointInfo {
@@ -98,4 +78,16 @@ export interface DatapointInfo {
   seriesIndex: number;
   seriesName: string;
   yValue: number;
+}
+
+/**
+ * Minimal chart coordinate API used by nearby-series / tooltip helpers.
+ * Implemented by Recharts-backed charts (was previously an ECharts instance).
+ */
+export interface ChartCoordinateSystem {
+  containPixel?: (space: string, point: number[]) => boolean;
+  convertFromPixel?: (space: string | Record<string, unknown>, point: number[]) => number[] | null;
+  convertToPixel?: (space: string | Record<string, unknown>, point: number[]) => number[] | null;
+  dispatchAction?: (action: Record<string, unknown>) => void;
+  getDom?: () => HTMLElement | null;
 }

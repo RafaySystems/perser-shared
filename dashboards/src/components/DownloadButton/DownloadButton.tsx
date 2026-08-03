@@ -62,6 +62,8 @@ export function DownloadButton(): ReactElement {
         open={open}
         hideBackdrop={true}
         onClose={() => setAnchorEl(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         MenuListProps={{
           'aria-labelledby': 'download-dashboard-button',
         }}

@@ -27,8 +27,16 @@ export const EditJsonDialog = (props: EditJsonDialogProps): ReactElement => {
   const { editJsonDialog, closeEditJsonDialog } = useEditJsonDialog();
 
   return (
-    <Dialog open={!!editJsonDialog?.isOpen} scroll="paper" fullWidth maxWidth="lg">
-      <Dialog.Header onClose={() => closeEditJsonDialog()}>{!isReadonly && 'Edit '} Dashboard JSON</Dialog.Header>
+    <Dialog
+      open={!!editJsonDialog?.isOpen}
+      onClose={() => closeEditJsonDialog()}
+      scroll="paper"
+      fullWidth
+      maxWidth="lg"
+    >
+      <Dialog.Header onClose={() => closeEditJsonDialog()}>
+        {isReadonly ? 'View' : 'Edit'} Dashboard JSON
+      </Dialog.Header>
       {editJsonDialog?.isOpen && (
         <EditJsonDialogForm isReadonly={isReadonly} disableMetadataEdition={disableMetadataEdition} />
       )}

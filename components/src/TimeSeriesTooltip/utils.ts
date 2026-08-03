@@ -12,8 +12,8 @@
 // limitations under the License.
 
 import { Theme } from '@rafaysystems/components/compat/mui';
-import { ECharts as EChartsInstance } from 'echarts/core';
-import { BarSeriesOption, LineSeriesOption } from 'echarts/charts';
+import type { ChartCoordinateSystem as EChartsInstance } from '../model';
+
 import { TimeChartSeriesMapping } from '../model';
 import {
   CursorCoordinates,
@@ -127,7 +127,7 @@ export function getTooltipStyles(
 
 export function getPixelXFromGrid(timestamp: number, chart: EChartsInstance): number | null {
   try {
-    const pixelCoords = chart.convertToPixel('grid', [timestamp, 0]);
+    const pixelCoords = chart.convertToPixel?.('grid', [timestamp, 0]);
     return pixelCoords?.[0] ?? null;
   } catch {
     return null;
@@ -148,7 +148,7 @@ export function calculateVisualYForSeries(
   const currentSeries = seriesMapping[seriesIdx];
   if (!currentSeries) return yValue;
 
-  const stackId = (currentSeries as LineSeriesOption | BarSeriesOption).stack;
+  const stackId = currentSeries.stack;
   if (!stackId) {
     return yValue;
   }
@@ -223,8 +223,8 @@ export function calculateBarYBounds(
   chart: EChartsInstance
 ): { top: number; bottom: number } | null {
   try {
-    const bottomPixel = chart.convertToPixel('grid', [0, visualYBottom]);
-    const topPixel = chart.convertToPixel('grid', [0, visualYTop]);
+    const bottomPixel = chart.convertToPixel?.('grid', [0, visualYBottom]);
+    const topPixel = chart.convertToPixel?.('grid', [0, visualYTop]);
 
     if (!bottomPixel || !topPixel || bottomPixel[1] === undefined || topPixel[1] === undefined) return null;
 

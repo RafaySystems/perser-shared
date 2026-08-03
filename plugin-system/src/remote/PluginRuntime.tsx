@@ -82,12 +82,12 @@ const getPluginRuntime = (): ModuleFederation => {
             requiredVersion: '^7.52.2',
           },
         },
-        echarts: {
-          version: '5.5.0',
-          lib: () => require('echarts'),
+        recharts: {
+          version: '3.8.1',
+          lib: () => require('recharts'),
           shareConfig: {
             singleton: true,
-            requiredVersion: '^5.5.0',
+            requiredVersion: '^3.8.1',
           },
         },
         '@perses-dev/spec': {

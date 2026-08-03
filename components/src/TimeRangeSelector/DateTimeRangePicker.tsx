@@ -12,14 +12,12 @@
 // limitations under the License.
 
 import { ReactElement, useState } from 'react';
-import { Box, Stack, Typography, Button } from '@rafaysystems/components/compat/mui';
-import { DateTimeField, LocalizationProvider, StaticDateTimePicker } from '@rafaysystems/components/compat/date-pickers';
-import { AdapterDateFns } from '@rafaysystems/components/compat/date-pickers';
 import { AbsoluteTimeRange } from '@perses-dev/spec';
 import { TZDate } from '@date-fns/tz';
-import { ErrorBoundary } from '../ErrorBoundary';
-import { ErrorAlert } from '../ErrorAlert';
-import { DATE_TIME_FORMAT, validateDateRange } from './utils';
+import { Calendar } from '../ui/calendar';
+import { Button } from '../ui/button';
+import { cn } from '../ui/lib/utils';
+import { validateDateRange } from './utils';
 
 export interface AbsoluteTimeFormProps {
   initialTimeRange: AbsoluteTimeRange;
@@ -28,14 +26,41 @@ export interface AbsoluteTimeFormProps {
   timeZone: string;
 }
 
+function pad(v: number): string {
+  return `${v}`.padStart(2, '0');
+}
+
+function toTimeValue(value: Date): string {
+  return `${pad(value.getHours())}:${pad(value.getMinutes())}:${pad(value.getSeconds())}`;
+}
+
+function mergeDateAndTime(day: Date, timeValue: string): Date {
+  const [h = '0', m = '0', s = '0'] = timeValue.split(':');
+  const next = new Date(day);
+  next.setHours(Number(h), Number(m), Number(s), 0);
+  return next;
+}
+
+function formatDisplay(value: Date, timeZone: string): string {
+  try {
+    return new Intl.DateTimeFormat(undefined, {
+      timeZone: ['local', 'browser'].includes(timeZone.toLowerCase())
+        ? undefined
+        : timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    }).format(value);
+  } catch {
+    return value.toLocaleString();
+  }
+}
+
 /**
- * Start and End datetime picker, allowing use to select a specific time range selecting two absolute dates and times.
- * TODO: Use directly the MUI X ``DateTimePicker`` for datetime selection which is better. https://next.mui.com/x/react-date-pickers/date-time-picker/
- *   Use ``DateTimeRangePicker`` directly would be cool but paid https://next.mui.com/x/react-date-pickers/date-time-range-picker/
- * @param initialTimeRange initial time range to pre-select.
- * @param onChange event received when start and end has been selected (click on apply)
- * @param onCancel event received when user click on cancel
- * @constructor
+ * Absolute start/end picker using shadcn Calendar (react-day-picker).
  */
 export const DateTimeRangePicker = ({
   initialTimeRange,
@@ -47,150 +72,104 @@ export const DateTimeRangePicker = ({
     ? Intl.DateTimeFormat().resolvedOptions().timeZone
     : timeZone;
   const [timeRange, setTimeRange] = useState<AbsoluteTimeRange>(initialTimeRange);
-  const [showStartCalendar, setShowStartCalendar] = useState<boolean>(true);
+  const [active, setActive] = useState<'start' | 'end'>('start');
 
-  const changeTimeRange = (newTime: Date, segment: keyof AbsoluteTimeRange): void => {
-    setTimeRange((prevTimeRange) => {
-      return {
-        ...prevTimeRange,
-        [segment]: newTime,
-      };
-    });
-  };
+  const activeDate =
+    active === 'start'
+      ? new TZDate(timeRange.start, stdTimeZone)
+      : new TZDate(timeRange.end, stdTimeZone);
 
-  const onChangeStartTime = (newStartTime: Date): void => {
-    changeTimeRange(newStartTime, 'start');
-  };
-
-  const onChangeEndTime = (newEndTime: Date): void => {
-    changeTimeRange(newEndTime, 'end');
-  };
-
-  const updateDateRange = (): { start: Date; end: Date } | undefined => {
-    const newDates = {
-      start: timeRange.start,
-      end: timeRange.end,
-    };
-    const isValidDateRange = validateDateRange(newDates.start, newDates.end);
-    if (isValidDateRange) {
-      return newDates;
-    }
+  const changeSegment = (segment: 'start' | 'end', next: Date): void => {
+    setTimeRange((prev) => ({ ...prev, [segment]: next }));
   };
 
   const onApply = (): void => {
-    const newDates = updateDateRange();
-    if (newDates) {
-      onChange(newDates);
+    if (validateDateRange(timeRange.start, timeRange.end)) {
+      onChange({ start: timeRange.start, end: timeRange.end });
     }
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Stack
-        spacing={2}
-        sx={(theme) => ({
-          padding: theme.spacing(1, 0, 2),
-        })}
-      >
-        {showStartCalendar && (
-          <Box
-            sx={(theme) => ({
-              // TODO: create separate reusable calendar component
-              '.MuiPickersLayout-contentWrapper': {
-                backgroundColor: theme.palette.background.default,
-              },
-            })}
+    <div
+      className="flex w-[20rem] flex-col gap-3 p-3"
+      style={{
+        backgroundColor: 'hsl(var(--popover))',
+        color: 'hsl(var(--popover-foreground))',
+      }}
+    >
+      <div className="flex gap-1 rounded-md border border-border p-1">
+        {(['start', 'end'] as const).map((segment) => (
+          <button
+            key={segment}
+            type="button"
+            className={cn(
+              'flex-1 rounded-sm px-2 py-1.5 text-xs font-medium capitalize transition-colors',
+              active === segment
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+            )}
+            onClick={() => setActive(segment)}
           >
-            <Typography variant="h3" padding={1} paddingLeft={2}>
-              Select Start Time
-            </Typography>
-            <StaticDateTimePicker
-              timezone={stdTimeZone}
-              displayStaticWrapperAs="desktop"
-              openTo="day"
-              disableHighlightToday={true}
-              value={new TZDate(timeRange.start, stdTimeZone)}
-              onChange={(newValue) => {
-                if (newValue === null) return;
-                onChangeStartTime(newValue);
-              }}
-              onAccept={() => {
-                setShowStartCalendar(false);
-              }}
-            />
-          </Box>
-        )}
-        {!showStartCalendar && (
-          <Box
-            sx={(theme) => ({
-              '.MuiPickersLayout-contentWrapper': {
-                backgroundColor: theme.palette.background.default,
-              },
-            })}
-          >
-            <Typography variant="h3" padding={1} paddingLeft={2}>
-              Select End Time
-            </Typography>
-            <StaticDateTimePicker
-              timezone={stdTimeZone}
-              displayStaticWrapperAs="desktop"
-              openTo="day"
-              disableHighlightToday={true}
-              value={new TZDate(timeRange.end, stdTimeZone)}
-              minDateTime={new TZDate(timeRange.start, stdTimeZone)}
-              onChange={(newValue) => {
-                if (newValue === null) return;
-                onChangeEndTime(newValue);
-              }}
-              onAccept={(newValue) => {
-                if (newValue === null) return;
-                setShowStartCalendar(true);
-                onChangeEndTime(newValue);
-              }}
-            />
-          </Box>
-        )}
-        <Stack direction="row" alignItems="center" gap={1} pl={1} pr={1}>
-          <ErrorBoundary FallbackComponent={ErrorAlert}>
-            <DateTimeField
-              data-testid="start_time_input"
-              timezone={stdTimeZone}
-              label="Start Time"
-              value={new TZDate(timeRange.start, stdTimeZone)}
-              onChange={(event: Date | null) => {
-                if (event) {
-                  onChangeStartTime(event);
-                }
-              }}
-              onBlur={() => updateDateRange()}
-              format={DATE_TIME_FORMAT}
-            />
-          </ErrorBoundary>
-          <ErrorBoundary FallbackComponent={ErrorAlert}>
-            <DateTimeField
-              data-testid="end_time_input"
-              timezone={stdTimeZone}
-              label="End Time"
-              value={new TZDate(timeRange.end, stdTimeZone)}
-              onChange={(event: Date | null) => {
-                if (event) {
-                  onChangeEndTime(event);
-                }
-              }}
-              onBlur={() => updateDateRange()}
-              format={DATE_TIME_FORMAT}
-            />
-          </ErrorBoundary>
-        </Stack>
-        <Stack direction="row" sx={{ padding: (theme) => theme.spacing(0, 1) }} gap={1}>
-          <Button variant="contained" onClick={() => onApply()} fullWidth>
-            Apply
-          </Button>
-          <Button variant="outlined" onClick={() => onCancel()} fullWidth>
-            Cancel
-          </Button>
-        </Stack>
-      </Stack>
-    </LocalizationProvider>
+            {segment}
+          </button>
+        ))}
+      </div>
+
+      <Calendar
+        mode="single"
+        selected={activeDate}
+        onSelect={(day) => {
+          if (!day) return;
+          const prev = active === 'start' ? timeRange.start : timeRange.end;
+          changeSegment(active, mergeDateAndTime(day, toTimeValue(prev)));
+        }}
+      />
+
+      <label className="flex items-center gap-2 text-xs">
+        <span className="text-muted-foreground">Time</span>
+        <input
+          type="time"
+          step={1}
+          className="h-9 flex-1 rounded-md border border-input bg-background px-2 text-sm text-foreground"
+          value={toTimeValue(active === 'start' ? timeRange.start : timeRange.end)}
+          onChange={(e) => {
+            const prev = active === 'start' ? timeRange.start : timeRange.end;
+            changeSegment(active, mergeDateAndTime(prev, e.target.value));
+          }}
+        />
+      </label>
+
+      <div className="grid gap-1 text-xs text-muted-foreground">
+        <button
+          type="button"
+          className={cn(
+            'rounded-md border border-border px-2 py-1.5 text-left transition-colors hover:bg-accent',
+            active === 'start' && 'border-primary text-foreground'
+          )}
+          onClick={() => setActive('start')}
+        >
+          Start: {formatDisplay(timeRange.start, stdTimeZone)}
+        </button>
+        <button
+          type="button"
+          className={cn(
+            'rounded-md border border-border px-2 py-1.5 text-left transition-colors hover:bg-accent',
+            active === 'end' && 'border-primary text-foreground'
+          )}
+          onClick={() => setActive('end')}
+        >
+          End: {formatDisplay(timeRange.end, stdTimeZone)}
+        </button>
+      </div>
+
+      <div className="flex gap-2">
+        <Button variant="contained" className="flex-1" onClick={onApply}>
+          Apply
+        </Button>
+        <Button variant="outlined" className="flex-1" onClick={onCancel}>
+          Cancel
+        </Button>
+      </div>
+    </div>
   );
 };

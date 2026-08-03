@@ -23,7 +23,6 @@ import {
   Dialog as MuiDialog,
   DialogContentProps as MuiDialogContentProps,
   styled,
-  Theme,
 } from '@rafaysystems/components/compat/mui';
 import { CloseIcon } from '@rafaysystems/components/compat/icons';
 import { MouseEvent, ReactElement, ReactNode } from 'react';
@@ -43,16 +42,32 @@ export type DialogContentProps = MuiDialogContentProps;
 
 const Header = ({ children, onClose, ...props }: DialogHeaderProps): ReactElement => {
   return (
-    <>
-      <DialogTitle style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} {...props}>
+    <div
+      style={{
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+        padding: '16px 48px 12px 24px',
+        borderBottom: '1px solid hsl(var(--border))',
+        flexShrink: 0,
+        zIndex: 2,
+        background: 'hsl(var(--background))',
+      }}
+    >
+      <DialogTitle style={{ textOverflow: 'ellipsis', overflow: 'hidden', flex: 1, margin: 0 }} {...props}>
         {children}
       </DialogTitle>
       {onClose && (
-        <IconButton aria-label="Close" onClick={onClose} sx={dialogCloseIconButtonStyle}>
+        <IconButton
+          aria-label="Close"
+          onClick={onClose}
+          sx={{ position: 'absolute', top: 8, right: 8 }}
+        >
           <CloseIcon />
         </IconButton>
       )}
-    </>
+    </div>
   );
 };
 
@@ -84,15 +99,9 @@ const Form = styled('form')({
   overflowY: 'auto',
   display: 'flex',
   flexDirection: 'column',
+  minHeight: 0,
+  flex: 1,
 });
-
-/**
- * Render the CSS of the dialog's close button, according to the given material theme.
- * @param theme material theme
- */
-const dialogCloseIconButtonStyle = (theme: Theme): Record<string, unknown> => {
-  return { position: 'absolute', top: theme.spacing(0.5), right: theme.spacing(0.5) };
-};
 
 export const Dialog: React.FC<DialogProps> & {
   Header: typeof Header;

@@ -113,8 +113,22 @@ export const DashboardToolbar = (props: DashboardToolbarProps): ReactElement => 
           ) : (
             <>
               {isBiggerThanSm && (
-                <Stack direction="row" gap={1} ml="auto">
-                  <EditButton onClick={onEditButtonClick} />
+                <Stack direction="row" gap={1} ml="auto" alignItems="center">
+                  {isReadonly ? (
+                    <Alert
+                      severity="info"
+                      sx={{
+                        backgroundColor: 'transparent',
+                        padding: 0,
+                        color: 'text.secondary',
+                        '& .MuiAlert-message': { padding: 0 },
+                      }}
+                    >
+                      Readonly view
+                    </Alert>
+                  ) : (
+                    <EditButton onClick={onEditButtonClick} />
+                  )}
                 </Stack>
               )}
             </>

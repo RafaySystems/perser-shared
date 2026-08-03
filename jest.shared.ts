@@ -26,8 +26,6 @@ const config: Config.InitialOptions = {
   testEnvironment: 'jsdom',
   roots: ['<rootDir>/src'],
   moduleNameMapper: {
-    '^echarts/(.*)$': 'echarts',
-
     // Use polyfill for jsdom environment
     '^use-resize-observer$': 'use-resize-observer/polyfilled',
 

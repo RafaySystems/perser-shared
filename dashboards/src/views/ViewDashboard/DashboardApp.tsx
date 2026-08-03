@@ -30,6 +30,7 @@ import {
   EditJsonDialog,
   SaveChangesConfirmationDialog,
   LeaveDialog,
+  ViewPanelDialog,
 } from '../../components';
 import { OnSaveDashboard, useDashboard, useDiscardChangesConfirmationDialog, useEditMode } from '../../context';
 import { PanelFocusProvider } from '../../keyboard-shortcuts';
@@ -171,6 +172,7 @@ const DashboardAppContent = (props: DashboardAppProps): ReactElement => {
         <ChartsProvider chartsTheme={chartsTheme} enablePinning={false} enableSyncGrouping={false}>
           <PanelDrawer />
         </ChartsProvider>
+        <ViewPanelDialog />
         <PanelGroupDialog />
         <DeletePanelGroupDialog />
         <DeletePanelDialog />
